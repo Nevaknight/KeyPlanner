@@ -303,7 +303,8 @@
 
         function createRowHTML(dateObj, entry, isFirstRowOfDay) {
             const tr = document.createElement('tr');
-            tr.className = `border-b border-slate-100 hover:bg-slate-50 transition-colors form-row data-date="${dateObj.iso}"`;
+            tr.className = `border-b border-slate-100 hover:bg-slate-50 transition-colors form-row`;
+            tr.setAttribute('data-date', dateObj.iso);
             if (isFirstRowOfDay) tr.classList.add('border-t', 'border-slate-200');
 
             // Структура с заданными ширинами и выравниванием по ТЗ
