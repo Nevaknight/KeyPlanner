@@ -13,7 +13,7 @@
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="text-slate-800 antialiased min-h-screen flex flex-col relative">
 
     <!-- Навигация -->
     <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-10">
@@ -105,16 +105,20 @@
                 </div>
             </div>
         </div>
-
     </main>
+
+    <!-- Всплывающее уведомление (заменяет системные alert) -->
+    <div id="message-box" class="fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 text-white hidden transition-opacity duration-300"></div>
 
     <script>
         // ==========================================
         // === НАСТРОЙКИ (ВВЕДИ СВОИ ДАННЫЕ ТУТ) ====
         // ==========================================
         
-        const GITHUB_TOKEN = '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'; // Вставь свой токен github_pat_...
-        const REPO_OWNER = 'Nevaknight'; // Твой ник
+        // ВСТАВЬ СЮДА СВОЙ ТОКЕН ВМЕСТО ТЕКСТА (ОСТАВЬ КАВЫЧКИ!)
+        const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN'; 
+        
+        const REPO_OWNER = 'Nevaknight'; // Твой ник на GitHub
         const REPO_NAME = 'KeyPlanner'; // Название репозитория
         
         // ==========================================
@@ -129,10 +133,9 @@
 
         const dayNamesShort = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
         let currentUser = null;
-        let generatedDates = []; // Массив строк 'YYYY-MM-DD' на 14 дней
+        let generatedDates = []; 
 
         // === ИНИЦИАЛИЗАЦИЯ И ДАТЫ ===
-
         // Находим ближайшую прошедшую среду (или сегодня, если сегодня среда)
         function generateTwoWeeks() {
             let d = new Date();
@@ -146,7 +149,6 @@
             for (let i = 0; i < 14; i++) {
                 let tempD = new Date(d);
                 tempD.setDate(d.getDate() + i);
-                // Формат YYYY-MM-DD
                 let isoDate = new Date(tempD.getTime() - (tempD.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
                 generatedDates.push({
                     iso: isoDate,
@@ -157,20 +159,25 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             generateTwoWeeks();
-            // Проверка сохраненной сессии
             const savedUser = localStorage.getItem('wow_user');
             if (savedUser && PLAYERS.includes(savedUser)) {
                 currentUser = savedUser;
                 document.getElementById('nav-user').classList.remove('hidden');
                 document.getElementById('nav-player-name').innerText = currentUser;
                 showView('dashboard');
-                loadAllData();
             } else {
                 showView('login');
             }
         });
 
-        // === НАВИГАЦИЯ И АВТОРИЗАЦИЯ ===
+        // Кастомная функция для красивых уведомлений вместо alert()
+        function showMessage(msg, isError = false) {
+            const box = document.getElementById('message-box');
+            box.textContent = msg;
+            box.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 text-white transition-opacity duration-300 ${isError ? 'bg-red-600' : 'bg-slate-800'}`;
+            box.classList.remove('hidden');
+            setTimeout(() => box.classList.add('hidden'), 6000);
+        }
 
         function showView(viewId) {
             document.getElementById('view-login').classList.add('hidden-view');
@@ -211,14 +218,13 @@
         }
 
         // === ЛОГИКА ФОРМЫ (АНКЕТЫ) ===
-
         function renderForm(userData = {}) {
             const tbody = document.getElementById('form-body');
             tbody.innerHTML = '';
 
             generatedDates.forEach(dateObj => {
-                // Если есть сохраненные данные для этой даты
-                let dayEntries = userData[dateObj.iso] || [{ status: '?', start: '', end: '' }];
+                // Изменение 1: По умолчанию стоит плюс ('+')
+                let dayEntries = userData[dateObj.iso] || [{ status: '+', start: '', end: '' }];
                 
                 dayEntries.forEach((entry, index) => {
                     tbody.appendChild(createRowHTML(dateObj, entry, index === 0));
@@ -226,10 +232,28 @@
             });
         }
 
+        // Изменение 2: Логика синхронизации времени
+        window.handleStartTimeChange = function(event) {
+            const startInput = event.target;
+            const row = startInput.closest('tr');
+            const endInput = row.querySelector('.entry-end');
+            
+            if (startInput.value) {
+                // Устанавливаем минимальное время для окончания (чтобы нельзя было выбрать раньше старта)
+                endInput.min = startInput.value;
+                // Если конец не задан или он меньше начала, приравниваем его к началу
+                if (!endInput.value || endInput.value < startInput.value) {
+                    endInput.value = startInput.value;
+                }
+            } else {
+                endInput.removeAttribute('min');
+            }
+        }
+
         function createRowHTML(dateObj, entry, isFirstRowOfDay) {
             const tr = document.createElement('tr');
             tr.className = `border-b border-slate-100 hover:bg-slate-50 form-row data-date="${dateObj.iso}"`;
-            if (isFirstRowOfDay) tr.classList.add('border-t', 'border-slate-200'); // Отделяем дни
+            if (isFirstRowOfDay) tr.classList.add('border-t', 'border-slate-200');
 
             tr.innerHTML = `
                 <td class="py-3 px-2 font-medium ${isFirstRowOfDay ? 'text-slate-800' : 'text-transparent'}">
@@ -242,9 +266,9 @@
                     </select>
                 </td>
                 <td class="py-3 px-2 flex items-center gap-2">
-                    <input type="time" class="entry-start border border-slate-300 rounded p-1 outline-none text-sm" value="${entry.start}">
+                    <input type="time" class="entry-start border border-slate-300 rounded p-1 outline-none text-sm" value="${entry.start}" onchange="handleStartTimeChange(event)">
                     <span class="text-slate-400">-</span>
-                    <input type="time" class="entry-end border border-slate-300 rounded p-1 outline-none text-sm" value="${entry.end}">
+                    <input type="time" class="entry-end border border-slate-300 rounded p-1 outline-none text-sm" value="${entry.end}" min="${entry.start || ''}">
                 </td>
                 <td class="py-3 px-2 text-center">
                     ${isFirstRowOfDay 
@@ -259,15 +283,15 @@
         window.addTimeRow = function(isoDate, btnElem) {
             const dateObj = generatedDates.find(d => d.iso === isoDate);
             const currentRow = btnElem.closest('tr');
+            // При добавлении строки тоже по умолчанию ставим "+"
             const newRow = createRowHTML(dateObj, { status: '+', start: '', end: '' }, false);
             currentRow.parentNode.insertBefore(newRow, currentRow.nextSibling);
         }
 
         // === РАБОТА С GITHUB API ===
-
         async function githubAPI(method, path, body = null) {
-            if (GITHUB_TOKEN === 'YOUR_GITHUB_TOKEN') {
-                alert('ВНИМАНИЕ! Вы не вставили GitHub Token в код (строка 105). Сохранение работать не будет!');
+            if (GITHUB_TOKEN.includes('YOUR_GITHUB_TOKEN') || !GITHUB_TOKEN) {
+                showMessage('ВНИМАНИЕ! Вы не вставили GitHub Token в код. Сохранение не сработает!', true);
                 return null;
             }
 
@@ -285,11 +309,15 @@
                 const response = await fetch(url, options);
                 if (!response.ok) {
                     if (response.status === 404 && method === 'GET') return null; // Файла еще нет, это норм
-                    throw new Error(`GitHub Error: ${response.status}`);
+                    
+                    // Изменение 3: Получаем точный текст ошибки от GitHub
+                    const errData = await response.json();
+                    throw new Error(errData.message || `Ошибка HTTP: ${response.status}`);
                 }
                 return await response.json();
             } catch (error) {
                 console.error(error);
+                showMessage(`GitHub Ответил: ${error.message}`, true);
                 return null;
             }
         }
@@ -301,12 +329,12 @@
             const fileData = await githubAPI('GET', `${currentUser}.json`);
             
             if (fileData && fileData.content) {
-                // Декодируем Base64 (поддержка кириллицы/UTF-8)
                 const jsonString = decodeURIComponent(escape(atob(fileData.content)));
                 const data = JSON.parse(jsonString);
                 renderForm(data);
+                showMessage('Анкета загружена', false);
             } else {
-                renderForm({}); // Пустая форма, если файла нет
+                renderForm({});
             }
             
             btn.innerHTML = `Сохранить в GitHub`;
@@ -317,7 +345,6 @@
             btn.innerHTML = `<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full loader mr-2"></div> Сохранение...`;
             btn.disabled = true;
 
-            // Сбор данных из HTML формы
             const dataToSave = {};
             document.querySelectorAll('.form-row').forEach(row => {
                 const date = row.getAttribute('data-date');
@@ -332,16 +359,12 @@
                 }
             });
 
-            // Подготавливаем JSON для GitHub
             const jsonString = JSON.stringify(dataToSave, null, 2);
-            // Кодируем в Base64 с поддержкой UTF-8
             const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
 
-            // 1. Проверяем, существует ли файл, чтобы получить его SHA (нужно для обновления)
             const fileData = await githubAPI('GET', `${currentUser}.json`);
             const sha = fileData ? fileData.sha : null;
 
-            // 2. Отправляем сохранение
             const body = {
                 message: `Update schedule for ${currentUser}`,
                 content: base64Content
@@ -354,18 +377,21 @@
             if (result) {
                 btn.innerHTML = `✓ Сохранено!`;
                 btn.classList.replace('bg-green-600', 'bg-emerald-500');
+                showMessage('Данные успешно сохранены в GitHub!');
                 setTimeout(() => {
                     btn.innerHTML = `Сохранить в GitHub`;
                     btn.classList.replace('bg-emerald-500', 'bg-green-600');
                 }, 3000);
             } else {
                 btn.innerHTML = `❌ Ошибка`;
-                alert('Не удалось сохранить в GitHub. Проверь консоль или токен.');
+                // Сообщение об ошибке выведется само через функцию githubAPI
+                setTimeout(() => {
+                    btn.innerHTML = `Сохранить в GitHub`;
+                }, 3000);
             }
         }
 
         // === ЛОГИКА СВОДНОЙ ТАБЛИЦЫ (ИНТЕРСЕКТОР ВРЕМЕНИ) ===
-
         async function loadAllData() {
             document.getElementById('dashboard-content').innerHTML = '';
             document.getElementById('dashboard-loading').classList.remove('hidden');
@@ -373,7 +399,6 @@
             let allSchedules = {};
             let playersWhoFilled = [];
 
-            // Загружаем файлы всех игроков
             for (let player of PLAYERS) {
                 const fileData = await githubAPI('GET', `${player}.json`);
                 if (fileData && fileData.content) {
@@ -389,16 +414,14 @@
             renderDashboard(allSchedules, playersWhoFilled);
         }
 
-        // Вспомогательная функция: Время HH:MM в минуты от начала дня
         function timeToMins(timeStr) {
             if (!timeStr) return -1;
             const [h, m] = timeStr.split(':').map(Number);
             return h * 60 + m;
         }
 
-        // Вспомогательная функция: Минуты в HH:MM
         function minsToTime(mins) {
-            if (mins === 1440) return "24:00"; // Обработка полуночи
+            if (mins === 1440) return "24:00"; 
             const h = Math.floor(mins / 60).toString().padStart(2, '0');
             const m = (mins % 60).toString().padStart(2, '0');
             return `${h}:${m}`;
@@ -420,7 +443,6 @@
                 <div class="divide-y divide-slate-100">
             `;
 
-            // Проходим по всем сгенерированным датам
             generatedDates.forEach(dateObj => {
                 let dayHtml = `
                     <div class="p-4 sm:p-6 hover:bg-slate-50 transition flex flex-col sm:flex-row gap-4 sm:items-center">
@@ -428,9 +450,8 @@
                         <div class="flex-1 space-y-2">
                 `;
 
-                // 1. Поиск ОБЩЕГО времени (Только если заполнили все 4)
+                // Ищем общее время, если заполнили ВСЕ игроки
                 if (activePlayers.length === PLAYERS.length) {
-                    // Массив из 1440 минут (1 день). Изначально везде 1 (все могут).
                     let commonMinutes = new Array(1440).fill(1);
                     let hasAnyTimes = false;
 
@@ -445,26 +466,23 @@
                                 hasAnyTimes = true;
                                 let startM = timeToMins(slot.start);
                                 let endM = timeToMins(slot.end);
-                                if (endM === 0) endM = 1440; // Если 00:00 - считаем концом дня
+                                if (endM === 0) endM = 1440; // 00:00 = 24:00
                                 for (let m = startM; m < endM; m++) {
                                     playerMinutes[m] = 1;
                                 }
                             }
                         });
                         
-                        // Если у игрока вообще нет записей со статусом "+", он не может в этот день
                         if (!pHasData) {
                             commonMinutes.fill(0);
                             break;
                         }
 
-                        // Умножаем общее на индивидуальное (пересечение массивов)
                         for (let i = 0; i < 1440; i++) {
                             commonMinutes[i] = commonMinutes[i] * playerMinutes[i];
                         }
                     }
 
-                    // Превращаем массив минут обратно в отрезки времени
                     let commonIntervals = [];
                     let inInterval = false;
                     let startIdx = 0;
@@ -495,7 +513,7 @@
                     }
                 }
 
-                // 2. Вывод индивидуальных статусов (кто что отметил)
+                // Вывод индивидуальных статусов
                 let statusesHtml = '';
                 PLAYERS.forEach(p => {
                     if (schedules[p] && schedules[p][dateObj.iso]) {
