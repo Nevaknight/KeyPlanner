@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ХОЧУ ИГРАТЬ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        .hidden-view { display: none !important; }
+        .loader { border-top-color: #3b82f6; -webkit-animation: spinner 1.5s linear infinite; animation: spinner 1.5s linear infinite; }
+        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Навигация -->
+    <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-10">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <h1 class="text-xl font-bold text-slate-900 tracking-tight cursor-pointer" onclick="showView('dashboard')">⚔️ ХОЧУ ИГРАТЬ</h1>
+            <div id="nav-user" class="hidden flex items-center gap-4">
+                <span id="nav-player-name" class="font-medium text-blue-600"></span>
+                <button onclick="showView('form')" class="text-sm bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-md transition">Моя анкета</button>
+                <button onclick="logout()" class="text-sm text-slate-500 hover:text-slate-700 transition">Выйти</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контейнер -->
+    <main class="flex-1 max-w-5xl mx-auto px-4 py-8 w-full">
+        
+        <!-- ЭКРАН 1: ЛОГИН -->
+        <div id="view-login" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-10">
+            <h2 class="text-2xl font-bold text-center mb-6">Вход для игроков</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Кто ты?</label>
+                    <select id="login-player" class="w-full border border-slate-300 rounded-lg p-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                        <option value="Рид">Рид</option>
+                        <option value="Рипыч">Рипыч</option>
+                        <option value="Женя">Женя</option>
+                        <option value="Рейнон">Рейнон</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Пароль</label>
+                    <input type="password" id="login-password" class="w-full border border-slate-300 rounded-lg p-2.5 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" placeholder="R1234">
+                </div>
+                <button onclick="login()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition mt-2">
+                    Войти
+                </button>
+                <p id="login-error" class="text-red-500 text-sm text-center hidden mt-2">Неверный пароль!</p>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 2: СВОДНАЯ ТАБЛИЦА (DASHBOARD) -->
+        <div id="view-dashboard" class="hidden-view space-y-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-bold">Сводное расписание</h2>
+                <button onclick="loadAllData()" class="text-sm bg-white border border-slate-300 hover:bg-slate-50 px-3 py-1.5 rounded-md transition flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    Обновить
+                </button>
+            </div>
+            
+            <div id="dashboard-loading" class="text-center py-10 hidden">
+                <div class="inline-block w-8 h-8 border-4 border-slate-200 rounded-full loader mb-2"></div>
+                <p class="text-slate-500">Считываем данные из GitHub...</p>
+            </div>
+
+            <div id="dashboard-content" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <!-- Сюда будет рендериться общий результат -->
+            </div>
+        </div>
+
+        <!-- ЭКРАН 3: АНКЕТА ИГРОКА -->
+        <div id="view-form" class="hidden-view">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="flex justify-between items-end mb-6 border-b border-slate-100 pb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Заполнение анкеты</h2>
+                        <p class="text-slate-500 text-sm mt-1">Отметь время на текущую и следующую неделю.</p>
+                    </div>
+                    <button onclick="saveForm()" id="btn-save" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition flex items-center gap-2">
+                        Сохранить в GitHub
+                    </button>
+                </div>
+                
+                <!-- Таблица формы -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-sm text-slate-500 border-b border-slate-200">
+                                <th class="pb-3 font-medium w-32">Дата</th>
+                                <th class="pb-3 font-medium w-24">Статус</th>
+                                <th class="pb-3 font-medium">Время (Старт - Конец)</th>
+                                <th class="pb-3 font-medium w-16 text-center">Действие</th>
+                            </tr>
+                        </thead>
+                        <tbody id="form-body" class="text-sm">
+                            <!-- Строки генерируются JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // ==========================================
+        // === НАСТРОЙКИ (ВВЕДИ СВОИ ДАННЫЕ ТУТ) ====
+        // ==========================================
+        
+        const GITHUB_TOKEN = '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'; // Вставь свой токен github_pat_...
+        const REPO_OWNER = 'Nevaknight'; // Твой ник
+        const REPO_NAME = 'KeyPlanner'; // Название репозитория
+        
+        // ==========================================
+
+        const PLAYERS = ['Рид', 'Рипыч', 'Женя', 'Рейнон'];
+        const PASSWORDS = {
+            'Рид': 'R1234',
+            'Рипыч': 'R1234',
+            'Женя': 'R1234',
+            'Рейнон': 'R1234'
+        };
+
+        const dayNamesShort = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+        let currentUser = null;
+        let generatedDates = []; // Массив строк 'YYYY-MM-DD' на 14 дней
+
+        // === ИНИЦИАЛИЗАЦИЯ И ДАТЫ ===
+
+        // Находим ближайшую прошедшую среду (или сегодня, если сегодня среда)
+        function generateTwoWeeks() {
+            let d = new Date();
+            let day = d.getDay(); // 0=Вс, 3=Ср
+            let diffToWednesday = day >= 3 ? day - 3 : day + 4;
+            
+            d.setDate(d.getDate() - diffToWednesday);
+            d.setHours(0,0,0,0);
+
+            generatedDates = [];
+            for (let i = 0; i < 14; i++) {
+                let tempD = new Date(d);
+                tempD.setDate(d.getDate() + i);
+                // Формат YYYY-MM-DD
+                let isoDate = new Date(tempD.getTime() - (tempD.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+                generatedDates.push({
+                    iso: isoDate,
+                    display: `${tempD.getDate().toString().padStart(2, '0')}.${(tempD.getMonth() + 1).toString().padStart(2, '0')} (${dayNamesShort[tempD.getDay()]})`
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            generateTwoWeeks();
+            // Проверка сохраненной сессии
+            const savedUser = localStorage.getItem('wow_user');
+            if (savedUser && PLAYERS.includes(savedUser)) {
+                currentUser = savedUser;
+                document.getElementById('nav-user').classList.remove('hidden');
+                document.getElementById('nav-player-name').innerText = currentUser;
+                showView('dashboard');
+                loadAllData();
+            } else {
+                showView('login');
+            }
+        });
+
+        // === НАВИГАЦИЯ И АВТОРИЗАЦИЯ ===
+
+        function showView(viewId) {
+            document.getElementById('view-login').classList.add('hidden-view');
+            document.getElementById('view-dashboard').classList.add('hidden-view');
+            document.getElementById('view-form').classList.add('hidden-view');
+            document.getElementById(`view-${viewId}`).classList.remove('hidden-view');
+
+            if (viewId === 'form') {
+                renderForm();
+                loadUserFormFromGitHub();
+            } else if (viewId === 'dashboard') {
+                loadAllData();
+            }
+        }
+
+        function login() {
+            const player = document.getElementById('login-player').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (PASSWORDS[player] === password) {
+                currentUser = player;
+                localStorage.setItem('wow_user', player);
+                document.getElementById('login-error').classList.add('hidden');
+                document.getElementById('nav-user').classList.remove('hidden');
+                document.getElementById('nav-player-name').innerText = currentUser;
+                showView('dashboard');
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('wow_user');
+            document.getElementById('nav-user').classList.add('hidden');
+            document.getElementById('login-password').value = '';
+            showView('login');
+        }
+
+        // === ЛОГИКА ФОРМЫ (АНКЕТЫ) ===
+
+        function renderForm(userData = {}) {
+            const tbody = document.getElementById('form-body');
+            tbody.innerHTML = '';
+
+            generatedDates.forEach(dateObj => {
+                // Если есть сохраненные данные для этой даты
+                let dayEntries = userData[dateObj.iso] || [{ status: '?', start: '', end: '' }];
+                
+                dayEntries.forEach((entry, index) => {
+                    tbody.appendChild(createRowHTML(dateObj, entry, index === 0));
+                });
+            });
+        }
+
+        function createRowHTML(dateObj, entry, isFirstRowOfDay) {
+            const tr = document.createElement('tr');
+            tr.className = `border-b border-slate-100 hover:bg-slate-50 form-row data-date="${dateObj.iso}"`;
+            if (isFirstRowOfDay) tr.classList.add('border-t', 'border-slate-200'); // Отделяем дни
+
+            tr.innerHTML = `
+                <td class="py-3 px-2 font-medium ${isFirstRowOfDay ? 'text-slate-800' : 'text-transparent'}">
+                    ${isFirstRowOfDay ? dateObj.display : dateObj.display}
+                </td>
+                <td class="py-3 px-2">
+                    <select class="entry-status border border-slate-300 rounded p-1 outline-none">
+                        <option value="+" ${entry.status === '+' ? 'selected' : ''}>+</option>
+                        <option value="?" ${entry.status === '?' ? 'selected' : ''}>?</option>
+                    </select>
+                </td>
+                <td class="py-3 px-2 flex items-center gap-2">
+                    <input type="time" class="entry-start border border-slate-300 rounded p-1 outline-none text-sm" value="${entry.start}">
+                    <span class="text-slate-400">-</span>
+                    <input type="time" class="entry-end border border-slate-300 rounded p-1 outline-none text-sm" value="${entry.end}">
+                </td>
+                <td class="py-3 px-2 text-center">
+                    ${isFirstRowOfDay 
+                        ? `<button onclick="addTimeRow('${dateObj.iso}', this)" class="text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded px-2 py-1 transition">+</button>` 
+                        : `<button onclick="this.closest('tr').remove()" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded px-2 py-1 transition">×</button>`
+                    }
+                </td>
+            `;
+            return tr;
+        }
+
+        window.addTimeRow = function(isoDate, btnElem) {
+            const dateObj = generatedDates.find(d => d.iso === isoDate);
+            const currentRow = btnElem.closest('tr');
+            const newRow = createRowHTML(dateObj, { status: '+', start: '', end: '' }, false);
+            currentRow.parentNode.insertBefore(newRow, currentRow.nextSibling);
+        }
+
+        // === РАБОТА С GITHUB API ===
+
+        async function githubAPI(method, path, body = null) {
+            if (GITHUB_TOKEN === 'YOUR_GITHUB_TOKEN') {
+                alert('ВНИМАНИЕ! Вы не вставили GitHub Token в код (строка 105). Сохранение работать не будет!');
+                return null;
+            }
+
+            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data/${path}`;
+            const headers = {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            };
+            
+            const options = { method, headers };
+            if (body) options.body = JSON.stringify(body);
+
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    if (response.status === 404 && method === 'GET') return null; // Файла еще нет, это норм
+                    throw new Error(`GitHub Error: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        }
+
+        async function loadUserFormFromGitHub() {
+            const btn = document.getElementById('btn-save');
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full loader mr-2"></div> Загрузка...`;
+            
+            const fileData = await githubAPI('GET', `${currentUser}.json`);
+            
+            if (fileData && fileData.content) {
+                // Декодируем Base64 (поддержка кириллицы/UTF-8)
+                const jsonString = decodeURIComponent(escape(atob(fileData.content)));
+                const data = JSON.parse(jsonString);
+                renderForm(data);
+            } else {
+                renderForm({}); // Пустая форма, если файла нет
+            }
+            
+            btn.innerHTML = `Сохранить в GitHub`;
+        }
+
+        async function saveForm() {
+            const btn = document.getElementById('btn-save');
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full loader mr-2"></div> Сохранение...`;
+            btn.disabled = true;
+
+            // Сбор данных из HTML формы
+            const dataToSave = {};
+            document.querySelectorAll('.form-row').forEach(row => {
+                const date = row.getAttribute('data-date');
+                const status = row.querySelector('.entry-status').value;
+                const start = row.querySelector('.entry-start').value;
+                const end = row.querySelector('.entry-end').value;
+
+                if (!dataToSave[date]) dataToSave[date] = [];
+                // Сохраняем только если введено время или стоит '?'
+                if (start && end || status === '?') {
+                    dataToSave[date].push({ status, start, end });
+                }
+            });
+
+            // Подготавливаем JSON для GitHub
+            const jsonString = JSON.stringify(dataToSave, null, 2);
+            // Кодируем в Base64 с поддержкой UTF-8
+            const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
+
+            // 1. Проверяем, существует ли файл, чтобы получить его SHA (нужно для обновления)
+            const fileData = await githubAPI('GET', `${currentUser}.json`);
+            const sha = fileData ? fileData.sha : null;
+
+            // 2. Отправляем сохранение
+            const body = {
+                message: `Update schedule for ${currentUser}`,
+                content: base64Content
+            };
+            if (sha) body.sha = sha;
+
+            const result = await githubAPI('PUT', `${currentUser}.json`, body);
+
+            btn.disabled = false;
+            if (result) {
+                btn.innerHTML = `✓ Сохранено!`;
+                btn.classList.replace('bg-green-600', 'bg-emerald-500');
+                setTimeout(() => {
+                    btn.innerHTML = `Сохранить в GitHub`;
+                    btn.classList.replace('bg-emerald-500', 'bg-green-600');
+                }, 3000);
+            } else {
+                btn.innerHTML = `❌ Ошибка`;
+                alert('Не удалось сохранить в GitHub. Проверь консоль или токен.');
+            }
+        }
+
+        // === ЛОГИКА СВОДНОЙ ТАБЛИЦЫ (ИНТЕРСЕКТОР ВРЕМЕНИ) ===
+
+        async function loadAllData() {
+            document.getElementById('dashboard-content').innerHTML = '';
+            document.getElementById('dashboard-loading').classList.remove('hidden');
+
+            let allSchedules = {};
+            let playersWhoFilled = [];
+
+            // Загружаем файлы всех игроков
+            for (let player of PLAYERS) {
+                const fileData = await githubAPI('GET', `${player}.json`);
+                if (fileData && fileData.content) {
+                    try {
+                        const jsonString = decodeURIComponent(escape(atob(fileData.content)));
+                        allSchedules[player] = JSON.parse(jsonString);
+                        playersWhoFilled.push(player);
+                    } catch(e) { console.error('Error parsing', player); }
+                }
+            }
+
+            document.getElementById('dashboard-loading').classList.add('hidden');
+            renderDashboard(allSchedules, playersWhoFilled);
+        }
+
+        // Вспомогательная функция: Время HH:MM в минуты от начала дня
+        function timeToMins(timeStr) {
+            if (!timeStr) return -1;
+            const [h, m] = timeStr.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        // Вспомогательная функция: Минуты в HH:MM
+        function minsToTime(mins) {
+            if (mins === 1440) return "24:00"; // Обработка полуночи
+            const h = Math.floor(mins / 60).toString().padStart(2, '0');
+            const m = (mins % 60).toString().padStart(2, '0');
+            return `${h}:${m}`;
+        }
+
+        function renderDashboard(schedules, activePlayers) {
+            const container = document.getElementById('dashboard-content');
+            
+            if (activePlayers.length === 0) {
+                container.innerHTML = `<div class="p-8 text-center text-slate-500">Пока никто не заполнил анкету.</div>`;
+                return;
+            }
+
+            let html = `
+                <div class="bg-blue-50 border-b border-blue-100 p-4 flex justify-between items-center">
+                    <span class="text-sm font-medium text-blue-800">Заполнили: ${activePlayers.join(', ')} (${activePlayers.length}/${PLAYERS.length})</span>
+                    ${activePlayers.length < PLAYERS.length ? `<span class="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">Ждем остальных</span>` : `<span class="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">Все в сборе!</span>`}
+                </div>
+                <div class="divide-y divide-slate-100">
+            `;
+
+            // Проходим по всем сгенерированным датам
+            generatedDates.forEach(dateObj => {
+                let dayHtml = `
+                    <div class="p-4 sm:p-6 hover:bg-slate-50 transition flex flex-col sm:flex-row gap-4 sm:items-center">
+                        <div class="w-32 flex-shrink-0 font-medium text-slate-700">${dateObj.display}</div>
+                        <div class="flex-1 space-y-2">
+                `;
+
+                // 1. Поиск ОБЩЕГО времени (Только если заполнили все 4)
+                if (activePlayers.length === PLAYERS.length) {
+                    // Массив из 1440 минут (1 день). Изначально везде 1 (все могут).
+                    let commonMinutes = new Array(1440).fill(1);
+                    let hasAnyTimes = false;
+
+                    for (let p of PLAYERS) {
+                        let playerMinutes = new Array(1440).fill(0);
+                        let dayData = schedules[p][dateObj.iso] || [];
+                        
+                        let pHasData = false;
+                        dayData.forEach(slot => {
+                            if (slot.status === '+' && slot.start && slot.end) {
+                                pHasData = true;
+                                hasAnyTimes = true;
+                                let startM = timeToMins(slot.start);
+                                let endM = timeToMins(slot.end);
+                                if (endM === 0) endM = 1440; // Если 00:00 - считаем концом дня
+                                for (let m = startM; m < endM; m++) {
+                                    playerMinutes[m] = 1;
+                                }
+                            }
+                        });
+                        
+                        // Если у игрока вообще нет записей со статусом "+", он не может в этот день
+                        if (!pHasData) {
+                            commonMinutes.fill(0);
+                            break;
+                        }
+
+                        // Умножаем общее на индивидуальное (пересечение массивов)
+                        for (let i = 0; i < 1440; i++) {
+                            commonMinutes[i] = commonMinutes[i] * playerMinutes[i];
+                        }
+                    }
+
+                    // Превращаем массив минут обратно в отрезки времени
+                    let commonIntervals = [];
+                    let inInterval = false;
+                    let startIdx = 0;
+
+                    for (let i = 0; i <= 1440; i++) {
+                        if (commonMinutes[i] === 1 && !inInterval) {
+                            inInterval = true;
+                            startIdx = i;
+                        } else if ((commonMinutes[i] === 0 || i === 1440) && inInterval) {
+                            inInterval = false;
+                            commonIntervals.push(`${minsToTime(startIdx)} - ${minsToTime(i)}`);
+                        }
+                    }
+
+                    if (commonIntervals.length > 0) {
+                        dayHtml += `
+                            <div class="bg-green-100 border border-green-200 text-green-800 rounded-lg p-3 shadow-sm">
+                                <span class="font-bold uppercase text-xs tracking-wider opacity-80 block mb-1">Сбор рейда (Могут ВСЕ):</span>
+                                <span class="font-bold text-lg">${commonIntervals.join(' и ')}</span>
+                            </div>
+                        `;
+                    } else if (hasAnyTimes) {
+                         dayHtml += `
+                            <div class="bg-slate-100 border border-slate-200 text-slate-500 rounded-lg p-3 text-sm">
+                                ❌ В этот день нет времени, удобного для всех четверых.
+                            </div>
+                        `;
+                    }
+                }
+
+                // 2. Вывод индивидуальных статусов (кто что отметил)
+                let statusesHtml = '';
+                PLAYERS.forEach(p => {
+                    if (schedules[p] && schedules[p][dateObj.iso]) {
+                        schedules[p][dateObj.iso].forEach(slot => {
+                            if (!slot.start) return;
+                            let color = slot.status === '+' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800';
+                            statusesHtml += `<span class="inline-block px-2 py-1 rounded text-xs font-medium mr-2 mb-1 ${color}">${p}: ${slot.status} ${slot.start}-${slot.end}</span>`;
+                        });
+                    }
+                });
+
+                if (statusesHtml) {
+                    dayHtml += `<div class="mt-2 flex flex-wrap">${statusesHtml}</div>`;
+                } else {
+                    dayHtml += `<div class="text-sm text-slate-400 italic mt-1">Нет планов</div>`;
+                }
+
+                dayHtml += `</div></div>`;
+                html += dayHtml;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+    </script>
+</body>
+</html>
