@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ХОЧУ ИГРАТЬ</title>
-    <!-- Добавлена крутая иконка вкладки -->
+    <!-- Иконка вкладки -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚔️</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
@@ -27,16 +27,13 @@
             </h1>
             <div id="nav-user" class="hidden flex items-center gap-2 sm:gap-4">
                 <span id="nav-player-name" class="font-bold text-blue-600 hidden sm:inline-block"></span>
-                <!-- Добавлена кнопка Расписание -->
-                <button onclick="showView('dashboard')" class="text-sm bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-md transition font-medium">Расписание</button>
-                <button onclick="showView('form')" class="text-sm bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-md transition font-medium">Моя анкета</button>
-                <!-- Кнопка Выйти теперь красная -->
+                <button id="nav-btn-dashboard" onclick="showView('dashboard')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Расписание</button>
+                <button id="nav-btn-form" onclick="showView('form')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Моя анкета</button>
                 <button onclick="logout()" class="text-sm text-red-500 hover:text-red-700 transition font-bold px-2">Выйти</button>
             </div>
         </div>
     </nav>
 
-    <!-- Основной контейнер -->
     <main class="flex-1 max-w-7xl mx-auto px-4 py-8 w-full">
         
         <!-- ЭКРАН 1: ЛОГИН -->
@@ -68,7 +65,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <div>
                     <h2 class="text-2xl font-bold text-slate-900">Сводное расписание</h2>
-                    <p id="dashboard-status-text" class="text-sm text-slate-500 mt-1">Ожидание данных...</p>
+                    <p id="dashboard-status-text" class="text-sm font-bold text-slate-700 mt-1">Ожидание данных...</p>
                 </div>
                 <button onclick="loadAllData()" class="text-sm bg-white border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg transition flex items-center justify-center gap-2 font-bold shadow-sm w-full sm:w-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
@@ -96,7 +93,6 @@
                     <h2 class="text-2xl font-bold text-slate-900">Заполнение анкеты</h2>
                     <p class="text-slate-500 text-sm mt-1">Отметь время на текущую и следующую неделю.</p>
                 </div>
-                <!-- Переименована кнопка Сохранить -->
                 <button onclick="saveForm()" id="btn-save" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-8 rounded-lg transition flex items-center justify-center gap-2 shadow-sm w-full sm:w-auto text-lg">
                     Сохранить
                 </button>
@@ -145,13 +141,11 @@
 
             <!-- Блок 2: Текущая неделя -->
             <div id="week1-container" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
-                <!-- Центрирование заголовка -->
                 <h3 class="text-xl font-black text-slate-800 mb-6 text-center uppercase tracking-wide">Текущая неделя</h3>
                 <div class="overflow-x-auto custom-scrollbar pb-2">
                     <table class="w-full border-collapse min-w-[500px]">
                         <thead>
                             <tr class="text-sm text-slate-500 border-b border-slate-200">
-                                <!-- Центрирование всех заголовков -->
                                 <th class="pb-3 font-bold px-2 w-[20%] text-center">Дата</th>
                                 <th class="pb-3 font-bold px-2 w-[20%] text-center">Статус</th>
                                 <th class="pb-3 font-bold px-2 w-[40%] text-center">Время (Старт - Конец)</th>
@@ -166,13 +160,11 @@
 
             <!-- Блок 3: Следующая неделя -->
             <div id="week2-container" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                <!-- Центрирование заголовка -->
                 <h3 class="text-xl font-black text-slate-800 mb-6 text-center uppercase tracking-wide">Следующая неделя</h3>
                 <div class="overflow-x-auto custom-scrollbar pb-2">
                     <table class="w-full border-collapse min-w-[500px]">
                         <thead>
                             <tr class="text-sm text-slate-500 border-b border-slate-200">
-                                <!-- Центрирование всех заголовков -->
                                 <th class="pb-3 font-bold px-2 w-[20%] text-center">Дата</th>
                                 <th class="pb-3 font-bold px-2 w-[20%] text-center">Статус</th>
                                 <th class="pb-3 font-bold px-2 w-[40%] text-center">Время (Старт - Конец)</th>
@@ -204,30 +196,40 @@
 
         const PLAYERS = ['Рид', 'Рипыч', 'Женя', 'Рейнон'];
         const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'R1234', 'Женя': 'R1234', 'Рейнон': 'R1234' };
-        const dayNamesShort = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+        
+        // Полные названия дней
+        const dayNamesFull = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
         let currentUser = null;
         let generatedDates = []; 
 
+        function getMoscowISO() {
+            // Создаем дату с учетом смещения UTC+3 (Москва)
+            const d = new Date();
+            const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+            return new Date(utc + (3600000 * 3)); // +3 часа от UTC
+        }
+
         function generateTwoWeeks() {
-            let d = new Date();
-            let day = d.getDay();
+            let moscowDate = getMoscowISO();
+            let day = moscowDate.getDay();
             let diffToWednesday = day >= 3 ? day - 3 : day + 4;
             
-            d.setDate(d.getDate() - diffToWednesday);
-            d.setHours(0,0,0,0);
+            let startOfWeek = new Date(moscowDate);
+            startOfWeek.setDate(moscowDate.getDate() - diffToWednesday);
+            startOfWeek.setHours(0,0,0,0);
 
-            let today = new Date();
-            let todayIso = new Date(today.getTime() - (today.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+            let todayIso = getMoscowISO().toISOString().split('T')[0];
 
             generatedDates = [];
             for (let i = 0; i < 14; i++) {
-                let tempD = new Date(d);
-                tempD.setDate(d.getDate() + i);
-                let isoDate = new Date(tempD.getTime() - (tempD.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+                let tempD = new Date(startOfWeek);
+                tempD.setDate(startOfWeek.getDate() + i);
+                let isoDate = tempD.toISOString().split('T')[0];
                 
                 generatedDates.push({
                     iso: isoDate,
-                    display: `${tempD.getDate().toString().padStart(2, '0')}.${(tempD.getMonth() + 1).toString().padStart(2, '0')} (${dayNamesShort[tempD.getDay()]})`,
+                    // Формат: "29.06 - Понедельник"
+                    display: `${tempD.getDate().toString().padStart(2, '0')}.${(tempD.getMonth() + 1).toString().padStart(2, '0')} - ${dayNamesFull[tempD.getDay()]}`,
                     isPast: isoDate < todayIso 
                 });
             }
@@ -271,11 +273,34 @@
             }, 5000);
         }
 
+        function updateNavStyles(activeViewId) {
+            const btnDash = document.getElementById('nav-btn-dashboard');
+            const btnForm = document.getElementById('nav-btn-form');
+            
+            const inactiveClasses = "text-slate-600 hover:bg-slate-100 bg-transparent".split(' ');
+            const activeClasses = "text-blue-700 bg-blue-50 border border-blue-100 shadow-sm".split(' ');
+
+            btnDash.classList.remove(...activeClasses);
+            btnDash.classList.add(...inactiveClasses);
+            btnForm.classList.remove(...activeClasses);
+            btnForm.classList.add(...inactiveClasses);
+
+            if(activeViewId === 'dashboard') {
+                btnDash.classList.remove(...inactiveClasses);
+                btnDash.classList.add(...activeClasses);
+            } else if(activeViewId === 'form') {
+                btnForm.classList.remove(...inactiveClasses);
+                btnForm.classList.add(...activeClasses);
+            }
+        }
+
         function showView(viewId) {
             document.getElementById('view-login').classList.add('hidden-view');
             document.getElementById('view-dashboard').classList.add('hidden-view');
             document.getElementById('view-form').classList.add('hidden-view');
             document.getElementById(`view-${viewId}`).classList.remove('hidden-view');
+
+            updateNavStyles(viewId);
 
             if (viewId === 'form') {
                 renderForm();
@@ -339,7 +364,8 @@
 
                 let dayEntries = userData[dateObj.iso];
                 if (!dayEntries || dayEntries.length === 0) {
-                    dayEntries = [{ status: '+', start: '', end: '' }];
+                    // Новое дефолтное время 10:00 - 21:00
+                    dayEntries = [{ status: '+', start: '10:00', end: '21:00' }];
                 }
                 
                 dayEntries.forEach((entry, i) => {
@@ -358,29 +384,12 @@
             week2Container.classList.toggle('hidden', countW2 === 0);
         }
 
-        window.handleStartTimeChange = function(event) {
-            const startInput = event.target;
-            const row = startInput.closest('tr');
-            const endInput = row.querySelector('.entry-end');
-            
-            if (startInput.value) {
-                endInput.min = startInput.value;
-                // Как только набрали часы, копируем их во вторую ячейку (минуты автоматом будут 00 в EndInput)
-                if (!endInput.value || endInput.value < startInput.value) {
-                    endInput.value = startInput.value;
-                }
-            } else {
-                endInput.removeAttribute('min');
-            }
-        }
-
         function createRowHTML(dateObj, entry, isFirstRowOfDay) {
             const tr = document.createElement('tr');
             tr.className = `border-b border-slate-100 hover:bg-slate-50 transition-colors form-row`;
             tr.setAttribute('data-date', dateObj.iso);
             if (isFirstRowOfDay) tr.classList.add('border-t', 'border-slate-200');
 
-            // Все td теперь text-center
             tr.innerHTML = `
                 <td class="py-3 px-2 font-bold text-center ${isFirstRowOfDay ? 'text-slate-800' : 'text-transparent'}">
                     ${isFirstRowOfDay ? dateObj.display : dateObj.display}
@@ -393,9 +402,9 @@
                 </td>
                 <td class="py-3 px-2 text-center">
                     <div class="flex items-center justify-center gap-2">
-                        <input type="time" class="entry-start border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500" value="${entry.start}" oninput="handleStartTimeChange(event)">
+                        <input type="time" class="entry-start border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500" value="${entry.start}" min="08:00">
                         <span class="text-slate-400 font-bold">-</span>
-                        <input type="time" class="entry-end border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500" value="${entry.end}" min="${entry.start || ''}">
+                        <input type="time" class="entry-end border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500" value="${entry.end}">
                     </div>
                 </td>
                 <td class="py-3 px-2 text-center">
@@ -413,7 +422,8 @@
         window.addTimeRow = function(isoDate, btnElem) {
             const dateObj = generatedDates.find(d => d.iso === isoDate);
             const currentRow = btnElem.closest('tr');
-            const newRow = createRowHTML(dateObj, { status: '+', start: '', end: '' }, false);
+            // Дефолтное время при добавлении новой строки
+            const newRow = createRowHTML(dateObj, { status: '+', start: '10:00', end: '21:00' }, false);
             currentRow.parentNode.insertBefore(newRow, currentRow.nextSibling);
         }
 
@@ -467,8 +477,10 @@
 
             if(!wnlData[date]) wnlData[date] = {};
             
+            // Записываем создателя (Рейнона) сразу как "+"
             times.forEach(t => {
                 if(!wnlData[date][t]) wnlData[date][t] = {}; 
+                wnlData[date][t][currentUser] = '+'; 
             });
 
             const jsonString = JSON.stringify(wnlData, null, 2);
@@ -652,37 +664,18 @@
             renderDashboard(allSchedules, playersWhoFilled);
         }
 
-        function timeToMins(timeStr) {
-            if (!timeStr) return -1;
-            const [h, m] = timeStr.split(':').map(Number);
-            return h * 60 + m;
-        }
-
-        function minsToTime(mins) {
-            if (mins === 1440) return "24:00"; 
-            const h = Math.floor(mins / 60).toString().padStart(2, '0');
-            const m = (mins % 60).toString().padStart(2, '0');
-            return `${h}:${m}`;
-        }
-
         function renderDashboard(schedules, activePlayers) {
             const container = document.getElementById('dashboard-content');
             const statusText = document.getElementById('dashboard-status-text');
             
             if (activePlayers.length === 0 && Object.keys(window.wnlGlobalData).length === 0) {
-                statusText.innerHTML = `<span class="text-orange-500">Никто еще не заполнил анкету.</span>`;
+                statusText.innerHTML = `<span class="text-slate-500 font-medium">Никто еще не заполнил анкету.</span>`;
                 container.innerHTML = `<div class="p-12 text-center bg-white rounded-2xl border border-slate-200 border-dashed text-slate-500">Данных для отображения пока нет.</div>`;
                 return;
             }
 
-            // Статус бар
-            let statusHtml = `Данные на основе ответов: <span class="font-bold text-slate-800">${activePlayers.join(', ')}</span> (${activePlayers.length}/${PLAYERS.length})`;
-            if (activePlayers.length < PLAYERS.length) {
-                 statusHtml += ` <span class="inline-block ml-2 px-2 py-0.5 bg-orange-100 text-orange-700 rounded-md text-xs font-bold">Ждем остальных</span>`;
-            } else {
-                 statusHtml += ` <span class="inline-block ml-2 px-2 py-0.5 bg-green-100 text-green-700 rounded-md text-xs font-bold">Все в сборе</span>`;
-            }
-            statusText.innerHTML = statusHtml;
+            // Статус бар: Показываем только тех, кто заполнил
+            statusText.innerHTML = `Хотят играть: <span class="font-black text-slate-800">${activePlayers.join(', ') || '—'}</span>`;
 
             let finalHtml = '';
 
@@ -694,13 +687,14 @@
                 if(!dateObj || dateObj.isPast) return; 
 
                 wnlHtml += `<div class="bg-gradient-to-br from-purple-50 to-white rounded-2xl shadow-sm border border-purple-200 p-6 sm:p-8">
-                    <h2 class="text-3xl sm:text-4xl font-black text-purple-900 tracking-tight uppercase mb-1 drop-shadow-sm">Викли ноу ливерс</h2>
-                    <h3 class="text-xl font-bold text-purple-600 mb-6">${dateObj.display}</h3>
+                    <h2 class="text-3xl sm:text-4xl font-black text-purple-900 tracking-tight uppercase mb-1 drop-shadow-sm text-center">Викли ноу ливерс</h2>
+                    <h3 class="text-xl font-bold text-purple-600 mb-6 text-center">${dateObj.display}</h3>
                     <div class="space-y-4">`;
 
                 const sortedTimes = Object.keys(window.wnlGlobalData[date]).sort();
                 sortedTimes.forEach(time => {
                     const votes = window.wnlGlobalData[date][time] || {};
+                    // Фильтруем только тех, кто поставил "+"
                     const playersWantToPlay = Object.keys(votes).filter(p => votes[p] === '+').join(', ');
                     
                     const btnClass = (voteType) => {
