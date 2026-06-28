@@ -25,7 +25,7 @@
             <h1 class="text-xl font-bold text-slate-900 tracking-tight cursor-pointer flex items-center gap-2" onclick="showView('dashboard')">
                 <span>⚔️</span> ХОЧУ ИГРАТЬ
             </h1>
-            <div id="nav-user" class="hidden flex items-center gap-2 sm:gap-4">
+            <div id="nav-user" class="hidden flex items-center gap-4">
                 <span id="nav-player-name" class="font-bold text-blue-600 hidden sm:inline-block"></span>
                 <button id="nav-btn-dashboard" onclick="showView('dashboard')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Расписание</button>
                 <button id="nav-btn-form" onclick="showView('form')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Моя анкета</button>
@@ -70,10 +70,9 @@
         <div id="view-dashboard" class="hidden-view space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-900">Сводное расписание</h2>
-                    <p id="dashboard-status-text" class="text-sm font-bold text-slate-700 mt-1">Ожидание данных...</p>
+                    <h2 id="dashboard-status-text" class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Ожидание данных...</h2>
                 </div>
-                <button onclick="loadAllData()" class="text-sm bg-white border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg transition flex items-center justify-center gap-2 font-bold shadow-sm w-full sm:w-auto">
+                <button onclick="loadAllData()" class="text-sm bg-white border border-slate-300 hover:bg-slate-50 px-4 py-2.5 rounded-lg transition flex items-center justify-center gap-2 font-bold shadow-sm w-full sm:w-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
                     Обновить данные
                 </button>
@@ -84,7 +83,6 @@
                 <p class="text-slate-500 font-medium">Загружаем расписание и опросы...</p>
             </div>
 
-            <!-- Контейнер для Викли Ноу Ливерс и Матрицы -->
             <div id="dashboard-content" class="space-y-8">
                 <!-- Сюда будет рендериться контент -->
             </div>
@@ -93,7 +91,6 @@
         <!-- ЭКРАН 3: АНКЕТА ИГРОКА -->
         <div id="view-form" class="hidden-view">
             
-            <!-- Блок 1: Шапка -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-2xl font-bold text-slate-900 text-center sm:text-left w-full">Заполнение анкеты</h2>
@@ -115,7 +112,7 @@
                         </div>
                         <div class="flex-1">
                             <label class="block text-sm font-bold text-slate-700 mb-1">Время старта</label>
-                            <input type="time" id="wnl-time" class="w-full border border-slate-300 rounded-lg p-3 outline-none focus:border-purple-500 font-medium shadow-sm" onchange="document.getElementById('wnl-options').classList.remove('hidden')">
+                            <input type="time" id="wnl-time" class="w-full border border-slate-300 rounded-lg p-3 outline-none focus:border-purple-500 font-medium shadow-sm cursor-pointer" onclick="this.showPicker()" onchange="document.getElementById('wnl-options').classList.remove('hidden')">
                         </div>
                     </div>
 
@@ -152,10 +149,10 @@
                     <table class="w-full border-collapse min-w-[500px]">
                         <thead>
                             <tr class="text-sm text-slate-500 border-b border-slate-200">
-                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Дата</th>
-                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Статус</th>
-                                <th class="pb-3 font-bold px-2 w-[40%] text-center">Время (Старт - Конец)</th>
-                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Действие</th>
+                                <th class="pb-3 font-bold px-2 w-[25%] text-center">Дата</th>
+                                <th class="pb-3 font-bold px-2 w-[15%] text-center">Статус</th>
+                                <th class="pb-3 font-bold px-2 w-[40%] text-center">Время</th>
+                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Добавить время</th>
                             </tr>
                         </thead>
                         <tbody id="form-body-week1" class="text-sm">
@@ -171,10 +168,10 @@
                     <table class="w-full border-collapse min-w-[500px]">
                         <thead>
                             <tr class="text-sm text-slate-500 border-b border-slate-200">
-                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Дата</th>
-                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Статус</th>
-                                <th class="pb-3 font-bold px-2 w-[40%] text-center">Время (Старт - Конец)</th>
-                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Действие</th>
+                                <th class="pb-3 font-bold px-2 w-[25%] text-center">Дата</th>
+                                <th class="pb-3 font-bold px-2 w-[15%] text-center">Статус</th>
+                                <th class="pb-3 font-bold px-2 w-[40%] text-center">Время</th>
+                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Добавить время</th>
                             </tr>
                         </thead>
                         <tbody id="form-body-week2" class="text-sm">
@@ -203,7 +200,6 @@
         const PLAYERS = ['Женя', 'Рейнон', 'Рид', 'Рипыч'];
         const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'R1234', 'Женя': 'R1234', 'Рейнон': 'R1234' };
         
-        // Полные названия дней
         const dayNamesFull = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
         let currentUser = null;
         let generatedDates = []; 
@@ -233,6 +229,8 @@
                 
                 generatedDates.push({
                     iso: isoDate,
+                    datePart: `${tempD.getDate().toString().padStart(2, '0')}.${(tempD.getMonth() + 1).toString().padStart(2, '0')}`,
+                    dayPart: dayNamesFull[tempD.getDay()],
                     display: `${tempD.getDate().toString().padStart(2, '0')}.${(tempD.getMonth() + 1).toString().padStart(2, '0')} - ${dayNamesFull[tempD.getDay()]}`,
                     isPast: isoDate < todayIso 
                 });
@@ -374,17 +372,18 @@
                 if (dateObj.isPast) return; 
 
                 let dayEntries = userData[dateObj.iso];
+                // По умолчанию ничего не выбрано в статусе
                 if (!dayEntries || dayEntries.length === 0) {
-                    dayEntries = [{ status: '+', start: '10:00', end: '21:00' }];
+                    dayEntries = [{ status: '', start: '10:00', end: '21:00' }];
                 }
                 
                 dayEntries.forEach((entry, i) => {
                     const rowHtml = createRowHTML(dateObj, entry, i === 0);
                     if (index < 7) {
-                        tbody1.appendChild(rowHtml);
+                        tbody1.insertAdjacentHTML('beforeend', rowHtml);
                         countW1++;
                     } else {
-                        tbody2.appendChild(rowHtml);
+                        tbody2.insertAdjacentHTML('beforeend', rowHtml);
                         countW2++;
                     }
                 });
@@ -395,45 +394,54 @@
         }
 
         function createRowHTML(dateObj, entry, isFirstRowOfDay) {
-            const tr = document.createElement('tr');
-            tr.className = `border-b border-slate-100 hover:bg-slate-50 transition-colors form-row`;
-            tr.setAttribute('data-date', dateObj.iso);
-            if (isFirstRowOfDay) tr.classList.add('border-t', 'border-slate-200');
-
-            tr.innerHTML = `
-                <td class="py-3 px-2 font-bold text-center ${isFirstRowOfDay ? 'text-slate-800' : 'text-transparent'}">
-                    ${isFirstRowOfDay ? dateObj.display : dateObj.display}
-                </td>
-                <td class="py-3 px-2 text-center">
-                    <select class="entry-status border border-slate-300 rounded-md p-1.5 outline-none bg-white text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 mx-auto block cursor-pointer hover:border-blue-400">
-                        <option value="+" ${entry.status === '+' ? 'selected' : ''}>+</option>
-                        <option value="?" ${entry.status === '?' ? 'selected' : ''}>?</option>
-                    </select>
-                </td>
-                <td class="py-3 px-2 text-center">
-                    <div class="flex items-center justify-center gap-2">
-                        <input type="time" class="entry-start border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500" value="${entry.start}" min="08:00">
-                        <span class="text-slate-400 font-bold">-</span>
-                        <input type="time" class="entry-end border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500" value="${entry.end}">
-                    </div>
-                </td>
-                <td class="py-3 px-2 text-center">
-                    <div class="flex justify-center">
-                        ${isFirstRowOfDay 
-                            ? `<button onclick="addTimeRow('${dateObj.iso}', this)" class="text-blue-600 hover:text-blue-800 hover:bg-blue-100 bg-blue-50 border border-blue-200 rounded-md p-1.5 px-4 transition font-black shadow-sm text-lg leading-none" title="Добавить время">+</button>` 
-                            : `<button onclick="this.closest('tr').remove()" class="text-red-500 hover:text-red-700 hover:bg-red-100 bg-red-50 border border-red-200 rounded-md p-1.5 px-4 transition font-black shadow-sm text-lg leading-none" title="Удалить строку">×</button>`
-                        }
-                    </div>
-                </td>
+            // Генерируем уникальное имя для группы радиокнопок
+            const uniqueId = `status-${dateObj.iso}-${Math.random().toString(36).substr(2, 9)}`;
+            
+            return `
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors form-row ${isFirstRowOfDay ? 'border-t border-slate-200' : ''}" data-date="${dateObj.iso}">
+                    <td class="py-3 px-2 ${isFirstRowOfDay ? '' : 'text-transparent'}">
+                        <div class="flex justify-center items-center gap-2 font-bold ${isFirstRowOfDay ? 'text-slate-800' : ''}">
+                            <span class="w-12 text-right">${isFirstRowOfDay ? dateObj.datePart : ' '}</span>
+                            <span class="text-slate-400">${isFirstRowOfDay ? '-' : ' '}</span>
+                            <span class="w-24 text-left">${isFirstRowOfDay ? dateObj.dayPart : ' '}</span>
+                        </div>
+                    </td>
+                    <td class="py-3 px-2 text-center">
+                        <div class="flex justify-center gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" class="hidden peer entry-status-radio" name="${uniqueId}" value="+" ${entry.status === '+' ? 'checked' : ''}>
+                                <div class="w-8 h-8 flex items-center justify-center rounded-lg font-black border-2 border-slate-200 text-slate-400 peer-checked:bg-green-500 peer-checked:text-white peer-checked:border-green-500 hover:bg-slate-100 transition shadow-sm">+</div >
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" class="hidden peer entry-status-radio" name="${uniqueId}" value="?" ${entry.status === '?' ? 'checked' : ''}>
+                                <div class="w-8 h-8 flex items-center justify-center rounded-lg font-black border-2 border-slate-200 text-slate-400 peer-checked:bg-yellow-400 peer-checked:text-white peer-checked:border-yellow-400 hover:bg-slate-100 transition shadow-sm">?</div >
+                            </label>
+                        </div>
+                    </td>
+                    <td class="py-3 px-2 text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <input type="time" class="entry-start border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer" value="${entry.start}" min="08:00" onclick="this.showPicker()">
+                            <span class="text-slate-400 font-bold">-</span>
+                            <input type="time" class="entry-end border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer" value="${entry.end}" onclick="this.showPicker()">
+                        </div>
+                    </td>
+                    <td class="py-3 px-2 text-center">
+                        <div class="flex justify-center">
+                            ${isFirstRowOfDay 
+                                ? `<button onclick="addTimeRow('${dateObj.iso}', this)" class="text-blue-600 hover:text-blue-800 hover:bg-blue-100 bg-blue-50 border border-blue-200 rounded-md w-8 h-8 flex items-center justify-center transition font-black shadow-sm text-lg" title="Добавить время">+</button>` 
+                                : `<button onclick="this.closest('tr').remove()" class="text-red-500 hover:text-red-700 hover:bg-red-100 bg-red-50 border border-red-200 rounded-md w-8 h-8 flex items-center justify-center transition font-black shadow-sm text-lg" title="Удалить строку">×</button>`
+                            }
+                        </div>
+                    </td>
+                </tr>
             `;
-            return tr;
         }
 
         window.addTimeRow = function(isoDate, btnElem) {
             const dateObj = generatedDates.find(d => d.iso === isoDate);
             const currentRow = btnElem.closest('tr');
-            const newRow = createRowHTML(dateObj, { status: '+', start: '10:00', end: '21:00' }, false);
-            currentRow.parentNode.insertBefore(newRow, currentRow.nextSibling);
+            const newRowHtml = createRowHTML(dateObj, { status: '', start: '10:00', end: '21:00' }, false);
+            currentRow.insertAdjacentHTML('afterend', newRowHtml);
         }
 
         // ==========================================
@@ -542,7 +550,10 @@
                 return null;
             }
 
-            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data/${path}`;
+            // Добавляем timestamp, чтобы сбросить жесткое кеширование GitHub API
+            const t = new Date().getTime();
+            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data/${path}?t=${t}`;
+            
             const headers = {
                 'Authorization': `token ${GITHUB_TOKEN}`,
                 'Accept': 'application/vnd.github.v3+json',
@@ -556,8 +567,15 @@
                 const response = await fetch(url, options);
                 if (!response.ok) {
                     if (response.status === 404 && method === 'GET') return null; 
-                    const errData = await response.json();
-                    throw new Error(errData.message || response.statusText);
+                    
+                    // Безопасное чтение ошибки от GitHub, чтобы избежать Unexpected token '<'
+                    const text = await response.text();
+                    let errMsg = response.statusText;
+                    try {
+                        const errData = JSON.parse(text);
+                        errMsg = errData.message || errMsg;
+                    } catch(e) {}
+                    throw new Error(errMsg);
                 }
                 return await response.json();
             } catch (error) {
@@ -597,13 +615,16 @@
             const dataToSave = {};
             document.querySelectorAll('.form-row').forEach(row => {
                 const date = row.getAttribute('data-date');
-                const status = row.querySelector('.entry-status').value;
                 const start = row.querySelector('.entry-start').value;
                 const end = row.querySelector('.entry-end').value;
+                
+                // Ищем выбранный радио-button в текущей строке
+                const checkedStatus = row.querySelector('.entry-status-radio:checked');
+                const status = checkedStatus ? checkedStatus.value : null;
 
                 if (!dataToSave[date]) dataToSave[date] = [];
-                // Сохраняем только валидные строки
-                if ((start && end) || status === '?') {
+                // Сохраняем строку ТОЛЬКО если игрок нажал на плюс или вопрос
+                if (status === '+' || status === '?') {
                     dataToSave[date].push({ status, start, end });
                 }
             });
@@ -623,10 +644,10 @@
             const result = await githubAPI('PUT', `${currentUser}.json`, body);
 
             if (result) {
-                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg> Сохранено!`;
+                btn.innerHTML = `Сохранено!`;
                 btn.classList.replace('bg-green-600', 'bg-emerald-500');
                 btn.classList.replace('hover:bg-green-700', 'hover:bg-emerald-600');
-                showMessage('Анкета успешно сохранена в GitHub!', 'success');
+                showMessage('Анкета успешно сохранена!', 'success');
                 setTimeout(() => {
                     btn.innerHTML = originalBtnText;
                     btn.classList.replace('bg-emerald-500', 'bg-green-600');
@@ -672,6 +693,19 @@
             renderDashboard(allSchedules, playersWhoFilled);
         }
 
+        function timeToMins(timeStr) {
+            if (!timeStr) return -1;
+            const [h, m] = timeStr.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        function minsToTime(mins) {
+            if (mins === 1440) return "24:00"; 
+            const h = Math.floor(mins / 60).toString().padStart(2, '0');
+            const m = (mins % 60).toString().padStart(2, '0');
+            return `${h}:${m}`;
+        }
+
         function renderDashboard(schedules, activePlayers) {
             const container = document.getElementById('dashboard-content');
             const statusText = document.getElementById('dashboard-status-text');
@@ -682,12 +716,12 @@
                 return;
             }
 
-            // Статус бар: Показываем только тех, кто заполнил
-            statusText.innerHTML = `Хотят играть: <span class="font-black text-slate-800">${activePlayers.join(', ') || '—'}</span>`;
+            // Статус бар
+            statusText.innerHTML = `Хотят играть: <span class="font-black text-blue-600">${activePlayers.join(', ') || '—'}</span>`;
 
             let finalHtml = '';
 
-            // 1. Рендер ВИКЛИ НОУ ЛИВЕРС (Если есть данные)
+            // 1. Рендер ВИКЛИ НОУ ЛИВЕРС
             let wnlHtml = '';
             const sortedWnlDates = Object.keys(window.wnlGlobalData || {}).sort();
             sortedWnlDates.forEach(date => {
@@ -708,7 +742,7 @@
                         const base = "w-12 h-12 flex items-center justify-center rounded-xl font-black text-2xl border-2 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-1 ";
                         const isSelected = votes[currentUser] === voteType;
                         if(voteType === '+') return base + (isSelected ? "bg-green-500 text-white border-green-500 ring-green-500 transform scale-105" : "bg-white text-green-500 border-green-200 hover:bg-green-50 hover:border-green-300");
-                        if(voteType === '-') return base + (isSelected ? "bg-red-500 text-white border-red-500 ring-red-500 transform scale-105" : "bg-white text-red-500 border-red-200 hover:bg-red-50 hover:border-red-300");
+                        if(voteType === '×') return base + (isSelected ? "bg-red-500 text-white border-red-500 ring-red-500 transform scale-105" : "bg-white text-red-500 border-red-200 hover:bg-red-50 hover:border-red-300");
                         if(voteType === '?') return base + (isSelected ? "bg-yellow-400 text-white border-yellow-400 ring-yellow-400 transform scale-105" : "bg-white text-yellow-500 border-yellow-200 hover:bg-yellow-50 hover:border-yellow-300");
                     };
 
@@ -717,7 +751,7 @@
                             <div class="text-3xl font-black text-slate-800 w-28 text-center sm:text-left tracking-tight">${time}</div>
                             <div class="flex items-center justify-center sm:justify-start gap-3">
                                 <button onclick="voteWnl('${date}', '${time}', '+')" class="${btnClass('+')}">+</button>
-                                <button onclick="voteWnl('${date}', '${time}', '-')" class="${btnClass('-')}">-</button>
+                                <button onclick="voteWnl('${date}', '${time}', '×')" class="${btnClass('×')}">×</button>
                                 <button onclick="voteWnl('${date}', '${time}', '?')" class="${btnClass('?')}">?</button>
                             </div>
                             <div class="text-base sm:text-lg font-medium text-slate-500 ml-0 sm:ml-4 text-center sm:text-left bg-slate-50 px-4 py-2 rounded-lg flex-1 border border-slate-100">
