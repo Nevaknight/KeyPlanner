@@ -975,8 +975,8 @@
                 if (dateObj.isPast) return; // Скрываем прошедшие дни
 
                 let dayHtml = `
-                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col hover:shadow-md transition-shadow w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(14.28%-0.8rem)] min-w-[140px]">
-                        <div class="text-center font-bold text-slate-700 border-b border-slate-100 pb-2 mb-3 tracking-tight text-lg">
+                    <div class="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 shadow-sm flex flex-col hover:shadow-md transition-shadow w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.33%-1rem)] lg:w-[calc((100%-6rem)/7)] min-w-[110px] lg:min-w-[120px]">
+                        <div class="text-center font-bold text-slate-700 border-b border-slate-100 pb-2 mb-3 tracking-tight text-base lg:text-lg">
                             ${dateObj.datePart} - ${dateObj.dayPartShort}
                         </div>
                         <div class="flex-1 flex flex-col gap-2">
