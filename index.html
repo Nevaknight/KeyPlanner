@@ -46,7 +46,7 @@
                     <div class="relative">
                         <select id="login-player" class="w-full border border-slate-300 rounded-lg p-2.5 pl-3 pr-10 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white font-medium appearance-none invalid:text-slate-400" required onchange="this.classList.remove('text-slate-400')">
                             <option value="" disabled selected hidden>Выбери своё имя</option>
-                            <option value="Женя" class="text-slate-800">Женя</option>
+                            <option value="Сейлоркринж" class="text-slate-800">Сейлоркринж</option>
                             <option value="Рейнон" class="text-slate-800">Рейнон</option>
                             <option value="Рид" class="text-slate-800">Рид</option>
                             <option value="Рипыч" class="text-slate-800">Рипыч</option>
@@ -213,12 +213,16 @@
         const REPO_NAME = 'KeyPlanner';
         // ==========================================
 
-        const PLAYERS = ['Женя', 'Рейнон', 'Рид', 'Рипыч'];
-        const PASSWORDS = { 'Рид': 'R1234', 'Женя': 'R1234', 'Рейнон': 'R1234', 'Рипыч': 'DHtop' };
+        const PLAYERS = ['Сейлоркринж', 'Рейнон', 'Рид', 'Рипыч'];
+        const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'DHtop', 'Сейлоркринж': 'R1234', 'Рейнон': 'R1234' };
         
         const dayNamesFull = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
         const dayNamesShort = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
         const RAID_DAYS = ['Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье', 'Понедельник', 'Вторник'];
+        const RAID_DAYS_MAP = {
+            'Среда': 'СР', 'Четверг': 'ЧТ', 'Пятница': 'ПТ', 'Суббота': 'СБ',
+            'Воскресенье': 'ВС', 'Понедельник': 'ПН', 'Вторник': 'ВТ'
+        };
         
         let currentUser = null;
         let generatedDates = []; 
@@ -389,38 +393,10 @@
             showView('login');
         }
 
-        window.handleTimeChange = function(elem, isStart) {
-            // Ограничение минимального времени (не раньше 08:00)
+        window.validateTime = function(elem) {
             if (elem.value && elem.value < '08:00') {
-                elem.value = '08:00';
-                showMessage('Время не может быть раньше 08:00!', 'info');
-            }
-
-            const row = elem.closest('tr');
-
-            // УМНАЯ ФИЧА: Если игрок тронул время, автоматически ставим статус "+"
-            if (row && row.classList.contains('form-row')) {
-                const radios = row.querySelectorAll('.entry-status-radio');
-                if (radios.length === 2 && !radios[0].checked && !radios[1].checked) {
-                    radios[0].checked = true; // Авто-выбор "+"
-                }
-            }
-
-            // Умный сдвиг конечного времени
-            if (isStart && elem.value) {
-                const endElem = row.querySelector('.entry-end');
-                endElem.min = elem.value;
-                if (!endElem.value || endElem.value <= elem.value) {
-                    let [h, m] = elem.value.split(':').map(Number);
-                    h = (h + 1) % 24;
-                    if (h < 8) h = 8; // Запрет перескока на время до 08:00
-                    endElem.value = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-                    
-                    endElem.classList.add('bg-blue-50', 'text-blue-600');
-                    setTimeout(() => {
-                        if (endElem) endElem.classList.remove('bg-blue-50', 'text-blue-600');
-                    }, 800);
-                }
+                elem.value = ''; // Сбрасываем значение на "пусто" (то есть --:--)
+                showMessage('Игровое время начинается с 08:00!', 'error');
             }
             markFormDirty();
         }
@@ -457,7 +433,7 @@
                 if (dateObj.isPast) return; 
 
                 let dayEntries = userData[dateObj.iso] || [];
-                if (dayEntries.length === 0) dayEntries = [{ status: '', start: '10:00', end: '21:00' }];
+                if (dayEntries.length === 0) dayEntries = [{ status: '', start: '', end: '' }]; // Сбрасываем 10:00 - 21:00
                 
                 dayEntries.forEach((entry, i) => {
                     const rowHtml = createRowHTML(dateObj, entry, i === 0);
@@ -478,7 +454,7 @@
             const raidUserData = userData['raidDays'] || {};
             RAID_DAYS.forEach(dayName => {
                 let dayEntries = raidUserData[dayName] || [];
-                if (dayEntries.length === 0) dayEntries = [{ start: '10:00', end: '21:00' }];
+                if (dayEntries.length === 0) dayEntries = [{ start: '', end: '' }]; // Сбрасываем 10:00 - 21:00
                 
                 dayEntries.forEach((entry, i) => {
                     tbodyRaid.insertAdjacentHTML('beforeend', createRaidRowHTML(dayName, entry, i === 0));
@@ -499,7 +475,7 @@
                         </div>
                     </td>
                     <td class="py-3 px-2 text-center">
-                        <div class="flex justify-center gap-2">
+                        <div class="flex justify-center gap-2 status-container p-1 rounded-lg transition-all">
                             <label class="cursor-pointer">
                                 <input type="radio" class="hidden peer entry-status-radio" name="${uniqueId}" value="+" ${entry.status === '+' ? 'checked' : ''} onclick="markFormDirty()">
                                 <div class="w-8 h-8 flex items-center justify-center rounded-lg font-black border-2 border-slate-200 text-slate-400 peer-checked:bg-green-500 peer-checked:text-white peer-checked:border-green-500 hover:bg-slate-100 transition shadow-sm">+</div >
@@ -512,9 +488,9 @@
                     </td>
                     <td class="py-3 px-2 text-center">
                         <div class="flex items-center justify-center gap-2">
-                            <input type="time" class="entry-start border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer w-20 sm:w-24 text-center" value="${entry.start || '10:00'}" min="08:00" onclick="this.showPicker()" onchange="handleTimeChange(this, true)">
+                            <input type="time" class="entry-start border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer w-20 sm:w-24 text-center" value="${entry.start || ''}" min="08:00" onclick="this.showPicker()" onchange="validateTime(this)">
                             <span class="text-slate-400 font-bold">-</span>
-                            <input type="time" class="entry-end border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer w-20 sm:w-24 text-center" value="${entry.end || '21:00'}" min="08:00" onclick="this.showPicker()" onchange="handleTimeChange(this, false)">
+                            <input type="time" class="entry-end border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer w-20 sm:w-24 text-center" value="${entry.end || ''}" min="08:00" onclick="this.showPicker()" onchange="validateTime(this)">
                         </div>
                     </td>
                     <td class="py-3 px-2 text-center">
@@ -539,9 +515,9 @@
                     </td>
                     <td class="py-3 px-2 text-center w-auto">
                         <div class="flex items-center justify-center gap-2">
-                            <input type="time" class="entry-start border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer w-20 sm:w-24 text-center" value="${entry.start || '10:00'}" min="08:00" onclick="this.showPicker()" onchange="handleTimeChange(this, true)">
+                            <input type="time" class="entry-start border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer w-20 sm:w-24 text-center" value="${entry.start || ''}" min="08:00" onclick="this.showPicker()" onchange="validateTime(this)">
                             <span class="text-slate-400 font-bold">-</span>
-                            <input type="time" class="entry-end border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer w-20 sm:w-24 text-center" value="${entry.end || '21:00'}" min="08:00" onclick="this.showPicker()" onchange="handleTimeChange(this, false)">
+                            <input type="time" class="entry-end border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer w-20 sm:w-24 text-center" value="${entry.end || ''}" min="08:00" onclick="this.showPicker()" onchange="validateTime(this)">
                         </div>
                     </td>
                     <td class="py-3 px-2 text-center w-16">
@@ -560,11 +536,10 @@
             const currentRow = btnElem.closest('tr');
             let newRowHtml = '';
             if (isRaid) {
-                newRowHtml = createRaidRowHTML(id, { start: '10:00', end: '21:00' }, false);
+                newRowHtml = createRaidRowHTML(id, { start: '', end: '' }, false);
             } else {
                 const dateObj = generatedDates.find(d => d.iso === id);
-                // Автоматически ставим статус '+' для новой строки
-                newRowHtml = createRowHTML(dateObj, { status: '+', start: '10:00', end: '21:00' }, false);
+                newRowHtml = createRowHTML(dateObj, { status: '', start: '', end: '' }, false);
             }
             currentRow.insertAdjacentHTML('afterend', newRowHtml);
             markFormDirty();
@@ -727,6 +702,13 @@
             const floatBtn = document.getElementById('floating-save-btn');
             const floatText = document.getElementById('floating-save-text');
 
+            let hasErrors = false;
+
+            // Очищаем старые ошибки
+            document.querySelectorAll('.ring-2.ring-red-500').forEach(el => {
+                el.classList.remove('ring-2', 'ring-red-500', 'bg-red-50');
+            });
+
             const originalFloatText = floatText.innerText;
 
             floatText.innerText = 'Сохранение...';
@@ -737,30 +719,64 @@
             // 1. Сохранение дат (календарь)
             document.querySelectorAll('.form-row').forEach(row => {
                 const date = row.getAttribute('data-date');
-                const start = row.querySelector('.entry-start').value;
-                const end = row.querySelector('.entry-end').value;
+                const startElem = row.querySelector('.entry-start');
+                const endElem = row.querySelector('.entry-end');
+                const start = startElem.value;
+                const end = endElem.value;
                 
                 const checkedStatus = row.querySelector('.entry-status-radio:checked');
                 const status = checkedStatus ? checkedStatus.value : null;
 
-                if (!dataToSave[date]) dataToSave[date] = [];
-                // Сохраняем строку ТОЛЬКО если игрок нажал на плюс или вопрос
-                if (status === '+' || status === '?') {
-                    dataToSave[date].push({ status, start, end });
+                const hasTime = start !== '' || end !== '';
+                const hasStatus = status !== null;
+
+                if (hasTime || hasStatus) {
+                    if (hasTime && !hasStatus) {
+                        const statusContainer = row.querySelector('.status-container');
+                        if (statusContainer) statusContainer.classList.add('ring-2', 'ring-red-500', 'bg-red-50');
+                        hasErrors = true;
+                    }
+                    if (hasStatus && !hasTime) {
+                        startElem.classList.add('ring-2', 'ring-red-500');
+                        endElem.classList.add('ring-2', 'ring-red-500');
+                        hasErrors = true;
+                    }
+                    
+                    if (!dataToSave[date]) dataToSave[date] = [];
+                    if (!hasErrors) {
+                        dataToSave[date].push({ status, start, end });
+                    }
                 }
             });
 
             // 2. Сохранение рейдовых дней (Среда-Вторник)
             document.querySelectorAll('.form-row-raid').forEach(row => {
                 const dayName = row.getAttribute('data-day');
-                const start = row.querySelector('.entry-start').value;
-                const end = row.querySelector('.entry-end').value;
+                const startElem = row.querySelector('.entry-start');
+                const endElem = row.querySelector('.entry-end');
+                const start = startElem.value;
+                const end = endElem.value;
                 
-                if (!dataToSave.raidDays[dayName]) dataToSave.raidDays[dayName] = [];
-                if (start && end) {
-                    dataToSave.raidDays[dayName].push({ start, end });
+                const hasTime = start !== '' || end !== '';
+                if (hasTime) {
+                    if (start === '' || end === '') {
+                        if (start === '') startElem.classList.add('ring-2', 'ring-red-500');
+                        if (end === '') endElem.classList.add('ring-2', 'ring-red-500');
+                        hasErrors = true;
+                    }
+                    if (!dataToSave.raidDays[dayName]) dataToSave.raidDays[dayName] = [];
+                    if (!hasErrors) {
+                        dataToSave.raidDays[dayName].push({ start, end });
+                    }
                 }
             });
+
+            if (hasErrors) {
+                showMessage('Укажите статус для выделенного времени (и наоборот)!', 'error');
+                floatBtn.disabled = false;
+                floatText.innerText = originalFloatText;
+                return;
+            }
 
             const jsonString = JSON.stringify(dataToSave, null, 2);
             const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
@@ -1026,7 +1042,7 @@
                             <div class="w-24 shrink-0 font-bold text-slate-400 text-sm flex items-end justify-center uppercase tracking-wider">Игрок</div>
             `;
             RAID_DAYS.forEach(day => {
-                raidTimelineHtml += `<div class="flex-1 text-center font-bold text-slate-500 uppercase tracking-widest text-xs">${day.substring(0,2)}</div>`;
+                raidTimelineHtml += `<div class="flex-1 text-center font-bold text-slate-500 uppercase tracking-widest text-xs">${RAID_DAYS_MAP[day]}</div>`;
             });
             raidTimelineHtml += `</div>`;
 
@@ -1052,9 +1068,12 @@
                 raidTimelineHtml += `<div class="flex relative mb-4 items-center group">`;
                 raidTimelineHtml += `<div class="w-24 shrink-0 font-black text-slate-700 text-right pr-4 text-sm truncate">${p}</div>`;
                 
+                // Изолируем таймлайн в гибкий контейнер
+                raidTimelineHtml += `<div class="flex-1 relative flex h-10">`;
+
                 // Рисуем подложки
                 RAID_DAYS.forEach(() => {
-                    raidTimelineHtml += `<div class="flex-1 h-10 border-x border-dashed border-slate-100 bg-slate-50/50 mx-[1px] rounded-sm"></div>`;
+                    raidTimelineHtml += `<div class="flex-1 border-x border-dashed border-slate-100 bg-slate-50/50 mx-[1px] rounded-sm h-full"></div>`;
                 });
 
                 // Вычисляем объединенные блоки
@@ -1083,18 +1102,18 @@
                 // Отрисовываем цветные плашки поверх подложек
                 const trackWidthPercent = 100 / RAID_DAYS.length;
                 blocks.forEach(b => {
-                    const leftPos = `calc(${b.startIdx * trackWidthPercent}% + 6rem)`; // 6rem это 24 (w-24)
+                    const leftPos = `calc(${b.startIdx * trackWidthPercent}%)`; 
                     const widthVal = `calc(${b.span * trackWidthPercent}%)`;
                     
                     raidTimelineHtml += `
-                        <div class="absolute h-10 flex items-center justify-center rounded-full border ${pColor.bg} ${pColor.border} ${pColor.text} font-bold text-xs shadow-sm transition-transform transform group-hover:scale-[1.02] z-10 mx-[2px] cursor-default" 
-                             style="left: ${leftPos}; width: ${widthVal};">
+                        <div class="absolute h-full flex items-center justify-center rounded-full border ${pColor.bg} ${pColor.border} ${pColor.text} font-bold text-xs shadow-sm transition-transform transform group-hover:scale-[1.02] z-10 cursor-default" 
+                             style="left: ${leftPos}; width: ${widthVal}; margin-left: 2px; padding-right: 4px;">
                             ${b.timeStr}
                         </div>
                     `;
                 });
 
-                raidTimelineHtml += `</div>`;
+                raidTimelineHtml += `</div></div>`; // Закрываем контейнер таймлайна и строку
             });
 
             raidTimelineHtml += `</div></div>`;
