@@ -16,13 +16,13 @@
   "2026-07-06": [],
   "raid-wed": [],
   "raid-thu": [],
-  "raid-fri": [
+  "raid-fri": [],
+  "raid-sat": [
     {
-      "start": "22:09",
-      "end": "23:44"
+      "start": "20:00",
+      "end": "23:59"
     }
   ],
-  "raid-sat": [],
   "raid-sun": [],
   "raid-mon": [],
   "raid-tue": []
