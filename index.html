@@ -142,6 +142,24 @@
                 </div>
             </div>
 
+            <!-- Блок 1.5: Рейдовые дни -->
+            <div id="raid-container" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
+                <h3 class="text-xl font-black text-slate-800 mb-6 text-center uppercase tracking-wide">Рейдовые дни</h3>
+                <div class="overflow-x-auto custom-scrollbar pb-2">
+                    <table class="w-full border-collapse min-w-[500px]">
+                        <thead>
+                            <tr class="text-sm text-slate-500 border-b border-slate-200">
+                                <th class="pb-3 font-bold px-2 w-[30%] text-center">День</th>
+                                <th class="pb-3 font-bold px-2 w-[50%] text-center">Время</th>
+                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Добавить время</th>
+                            </tr>
+                        </thead>
+                        <tbody id="form-body-raid" class="text-sm">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Блок 2: Текущая неделя -->
             <div id="week1-container" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
                 <h3 class="text-xl font-black text-slate-800 mb-6 text-center uppercase tracking-wide">Текущая неделя</h3>
@@ -200,6 +218,14 @@
         const PLAYERS = ['Женя', 'Рейнон', 'Рид', 'Рипыч'];
         const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'R1234', 'Женя': 'R1234', 'Рейнон': 'R1234' };
         
+        const RAID_DAYS = ['Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье', 'Понедельник', 'Вторник'];
+        const PLAYER_COLORS = {
+            'Женя': 'bg-rose-100 text-rose-700 border-rose-200',
+            'Рейнон': 'bg-emerald-100 text-emerald-700 border-emerald-200',
+            'Рид': 'bg-sky-100 text-sky-700 border-sky-200',
+            'Рипыч': 'bg-violet-100 text-violet-700 border-violet-200'
+        };
+
         const dayNamesFull = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
         const dayNamesShort = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
         
@@ -362,11 +388,26 @@
 
             const tbody1 = document.getElementById('form-body-week1');
             const tbody2 = document.getElementById('form-body-week2');
+            const tbodyRaid = document.getElementById('form-body-raid');
             const week1Container = document.getElementById('week1-container');
             const week2Container = document.getElementById('week2-container');
             
             tbody1.innerHTML = '';
             tbody2.innerHTML = '';
+            tbodyRaid.innerHTML = '';
+
+            // Рендер Рейдовых дней
+            RAID_DAYS.forEach((dayName, idx) => {
+                let dayEntries = userData[`raid_${idx}`];
+                if (!dayEntries || dayEntries.length === 0) {
+                    dayEntries = [{ start: '', end: '' }];
+                }
+                
+                dayEntries.forEach((entry, i) => {
+                    const rowHtml = createRaidRowHTML(idx, dayName, entry, i === 0);
+                    tbodyRaid.insertAdjacentHTML('beforeend', rowHtml);
+                });
+            });
 
             let countW1 = 0;
             let countW2 = 0;
@@ -438,10 +479,44 @@
             `;
         }
 
+        function createRaidRowHTML(dayIdx, dayName, entry, isFirstRowOfDay) {
+            return `
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors raid-row ${isFirstRowOfDay ? 'border-t border-slate-200' : ''}" data-day-idx="${dayIdx}">
+                    <td class="py-3 px-2 ${isFirstRowOfDay ? '' : 'text-transparent'}">
+                        <div class="flex justify-center items-center font-bold ${isFirstRowOfDay ? 'text-slate-800' : ''}">
+                            <span class="text-left w-24">${isFirstRowOfDay ? dayName : ' '}</span>
+                        </div>
+                    </td>
+                    <td class="py-3 px-2 text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <input type="time" class="entry-start border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer" value="${entry.start || ''}" onclick="this.showPicker()">
+                            <span class="text-slate-400 font-bold">-</span>
+                            <input type="time" class="entry-end border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer" value="${entry.end || ''}" onclick="this.showPicker()">
+                        </div>
+                    </td>
+                    <td class="py-3 px-2 text-center">
+                        <div class="flex justify-center">
+                            ${isFirstRowOfDay 
+                                ? `<button onclick="addRaidTimeRow('${dayIdx}', '${dayName}', this)" class="text-blue-600 hover:text-blue-800 hover:bg-blue-100 bg-blue-50 border border-blue-200 rounded-md w-8 h-8 flex items-center justify-center transition font-black shadow-sm text-lg" title="Добавить время">+</button>` 
+                                : `<button onclick="this.closest('tr').remove()" class="text-red-500 hover:text-red-700 hover:bg-red-100 bg-red-50 border border-red-200 rounded-md w-8 h-8 flex items-center justify-center transition font-black shadow-sm text-lg" title="Удалить строку">×</button>`
+                            }
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        window.addTimeRow = function(isoDate, btnElem) {
         window.addTimeRow = function(isoDate, btnElem) {
             const dateObj = generatedDates.find(d => d.iso === isoDate);
             const currentRow = btnElem.closest('tr');
             const newRowHtml = createRowHTML(dateObj, { status: '', start: '10:00', end: '21:00' }, false);
+            currentRow.insertAdjacentHTML('afterend', newRowHtml);
+        }
+
+        window.addRaidTimeRow = function(dayIdx, dayName, btnElem) {
+            const currentRow = btnElem.closest('tr');
+            const newRowHtml = createRaidRowHTML(dayIdx, dayName, { start: '', end: '' }, false);
             currentRow.insertAdjacentHTML('afterend', newRowHtml);
         }
 
@@ -623,6 +698,18 @@
                 if (!dataToSave[date]) dataToSave[date] = [];
                 if (status === '+' || status === '?') {
                     dataToSave[date].push({ status, start, end });
+                }
+            });
+
+            document.querySelectorAll('.raid-row').forEach(row => {
+                const dayIdx = row.getAttribute('data-day-idx');
+                const start = row.querySelector('.entry-start').value;
+                const end = row.querySelector('.entry-end').value;
+
+                if (!dataToSave[`raid_${dayIdx}`]) dataToSave[`raid_${dayIdx}`] = [];
+                // Сохраняем только если игрок реально ввел время
+                if (start && end) {
+                    dataToSave[`raid_${dayIdx}`].push({ start, end });
                 }
             });
 
@@ -909,6 +996,115 @@
             week2Html += `</div></div>`;
             
             finalHtml += week1Html + week2Html;
+
+            // 3. Рендер Таймлайна Рейдовых Дней
+            let timelineHtml = '';
+            let playersWithRaidData = [];
+
+            // Проверяем, есть ли у кого-то рейдовое расписание
+            PLAYERS.forEach(p => {
+                let hasRaid = false;
+                for(let i=0; i<7; i++) {
+                    if(schedules[p] && schedules[p][`raid_${i}`] && schedules[p][`raid_${i}`].length > 0) {
+                        hasRaid = true; break;
+                    }
+                }
+                if(hasRaid) playersWithRaidData.push(p);
+            });
+
+            if (playersWithRaidData.length > 0) {
+                timelineHtml += `
+                    <div class="mt-10 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 overflow-x-auto">
+                        <h3 class="text-xl font-black text-slate-800 mb-8 uppercase tracking-wide text-center sm:text-left px-1">Рейдовое расписание</h3>
+                        <div class="min-w-[700px] pb-4">
+                            <!-- Заголовки дней -->
+                            <div class="grid grid-cols-[100px_repeat(7,minmax(0,1fr))] sm:grid-cols-[120px_repeat(7,minmax(0,1fr))] gap-2 mb-4">
+                                <div></div>
+                                ${RAID_DAYS.map(d => `<div class="text-center font-bold text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider">${d}</div>`).join('')}
+                            </div>
+                `;
+
+                playersWithRaidData.forEach((p, pIdx) => {
+                    let colorClass = PLAYER_COLORS[p] || 'bg-slate-100 text-slate-700 border-slate-200';
+                    let pData = schedules[p] || {};
+
+                    let spans = [];
+                    let currentSpan = null;
+
+                    // Алгоритм поиска смежных одинаковых времен
+                    for(let i=0; i<7; i++) {
+                        let dayTimes = pData[`raid_${i}`] || [];
+                        if (dayTimes.length === 1 && dayTimes[0].start && dayTimes[0].end) {
+                            let timeStr = `${dayTimes[0].start} - ${dayTimes[0].end}`;
+                            if (currentSpan && currentSpan.timeStr === timeStr) {
+                                currentSpan.length++;
+                            } else {
+                                if (currentSpan) spans.push(currentSpan);
+                                currentSpan = { startDay: i, length: 1, timeStr: timeStr };
+                            }
+                        } else {
+                            if (currentSpan) { spans.push(currentSpan); currentSpan = null; }
+                            dayTimes.forEach(t => {
+                                 if(t.start && t.end) spans.push({ startDay: i, length: 1, timeStr: `${t.start} - ${t.end}` });
+                            });
+                        }
+                    }
+                    if (currentSpan) spans.push(currentSpan);
+
+                    // Избегаем наложения блоков, если у человека 2+ времени в 1 день
+                    let tracks = [[]];
+                    spans.forEach(span => {
+                        let placed = false;
+                        for(let t=0; t<tracks.length; t++) {
+                            let collision = tracks[t].some(s => !(span.startDay + span.length <= s.startDay || span.startDay >= s.startDay + s.length));
+                            if (!collision) {
+                                tracks[t].push(span);
+                                placed = true;
+                                break;
+                            }
+                        }
+                        if (!placed) tracks.push([span]);
+                    });
+
+                    timelineHtml += `<div class="flex flex-col gap-1.5 mb-6">`;
+
+                    // Рендер дорожек (tracks) для игрока
+                    tracks.forEach((trackSpans, trackIdx) => {
+                        timelineHtml += `<div class="grid grid-cols-[100px_repeat(7,minmax(0,1fr))] sm:grid-cols-[120px_repeat(7,minmax(0,1fr))] gap-2 items-center relative">`;
+                        
+                        // Имя выводится только на первой дорожке
+                        if (trackIdx === 0) {
+                            timelineHtml += `<div class="row-start-1 col-start-1 text-right pr-2 sm:pr-4 font-black text-slate-700 tracking-tight uppercase truncate text-[11px] sm:text-sm" title="${p}">${p}</div>`;
+                        } else {
+                            timelineHtml += `<div class="row-start-1 col-start-1"></div>`; 
+                        }
+                        
+                        // Серый фон-подложка для каждого дня
+                        for(let i=0; i<7; i++) {
+                            timelineHtml += `<div class="row-start-1 bg-slate-100 h-10 sm:h-12 w-full rounded-full opacity-60" style="grid-column: ${i+2};"></div>`;
+                        }
+
+                        // Сами длинные цветные блоки поверх фона
+                        trackSpans.forEach(span => {
+                            timelineHtml += `
+                                <div class="row-start-1 border flex items-center justify-center rounded-full h-10 sm:h-12 z-10 font-bold text-[10px] sm:text-[13px] tracking-wide shadow-sm hover:shadow-md transition-all cursor-default ${colorClass}"
+                                     style="grid-column: ${span.startDay + 2} / span ${span.length}; margin: 0 2px;">
+                                    ${span.timeStr}
+                                </div>
+                            `;
+                        });
+                        
+                        timelineHtml += `</div>`;
+                    });
+                    
+                    timelineHtml += `</div>`;
+                });
+
+                timelineHtml += `</div></div>`;
+            }
+
+            finalHtml += timelineHtml;
+
             container.innerHTML = finalHtml;
         }
 
