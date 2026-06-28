@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ХОЧУ ИГРАТЬ</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚔️</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -93,7 +94,7 @@
                     <p class="text-slate-500 text-sm mt-1">Отметь время на текущую и следующую неделю.</p>
                 </div>
                 <button onclick="saveForm()" id="btn-save" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 px-6 rounded-lg transition flex items-center justify-center gap-2 shadow-sm w-full sm:w-auto">
-                    Сохранить в GitHub
+                    Сохранить
                 </button>
             </div>
 
@@ -104,7 +105,7 @@
                     <table class="w-full text-left border-collapse min-w-[500px]">
                         <thead>
                             <tr class="text-sm text-slate-500 border-b border-slate-200">
-                                <th class="pb-3 font-medium px-2 w-[20%] text-left">Дата</th>
+                                <th class="pb-3 font-medium px-2 w-[20%] text-center">Дата</th>
                                 <th class="pb-3 font-medium px-2 w-[20%] text-center">Статус</th>
                                 <th class="pb-3 font-medium px-2 w-[40%] text-center">Время (Старт - Конец)</th>
                                 <th class="pb-3 font-medium px-2 w-[20%] text-center">Действие</th>
@@ -124,7 +125,7 @@
                     <table class="w-full text-left border-collapse min-w-[500px]">
                         <thead>
                             <tr class="text-sm text-slate-500 border-b border-slate-200">
-                                <th class="pb-3 font-medium px-2 w-[20%] text-left">Дата</th>
+                                <th class="pb-3 font-medium px-2 w-[20%] text-center">Дата</th>
                                 <th class="pb-3 font-medium px-2 w-[20%] text-center">Статус</th>
                                 <th class="pb-3 font-medium px-2 w-[40%] text-center">Время (Старт - Конец)</th>
                                 <th class="pb-3 font-medium px-2 w-[20%] text-center">Действие</th>
@@ -330,7 +331,7 @@
 
             // Структура с заданными ширинами и выравниванием по ТЗ
             tr.innerHTML = `
-                <td class="py-3 px-2 font-medium ${isFirstRowOfDay ? 'text-slate-800' : 'text-transparent'}">
+                <td class="py-3 px-2 font-medium text-center ${isFirstRowOfDay ? 'text-slate-800' : 'text-transparent'}">
                     ${isFirstRowOfDay ? dateObj.display : dateObj.display}
                 </td>
                 <td class="py-3 px-2 text-center">
@@ -346,8 +347,8 @@
                         <input type="time" class="entry-end border border-slate-300 rounded-md p-1.5 outline-none text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500" value="${entry.end}" min="${entry.start || ''}">
                     </div>
                 </td>
-                <td class="py-3 px-2">
-                    <div class="flex justify-end pr-2 md:pr-10">
+                <td class="py-3 px-2 text-center">
+                    <div class="flex justify-center">
                         ${isFirstRowOfDay 
                             ? `<button onclick="addTimeRow('${dateObj.iso}', this)" class="text-blue-600 hover:text-blue-800 hover:bg-blue-100 bg-blue-50 border border-blue-200 rounded-md p-1.5 px-3 transition font-bold shadow-sm" title="Добавить время">+</button>` 
                             : `<button onclick="this.closest('tr').remove()" class="text-red-500 hover:text-red-700 hover:bg-red-100 bg-red-50 border border-red-200 rounded-md p-1.5 px-3 transition font-bold shadow-sm" title="Удалить строку">×</button>`
@@ -636,7 +637,6 @@
                             if (slot.status === '+') colorClass = 'bg-blue-50 text-blue-700 border-blue-100';
                             if (slot.status === '?') colorClass = 'bg-yellow-50 text-yellow-700 border-yellow-200';
 
-                            // Убрали truncate и добавили flex-wrap для длинных имен (Рейнон и др.)
                             statusesHtml += `
                                 <div class="flex flex-wrap justify-between items-center text-xs p-1.5 px-2 border rounded-md ${colorClass} gap-1">
                                     <span class="font-semibold break-words max-w-full">${p}</span>
