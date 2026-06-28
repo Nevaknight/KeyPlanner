@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ХОЧУ ИГРАТЬ</title>
-    <!-- Безопасно закодированная иконка вкладки -->
+    <!-- Иконка песочных часов -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⌛%3C/text%3E%3C/svg%3E">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
@@ -16,39 +16,26 @@
         .custom-scrollbar::-webkit-scrollbar { height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        
-        /* Стили для таймлайна рейдовых дней */
-        .timeline-cell { padding: 4px; }
-        .timeline-pill { 
-            border-radius: 9999px; 
-            text-align: center; 
-            padding: 8px 12px; 
-            font-size: 0.875rem; 
-            font-weight: 700; 
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+        input[type="time"]::-webkit-calendar-picker-indicator { cursor: pointer; }
     </style>
 </head>
-<body class="text-slate-800 antialiased min-h-screen flex flex-col relative pb-20">
+<body class="text-slate-800 antialiased min-h-screen flex flex-col relative overflow-x-hidden">
 
     <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-20">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <h1 class="text-xl font-bold text-slate-900 tracking-tight cursor-pointer flex items-center gap-2" onclick="showView('dashboard')">
                 <span>⌛</span> ХОЧУ ИГРАТЬ
             </h1>
-            <div id="nav-user" class="hidden flex items-center gap-2 sm:gap-4">
+            <div id="nav-user" class="hidden flex items-center gap-4">
                 <span id="nav-player-name" class="font-bold text-blue-600 hidden sm:inline-block"></span>
-                <button id="nav-btn-dashboard" onclick="showView('dashboard')" class="text-sm px-2 sm:px-3 py-1.5 rounded-md transition font-medium">Расписание</button>
-                <button id="nav-btn-form" onclick="showView('form')" class="text-sm px-2 sm:px-3 py-1.5 rounded-md transition font-medium">Моя анкета</button>
-                <button onclick="logout()" class="text-sm text-red-500 hover:text-red-700 transition font-bold px-1 sm:px-2">Выйти</button>
+                <button id="nav-btn-dashboard" onclick="showView('dashboard')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Расписание</button>
+                <button id="nav-btn-form" onclick="showView('form')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Моя анкета</button>
+                <button onclick="logout()" class="text-sm text-red-500 hover:text-red-700 transition font-bold px-2">Выйти</button>
             </div>
         </div>
     </nav>
 
-    <main class="flex-1 max-w-7xl mx-auto px-4 py-8 w-full relative">
+    <main class="flex-1 max-w-7xl mx-auto px-4 py-8 w-full">
         
         <!-- ЭКРАН 1: ЛОГИН -->
         <div id="view-login" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-10">
@@ -84,7 +71,7 @@
         <div id="view-dashboard" class="hidden-view space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                 <div>
-                    <h2 id="dashboard-status-text" class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Ожидание данных...</h2>
+                    <h2 id="dashboard-status-text" class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Ожидание данных...</h2>
                 </div>
                 <button onclick="loadAllData()" class="text-sm bg-white border border-slate-300 hover:bg-slate-50 px-4 py-2.5 rounded-lg transition flex items-center justify-center gap-2 font-bold shadow-sm w-full sm:w-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
@@ -104,16 +91,6 @@
 
         <!-- ЭКРАН 3: АНКЕТА ИГРОКА -->
         <div id="view-form" class="hidden-view">
-            
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-900 text-center sm:text-left w-full">Заполнение анкеты</h2>
-                    <p class="text-slate-500 text-sm mt-1 text-center sm:text-left w-full">Отметь время на текущую и следующую неделю.</p>
-                </div>
-                <button onclick="saveForm()" id="btn-save" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-8 rounded-lg transition flex items-center justify-center gap-2 shadow-sm w-full sm:w-auto text-lg">
-                    Сохранить
-                </button>
-            </div>
 
             <!-- БЛОК: ВИКЛИ НОУ ЛИВЕРС (ТОЛЬКО РЕЙНОН) -->
             <div id="wnl-builder-container" class="bg-gradient-to-br from-purple-50 to-white rounded-2xl shadow-sm border border-purple-200 p-6 sm:p-8 mb-6 hidden">
@@ -156,7 +133,7 @@
                 </div>
             </div>
 
-            <!-- Блок: Текущая неделя -->
+            <!-- Блок 2: Текущая неделя -->
             <div id="week1-container" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
                 <h3 class="text-xl font-black text-slate-800 mb-6 text-center uppercase tracking-wide">Текущая неделя</h3>
                 <div class="overflow-x-auto custom-scrollbar pb-2">
@@ -166,15 +143,16 @@
                                 <th class="pb-3 font-bold px-2 w-[25%] text-center">Дата</th>
                                 <th class="pb-3 font-bold px-2 w-[15%] text-center">Статус</th>
                                 <th class="pb-3 font-bold px-2 w-[40%] text-center">Время</th>
-                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Доп. слот</th>
+                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Добавить время</th>
                             </tr>
                         </thead>
-                        <tbody id="form-body-week1" class="text-sm"></tbody>
+                        <tbody id="form-body-week1" class="text-sm">
+                        </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Блок: Следующая неделя -->
+            <!-- Блок 3: Следующая неделя -->
             <div id="week2-container" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
                 <h3 class="text-xl font-black text-slate-800 mb-6 text-center uppercase tracking-wide">Следующая неделя</h3>
                 <div class="overflow-x-auto custom-scrollbar pb-2">
@@ -184,20 +162,29 @@
                                 <th class="pb-3 font-bold px-2 w-[25%] text-center">Дата</th>
                                 <th class="pb-3 font-bold px-2 w-[15%] text-center">Статус</th>
                                 <th class="pb-3 font-bold px-2 w-[40%] text-center">Время</th>
-                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Доп. слот</th>
+                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Добавить время</th>
                             </tr>
                         </thead>
-                        <tbody id="form-body-week2" class="text-sm"></tbody>
+                        <tbody id="form-body-week2" class="text-sm">
+                        </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Блок: Рейдовые дни (Статичные дни без кнопок статуса) -->
+            <!-- Блок 4: Рейдовые дни (Среда - Вторник) -->
             <div id="raid-days-container" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
                 <h3 class="text-xl font-black text-slate-800 mb-6 text-center uppercase tracking-wide">Рейдовые дни</h3>
                 <div class="overflow-x-auto custom-scrollbar pb-2">
-                    <table class="w-full border-collapse min-w-[300px] max-w-2xl mx-auto">
-                        <tbody id="form-body-raid-days" class="text-sm"></tbody>
+                    <table class="w-full border-collapse min-w-[400px]">
+                        <thead>
+                            <tr class="text-sm text-slate-500 border-b border-slate-200">
+                                <th class="pb-3 font-bold px-2 w-[30%] text-center">День недели</th>
+                                <th class="pb-3 font-bold px-2 w-[50%] text-center">Время</th>
+                                <th class="pb-3 font-bold px-2 w-[20%] text-center">Добавить время</th>
+                            </tr>
+                        </thead>
+                        <tbody id="form-body-raid" class="text-sm">
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -205,14 +192,14 @@
         </div>
     </main>
 
-    <!-- Плавающая кнопка "Сохранить" -->
-    <button id="floating-save-btn" onclick="saveForm()" class="fixed bottom-6 right-6 sm:bottom-10 sm:right-10 z-40 bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 px-6 rounded-full shadow-2xl transition-all duration-300 transform translate-y-16 opacity-0 pointer-events-none flex items-center gap-2 border-2 border-white">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-        <span id="floating-save-text">Сохранить изменения</span>
+    <!-- Плавающая кнопка Сохранить -->
+    <button id="floating-save-btn" onclick="saveForm()" class="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full shadow-2xl z-40 transition-all duration-300 transform translate-y-24 opacity-0 flex items-center gap-2 pointer-events-none">
+        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span id="floating-save-text">Сохранить</span>
     </button>
 
-    <!-- Всплывающие уведомления (перенесены наверх, чтобы не перекрывать кнопку) -->
-    <div id="message-box" class="fixed top-20 right-4 sm:top-24 sm:right-10 px-6 py-4 rounded-xl shadow-2xl z-50 text-white font-medium hidden transition-all duration-300 transform -translate-y-4 opacity-0 flex items-center gap-3">
+    <!-- Уведомления (перенесены в правый ВЕРХНИЙ угол) -->
+    <div id="message-box" class="fixed top-20 right-4 px-6 py-4 rounded-xl shadow-2xl z-50 text-white font-medium hidden transition-all duration-300 transform -translate-y-4 opacity-0 flex items-center gap-3">
         <span id="message-icon"></span>
         <span id="message-text"></span>
     </div>
@@ -227,15 +214,15 @@
         // ==========================================
 
         const PLAYERS = ['Женя', 'Рейнон', 'Рид', 'Рипыч'];
-        const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'DHtop', 'Женя': 'R1234', 'Рейнон': 'R1234' };
+        const PASSWORDS = { 'Рид': 'R1234', 'Женя': 'R1234', 'Рейнон': 'R1234', 'Рипыч': 'DHtop' };
         
         const dayNamesFull = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
         const dayNamesShort = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
-        const RAID_DAYS = ['Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье', 'Понедельник', 'Вторник']; 
+        const RAID_DAYS = ['Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье', 'Понедельник', 'Вторник'];
         
         let currentUser = null;
         let generatedDates = []; 
-        let globalRaidData = {};
+        let isFormDirty = false;
 
         function getMoscowISO() {
             const d = new Date();
@@ -282,26 +269,7 @@
             } else {
                 showView('login');
             }
-
-            // Отслеживание изменений для плавающей кнопки
-            document.getElementById('view-form').addEventListener('input', markFormDirty);
-            document.getElementById('view-form').addEventListener('change', markFormDirty);
         });
-
-        // ==========================================
-        // ПЛАВАЮЩАЯ КНОПКА СОХРАНЕНИЯ
-        // ==========================================
-        window.markFormDirty = function() {
-            const btn = document.getElementById('floating-save-btn');
-            btn.classList.remove('translate-y-16', 'opacity-0', 'pointer-events-none');
-            btn.classList.add('translate-y-0', 'opacity-100');
-        }
-        
-        window.markFormClean = function() {
-            const btn = document.getElementById('floating-save-btn');
-            btn.classList.remove('translate-y-0', 'opacity-100');
-            btn.classList.add('translate-y-16', 'opacity-0', 'pointer-events-none');
-        }
 
         function showMessage(msg, type = 'info') {
             const box = document.getElementById('message-box');
@@ -311,22 +279,44 @@
             text.textContent = msg;
             
             if (type === 'error') {
-                box.className = `fixed top-20 right-4 sm:top-24 sm:right-10 px-6 py-4 rounded-xl shadow-2xl z-50 text-white font-medium transition-all duration-300 bg-red-600 flex items-center gap-3`;
+                box.className = `fixed top-20 right-4 px-6 py-4 rounded-xl shadow-2xl z-50 text-white font-medium transition-all duration-300 bg-red-600 flex items-center gap-3`;
                 icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>`;
             } else if (type === 'success') {
-                box.className = `fixed top-20 right-4 sm:top-24 sm:right-10 px-6 py-4 rounded-xl shadow-2xl z-50 text-white font-medium transition-all duration-300 bg-emerald-600 flex items-center gap-3`;
+                box.className = `fixed top-20 right-4 px-6 py-4 rounded-xl shadow-2xl z-50 text-white font-medium transition-all duration-300 bg-emerald-600 flex items-center gap-3`;
                 icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>`;
             } else {
-                box.className = `fixed top-20 right-4 sm:top-24 sm:right-10 px-6 py-4 rounded-xl shadow-2xl z-50 text-white font-medium transition-all duration-300 bg-slate-800 flex items-center gap-3`;
+                box.className = `fixed top-20 right-4 px-6 py-4 rounded-xl shadow-2xl z-50 text-white font-medium transition-all duration-300 bg-slate-800 flex items-center gap-3`;
                 icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`;
             }
             
             box.classList.remove('hidden');
             setTimeout(() => {
-                box.classList.remove('opacity-100', 'translate-y-0');
                 box.classList.add('opacity-0', '-translate-y-4');
+                box.classList.remove('translate-y-0', 'opacity-100');
                 setTimeout(() => box.classList.add('hidden'), 300);
             }, 5000);
+            
+            // Включаем анимацию появления
+            requestAnimationFrame(() => {
+                box.classList.remove('opacity-0', '-translate-y-4');
+                box.classList.add('translate-y-0', 'opacity-100');
+            });
+        }
+
+        function markFormDirty() {
+            if (!isFormDirty) {
+                isFormDirty = true;
+                const floatBtn = document.getElementById('floating-save-btn');
+                floatBtn.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+                floatBtn.classList.add('translate-y-0', 'opacity-100');
+            }
+        }
+
+        function markFormClean() {
+            isFormDirty = false;
+            const floatBtn = document.getElementById('floating-save-btn');
+            floatBtn.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+            floatBtn.classList.remove('translate-y-0', 'opacity-100');
         }
 
         function updateNavStyles(activeViewId) {
@@ -355,13 +345,13 @@
             document.getElementById('view-dashboard').classList.add('hidden-view');
             document.getElementById('view-form').classList.add('hidden-view');
             document.getElementById(`view-${viewId}`).classList.remove('hidden-view');
+            
+            markFormClean();
 
             updateNavStyles(viewId);
 
             if (viewId === 'form') {
-                renderForm();
                 loadUserFormFromGitHub();
-                markFormClean(); 
             } else if (viewId === 'dashboard') {
                 loadAllData();
             }
@@ -399,24 +389,36 @@
             showView('login');
         }
 
-        // ==========================================
-        // УМНОЕ ОБНОВЛЕНИЕ ВРЕМЕНИ (UX)
-        // ==========================================
-        window.updateEndTime = function(startElem) {
-            const row = startElem.closest('tr');
-            const endElem = row.querySelector('.entry-end');
-            
-            if (startElem.value) {
-                endElem.min = startElem.value;
-                if (!endElem.value || endElem.value <= startElem.value) {
-                    let [h, m] = startElem.value.split(':').map(Number);
-                    h = (h + 1) % 24; // +1 час
+        window.handleTimeChange = function(elem, isStart) {
+            // Ограничение минимального времени (не раньше 08:00)
+            if (elem.value && elem.value < '08:00') {
+                elem.value = '08:00';
+                showMessage('Время не может быть раньше 08:00!', 'info');
+            }
+
+            const row = elem.closest('tr');
+
+            // УМНАЯ ФИЧА: Если игрок тронул время, автоматически ставим статус "+"
+            if (row && row.classList.contains('form-row')) {
+                const radios = row.querySelectorAll('.entry-status-radio');
+                if (radios.length === 2 && !radios[0].checked && !radios[1].checked) {
+                    radios[0].checked = true; // Авто-выбор "+"
+                }
+            }
+
+            // Умный сдвиг конечного времени
+            if (isStart && elem.value) {
+                const endElem = row.querySelector('.entry-end');
+                endElem.min = elem.value;
+                if (!endElem.value || endElem.value <= elem.value) {
+                    let [h, m] = elem.value.split(':').map(Number);
+                    h = (h + 1) % 24;
+                    if (h < 8) h = 8; // Запрет перескока на время до 08:00
                     endElem.value = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
                     
-                    // Легкая анимация подсветки
                     endElem.classList.add('bg-blue-50', 'text-blue-600');
                     setTimeout(() => {
-                        endElem.classList.remove('bg-blue-50', 'text-blue-600');
+                        if (endElem) endElem.classList.remove('bg-blue-50', 'text-blue-600');
                     }, 800);
                 }
             }
@@ -438,33 +440,45 @@
 
             const tbody1 = document.getElementById('form-body-week1');
             const tbody2 = document.getElementById('form-body-week2');
-            const tbodyRaid = document.getElementById('form-body-raid-days');
+            const tbodyRaid = document.getElementById('form-body-raid');
+            
+            const week1Container = document.getElementById('week1-container');
+            const week2Container = document.getElementById('week2-container');
             
             tbody1.innerHTML = '';
             tbody2.innerHTML = '';
             tbodyRaid.innerHTML = '';
 
-            let countW1 = 0, countW2 = 0;
+            let countW1 = 0;
+            let countW2 = 0;
+
+            // Рендер дат
             generatedDates.forEach((dateObj, index) => {
                 if (dateObj.isPast) return; 
 
                 let dayEntries = userData[dateObj.iso] || [];
-                if (dayEntries.length === 0) dayEntries = [{ status: '', start: '', end: '' }];
+                if (dayEntries.length === 0) dayEntries = [{ status: '', start: '10:00', end: '21:00' }];
                 
                 dayEntries.forEach((entry, i) => {
                     const rowHtml = createRowHTML(dateObj, entry, i === 0);
-                    if (index < 7) { tbody1.insertAdjacentHTML('beforeend', rowHtml); countW1++; }
-                    else { tbody2.insertAdjacentHTML('beforeend', rowHtml); countW2++; }
+                    if (index < 7) {
+                        tbody1.insertAdjacentHTML('beforeend', rowHtml);
+                        countW1++;
+                    } else {
+                        tbody2.insertAdjacentHTML('beforeend', rowHtml);
+                        countW2++;
+                    }
                 });
             });
 
-            document.getElementById('week1-container').classList.toggle('hidden', countW1 === 0);
-            document.getElementById('week2-container').classList.toggle('hidden', countW2 === 0);
+            week1Container.classList.toggle('hidden', countW1 === 0);
+            week2Container.classList.toggle('hidden', countW2 === 0);
 
+            // Рендер рейдовых дней
             const raidUserData = userData['raidDays'] || {};
             RAID_DAYS.forEach(dayName => {
                 let dayEntries = raidUserData[dayName] || [];
-                if (dayEntries.length === 0) dayEntries = [{ start: '', end: '' }];
+                if (dayEntries.length === 0) dayEntries = [{ start: '10:00', end: '21:00' }];
                 
                 dayEntries.forEach((entry, i) => {
                     tbodyRaid.insertAdjacentHTML('beforeend', createRaidRowHTML(dayName, entry, i === 0));
@@ -474,39 +488,40 @@
 
         function createRowHTML(dateObj, entry, isFirstRowOfDay) {
             const uniqueId = `status-${dateObj.iso}-${Math.random().toString(36).substr(2, 9)}`;
+            
             return `
-                <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors form-row ${isFirstRowOfDay ? 'border-t border-slate-200' : ''}" data-date="${dateObj.iso}">
-                    <td class="py-4 px-2 ${isFirstRowOfDay ? '' : 'text-transparent'}">
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors form-row ${isFirstRowOfDay ? 'border-t border-slate-200' : ''}" data-date="${dateObj.iso}" onchange="markFormDirty()">
+                    <td class="py-3 px-2 ${isFirstRowOfDay ? '' : 'text-transparent'}">
                         <div class="flex justify-center items-center gap-2 font-bold ${isFirstRowOfDay ? 'text-slate-800' : ''}">
                             <span class="w-12 text-right">${isFirstRowOfDay ? dateObj.datePart : ' '}</span>
                             <span class="text-slate-400">${isFirstRowOfDay ? '-' : ' '}</span>
                             <span class="w-24 text-left">${isFirstRowOfDay ? dateObj.dayPart : ' '}</span>
                         </div>
                     </td>
-                    <td class="py-4 px-2 text-center">
+                    <td class="py-3 px-2 text-center">
                         <div class="flex justify-center gap-2">
                             <label class="cursor-pointer">
-                                <input type="radio" class="hidden peer entry-status-radio" name="${uniqueId}" value="+" ${entry.status === '+' ? 'checked' : ''} onchange="markFormDirty()">
+                                <input type="radio" class="hidden peer entry-status-radio" name="${uniqueId}" value="+" ${entry.status === '+' ? 'checked' : ''} onclick="markFormDirty()">
                                 <div class="w-8 h-8 flex items-center justify-center rounded-lg font-black border-2 border-slate-200 text-slate-400 peer-checked:bg-green-500 peer-checked:text-white peer-checked:border-green-500 hover:bg-slate-100 transition shadow-sm">+</div >
                             </label>
                             <label class="cursor-pointer">
-                                <input type="radio" class="hidden peer entry-status-radio" name="${uniqueId}" value="?" ${entry.status === '?' ? 'checked' : ''} onchange="markFormDirty()">
+                                <input type="radio" class="hidden peer entry-status-radio" name="${uniqueId}" value="?" ${entry.status === '?' ? 'checked' : ''} onclick="markFormDirty()">
                                 <div class="w-8 h-8 flex items-center justify-center rounded-lg font-black border-2 border-slate-200 text-slate-400 peer-checked:bg-yellow-400 peer-checked:text-white peer-checked:border-yellow-400 hover:bg-slate-100 transition shadow-sm">?</div >
                             </label>
                         </div>
                     </td>
-                    <td class="py-4 px-2 text-center">
-                        <div class="flex items-center justify-center gap-1 sm:gap-2 bg-slate-50 p-1 sm:p-2 rounded-lg border border-slate-200 w-fit mx-auto shadow-inner">
-                            <input type="time" class="entry-start bg-transparent outline-none text-sm sm:text-base font-bold text-slate-700 cursor-pointer w-20 sm:w-24 transition-colors text-center" value="${entry.start}" onclick="this.showPicker()" onchange="updateEndTime(this)">
-                            <span class="text-slate-300 font-bold">-</span>
-                            <input type="time" class="entry-end bg-transparent outline-none text-sm sm:text-base font-bold text-slate-700 cursor-pointer w-20 sm:w-24 transition-colors text-center" value="${entry.end}" onclick="this.showPicker()" onchange="markFormDirty()">
+                    <td class="py-3 px-2 text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <input type="time" class="entry-start border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer w-20 sm:w-24 text-center" value="${entry.start || '10:00'}" min="08:00" onclick="this.showPicker()" onchange="handleTimeChange(this, true)">
+                            <span class="text-slate-400 font-bold">-</span>
+                            <input type="time" class="entry-end border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer w-20 sm:w-24 text-center" value="${entry.end || '21:00'}" min="08:00" onclick="this.showPicker()" onchange="handleTimeChange(this, false)">
                         </div>
                     </td>
-                    <td class="py-4 px-2 text-center">
+                    <td class="py-3 px-2 text-center">
                         <div class="flex justify-center">
                             ${isFirstRowOfDay 
-                                ? `<button onclick="addTimeRow('${dateObj.iso}', this, false)" class="text-blue-500 hover:text-blue-700 hover:bg-blue-100 bg-blue-50 border border-blue-200 rounded-md w-8 h-8 flex items-center justify-center transition font-black shadow-sm text-lg" title="Добавить время">+</button>` 
-                                : `<button onclick="this.closest('tr').remove(); markFormDirty();" class="text-red-400 hover:text-red-600 hover:bg-red-50 border border-red-100 rounded-md w-8 h-8 flex items-center justify-center transition font-black shadow-sm text-lg" title="Удалить строку">×</button>`
+                                ? `<button onclick="addTimeRow('${dateObj.iso}', this, false)" class="text-blue-600 hover:text-blue-800 hover:bg-blue-100 bg-blue-50 border border-blue-200 rounded-md w-8 h-8 flex items-center justify-center transition font-black shadow-sm text-lg" title="Добавить время">+</button>` 
+                                : `<button onclick="this.closest('tr').remove(); markFormDirty();" class="text-red-500 hover:text-red-700 hover:bg-red-100 bg-red-50 border border-red-200 rounded-md w-8 h-8 flex items-center justify-center transition font-black shadow-sm text-lg" title="Удалить строку">×</button>`
                             }
                         </div>
                     </td>
@@ -516,22 +531,24 @@
 
         function createRaidRowHTML(dayName, entry, isFirstRowOfDay) {
             return `
-                <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors form-row-raid ${isFirstRowOfDay ? 'border-t border-slate-200' : ''}" data-day="${dayName}">
-                    <td class="py-4 px-4 ${isFirstRowOfDay ? 'text-slate-800' : 'text-transparent'} font-bold w-1/3">
-                        ${isFirstRowOfDay ? dayName : ' '}
-                    </td>
-                    <td class="py-4 px-2 text-center w-auto">
-                        <div class="flex items-center justify-center gap-1 sm:gap-2 bg-slate-50 p-1 sm:p-2 rounded-lg border border-slate-200 w-fit mx-auto shadow-inner">
-                            <input type="time" class="entry-start bg-transparent outline-none text-sm sm:text-base font-bold text-slate-700 cursor-pointer w-20 sm:w-24 transition-colors text-center" value="${entry.start}" onclick="this.showPicker()" onchange="updateEndTime(this)">
-                            <span class="text-slate-300 font-bold">-</span>
-                            <input type="time" class="entry-end bg-transparent outline-none text-sm sm:text-base font-bold text-slate-700 cursor-pointer w-20 sm:w-24 transition-colors text-center" value="${entry.end}" onclick="this.showPicker()" onchange="markFormDirty()">
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors form-row-raid ${isFirstRowOfDay ? 'border-t border-slate-200' : ''}" data-day="${dayName}" onchange="markFormDirty()">
+                    <td class="py-3 px-2 ${isFirstRowOfDay ? '' : 'text-transparent'}">
+                        <div class="flex justify-center items-center font-bold ${isFirstRowOfDay ? 'text-slate-800' : ''}">
+                            <span class="text-left w-24">${isFirstRowOfDay ? dayName : ' '}</span>
                         </div>
                     </td>
-                    <td class="py-4 px-2 text-center w-16">
+                    <td class="py-3 px-2 text-center w-auto">
+                        <div class="flex items-center justify-center gap-2">
+                            <input type="time" class="entry-start border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer w-20 sm:w-24 text-center" value="${entry.start || '10:00'}" min="08:00" onclick="this.showPicker()" onchange="handleTimeChange(this, true)">
+                            <span class="text-slate-400 font-bold">-</span>
+                            <input type="time" class="entry-end border border-slate-300 rounded-md p-1.5 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 cursor-pointer w-20 sm:w-24 text-center" value="${entry.end || '21:00'}" min="08:00" onclick="this.showPicker()" onchange="handleTimeChange(this, false)">
+                        </div>
+                    </td>
+                    <td class="py-3 px-2 text-center w-16">
                         <div class="flex justify-center">
                             ${isFirstRowOfDay 
-                                ? `<button onclick="addTimeRow('${dayName}', this, true)" class="text-blue-500 hover:text-blue-700 hover:bg-blue-100 bg-blue-50 border border-blue-200 rounded-md w-8 h-8 flex items-center justify-center transition font-black shadow-sm text-lg">+</button>` 
-                                : `<button onclick="this.closest('tr').remove(); markFormDirty();" class="text-red-400 hover:text-red-600 hover:bg-red-50 border border-red-100 rounded-md w-8 h-8 flex items-center justify-center transition font-black shadow-sm text-lg">×</button>`
+                                ? `<button onclick="addTimeRow('${dayName}', this, true)" class="text-blue-600 hover:text-blue-800 hover:bg-blue-100 bg-blue-50 border border-blue-200 rounded-md w-8 h-8 flex items-center justify-center transition font-black shadow-sm text-lg" title="Добавить время">+</button>` 
+                                : `<button onclick="this.closest('tr').remove(); markFormDirty();" class="text-red-500 hover:text-red-700 hover:bg-red-100 bg-red-50 border border-red-200 rounded-md w-8 h-8 flex items-center justify-center transition font-black shadow-sm text-lg" title="Удалить строку">×</button>`
                             }
                         </div>
                     </td>
@@ -543,15 +560,19 @@
             const currentRow = btnElem.closest('tr');
             let newRowHtml = '';
             if (isRaid) {
-                newRowHtml = createRaidRowHTML(id, { start: '', end: '' }, false);
+                newRowHtml = createRaidRowHTML(id, { start: '10:00', end: '21:00' }, false);
             } else {
                 const dateObj = generatedDates.find(d => d.iso === id);
-                newRowHtml = createRowHTML(dateObj, { status: '', start: '', end: '' }, false);
+                // Автоматически ставим статус '+' для новой строки
+                newRowHtml = createRowHTML(dateObj, { status: '+', start: '10:00', end: '21:00' }, false);
             }
             currentRow.insertAdjacentHTML('afterend', newRowHtml);
             markFormDirty();
         }
 
+        // ==========================================
+        // ЛОГИКА "ВИКЛИ НОУ ЛИВЕРС"
+        // ==========================================
         window.toggleWnl = function() {
             const isHours = document.querySelector('input[name="wnl-type"]:checked').value === 'hours';
             document.getElementById('wnl-hours-count').disabled = !isHours;
@@ -598,6 +619,7 @@
             }
 
             if(!wnlData[date]) wnlData[date] = {};
+            
             times.forEach(t => {
                 if(!wnlData[date][t]) wnlData[date][t] = {}; 
                 wnlData[date][t][currentUser] = '+'; 
@@ -631,6 +653,7 @@
 
             if(!wnlData[date]) wnlData[date] = {};
             if(!wnlData[date][time]) wnlData[date][time] = {};
+            
             wnlData[date][time][currentUser] = vote;
 
             const jsonString = JSON.stringify(wnlData, null, 2);
@@ -639,8 +662,12 @@
             if (sha) body.sha = sha;
 
             const result = await githubAPI('PUT', 'weekly_no_leavers.json', body);
-            if(result) { showMessage('Голос учтен!', 'success'); loadAllData(); } 
-            else { showMessage('Не удалось проголосовать', 'error'); }
+            if(result) {
+                showMessage('Голос учтен!', 'success');
+                loadAllData(); 
+            } else {
+                showMessage('Не удалось проголосовать', 'error');
+            }
         }
 
         async function githubAPI(method, path, body = null) {
@@ -648,9 +675,16 @@
                 showMessage('Токен GitHub не настроен. Сохранение невозможно.', 'error');
                 return null;
             }
+
             const t = new Date().getTime();
             const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data/${path}?t=${t}`;
-            const headers = { 'Authorization': `token ${GITHUB_TOKEN}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
+            
+            const headers = {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            };
+            
             const options = { method, headers };
             if (body) options.body = JSON.stringify(body);
 
@@ -658,9 +692,13 @@
                 const response = await fetch(url, options);
                 if (!response.ok) {
                     if (response.status === 404 && method === 'GET') return null; 
+                    
                     const text = await response.text();
                     let errMsg = response.statusText;
-                    try { const errData = JSON.parse(text); errMsg = errData.message || errMsg; } catch(e) {}
+                    try {
+                        const errData = JSON.parse(text);
+                        errMsg = errData.message || errMsg;
+                    } catch(e) {}
                     throw new Error(errMsg);
                 }
                 return await response.json();
@@ -672,12 +710,8 @@
         }
 
         async function loadUserFormFromGitHub() {
-            const btn = document.getElementById('btn-save');
-            const originalBtnText = btn.innerHTML;
-            btn.innerHTML = `<div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full loader"></div> Загрузка...`;
-            btn.disabled = true;
-            
             const fileData = await githubAPI('GET', `${currentUser}.json`);
+            
             if (fileData && fileData.content) {
                 const jsonString = decodeURIComponent(escape(atob(fileData.content)));
                 const data = JSON.parse(jsonString);
@@ -686,48 +720,45 @@
             } else {
                 renderForm({});
             }
-            btn.innerHTML = originalBtnText;
-            btn.disabled = false;
+            markFormClean();
         }
 
         async function saveForm() {
-            const topBtn = document.getElementById('btn-save');
             const floatBtn = document.getElementById('floating-save-btn');
             const floatText = document.getElementById('floating-save-text');
 
-            const originalTopBtnText = topBtn.innerHTML;
             const originalFloatText = floatText.innerText;
 
-            topBtn.innerHTML = `<div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full loader"></div> Сохранение...`;
-            topBtn.disabled = true;
             floatText.innerText = 'Сохранение...';
             floatBtn.disabled = true;
 
             const dataToSave = { raidDays: {} };
-            
-            // Сохранение обычных недель
+
+            // 1. Сохранение дат (календарь)
             document.querySelectorAll('.form-row').forEach(row => {
                 const date = row.getAttribute('data-date');
                 const start = row.querySelector('.entry-start').value;
                 const end = row.querySelector('.entry-end').value;
+                
                 const checkedStatus = row.querySelector('.entry-status-radio:checked');
                 const status = checkedStatus ? checkedStatus.value : null;
 
                 if (!dataToSave[date]) dataToSave[date] = [];
+                // Сохраняем строку ТОЛЬКО если игрок нажал на плюс или вопрос
                 if (status === '+' || status === '?') {
                     dataToSave[date].push({ status, start, end });
                 }
             });
 
-            // Строгое сохранение Рейдовых дней
+            // 2. Сохранение рейдовых дней (Среда-Вторник)
             document.querySelectorAll('.form-row-raid').forEach(row => {
-                const day = row.getAttribute('data-day');
+                const dayName = row.getAttribute('data-day');
                 const start = row.querySelector('.entry-start').value;
                 const end = row.querySelector('.entry-end').value;
                 
+                if (!dataToSave.raidDays[dayName]) dataToSave.raidDays[dayName] = [];
                 if (start && end) {
-                    if (!dataToSave.raidDays[day]) dataToSave.raidDays[day] = [];
-                    dataToSave.raidDays[day].push({ start, end });
+                    dataToSave.raidDays[dayName].push({ start, end });
                 }
             });
 
@@ -736,16 +767,17 @@
 
             const fileData = await githubAPI('GET', `${currentUser}.json`);
             const sha = fileData ? fileData.sha : null;
-            const body = { message: `Update schedule for ${currentUser}`, content: base64Content };
+
+            const body = {
+                message: `Update schedule for ${currentUser}`,
+                content: base64Content
+            };
             if (sha) body.sha = sha;
 
             const result = await githubAPI('PUT', `${currentUser}.json`, body);
+
             if (result) {
-                topBtn.innerHTML = `Сохранено!`;
                 floatText.innerText = `Сохранено!`;
-                
-                topBtn.classList.replace('bg-green-600', 'bg-emerald-500');
-                topBtn.classList.replace('hover:bg-green-700', 'hover:bg-emerald-600');
                 floatBtn.classList.replace('bg-green-600', 'bg-emerald-500');
                 floatBtn.classList.replace('hover:bg-green-700', 'hover:bg-emerald-600');
                 
@@ -753,22 +785,15 @@
                 markFormClean(); 
 
                 setTimeout(() => {
-                    topBtn.innerHTML = originalTopBtnText;
                     floatText.innerText = originalFloatText;
-
-                    topBtn.classList.replace('bg-emerald-500', 'bg-green-600');
-                    topBtn.classList.replace('hover:bg-emerald-600', 'hover:bg-green-700');
                     floatBtn.classList.replace('bg-emerald-500', 'bg-green-600');
                     floatBtn.classList.replace('hover:bg-emerald-600', 'hover:bg-green-700');
-                    
-                    topBtn.disabled = false;
                     floatBtn.disabled = false;
                 }, 3000);
             } else {
-                topBtn.innerHTML = originalTopBtnText;
                 floatText.innerText = originalFloatText;
-                topBtn.disabled = false;
                 floatBtn.disabled = false;
+                showMessage('Не удалось сохранить', 'error');
             }
         }
 
@@ -781,6 +806,7 @@
             let playersWhoFilled = [];
             window.wnlGlobalData = {};
 
+            // Грузим анкеты
             for (let player of PLAYERS) {
                 const fileData = await githubAPI('GET', `${player}.json`);
                 if (fileData && fileData.content) {
@@ -792,9 +818,12 @@
                 }
             }
 
+            // Грузим WNL
             const wnlFileData = await githubAPI('GET', 'weekly_no_leavers.json');
             if (wnlFileData && wnlFileData.content) {
-                try { window.wnlGlobalData = JSON.parse(decodeURIComponent(escape(atob(wnlFileData.content)))); } catch(e) {}
+                try {
+                    window.wnlGlobalData = JSON.parse(decodeURIComponent(escape(atob(wnlFileData.content))));
+                } catch(e) {}
             }
 
             document.getElementById('dashboard-loading').classList.add('hidden');
@@ -819,15 +848,17 @@
             const statusText = document.getElementById('dashboard-status-text');
             
             if (activePlayers.length === 0 && Object.keys(window.wnlGlobalData).length === 0) {
-                statusText.innerHTML = `<span class="text-slate-500 font-medium text-xl">Никто еще не заполнил анкету.</span>`;
+                statusText.innerHTML = `<span class="text-slate-500 font-medium">Никто еще не заполнил анкету.</span>`;
                 container.innerHTML = `<div class="p-12 text-center bg-white rounded-2xl border border-slate-200 border-dashed text-slate-500">Данных для отображения пока нет.</div>`;
                 return;
             }
 
+            // Статус бар
             statusText.innerHTML = `Хотят играть: <span class="font-black text-blue-600">${activePlayers.join(', ') || '—'}</span>`;
+
             let finalHtml = '';
 
-            // --- 1. WNL ---
+            // 1. Рендер ВИКЛИ НОУ ЛИВЕРС
             let wnlHtml = '';
             const sortedWnlDates = Object.keys(window.wnlGlobalData || {}).sort();
             sortedWnlDates.forEach(date => {
@@ -870,32 +901,33 @@
             });
             finalHtml += wnlHtml;
 
-            // --- 2. НЕДЕЛИ (Скрываем прошедшие дни и центрируем оставшиеся) ---
+            // 2. Рендер МАТРИЦЫ (Недели)
             let week1Html = `
                 <div class="mt-8">
-                    <h3 class="text-2xl font-black text-slate-800 mb-6 uppercase tracking-wide px-1 text-center">Текущая неделя</h3>
+                    <h3 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-wide text-center">Текущая неделя</h3>
                     <div class="flex flex-wrap justify-center gap-4">
             `;
             let week2Html = `
-                <div class="mt-12">
-                    <h3 class="text-2xl font-black text-slate-800 mb-6 uppercase tracking-wide px-1 text-center">Следующая неделя</h3>
+                <div class="mt-10">
+                    <h3 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-wide text-center">Следующая неделя</h3>
                     <div class="flex flex-wrap justify-center gap-4">
             `;
 
-            let hasW1Days = false, hasW2Days = false;
+            let hasWeek1Days = false;
+            let hasWeek2Days = false;
 
             generatedDates.forEach((dateObj, index) => {
-                if (dateObj.isPast) return; // Строго скрываем прошедшие дни
-                
-                if (index < 7) hasW1Days = true;
-                else hasW2Days = true;
+                if (dateObj.isPast) return; 
+
+                if (index < 7) hasWeek1Days = true;
+                else hasWeek2Days = true;
 
                 let dayHtml = `
-                    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col hover:shadow-md transition-shadow min-w-[200px] max-w-[240px] flex-1">
-                        <div class="flex justify-center items-center gap-2 font-black text-slate-800 border-b border-slate-100 pb-3 mb-4 tracking-tight">
-                            <span class="w-16 text-right text-xl">${dateObj.datePart}</span>
-                            <span class="text-slate-300 font-medium text-lg">-</span>
-                            <span class="w-16 text-left text-xl">${dateObj.dayPartShort}</span>
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col hover:shadow-md transition-shadow w-full sm:w-[180px] lg:w-[190px]">
+                        <div class="flex justify-center items-center gap-2 font-bold text-slate-700 border-b border-slate-100 pb-2 mb-3 tracking-tight">
+                            <span class="w-14 text-right text-lg">${dateObj.datePart}</span>
+                            <span class="text-slate-300">-</span>
+                            <span class="w-14 text-left text-xl">${dateObj.dayPartShort}</span>
                         </div>
                         <div class="flex-1 flex flex-col gap-2">
                 `;
@@ -910,7 +942,7 @@
                         if (slot.status === '+' && slot.start && slot.end) {
                             let startM = timeToMins(slot.start);
                             let endM = timeToMins(slot.end);
-                            if (endM === 0) endM = 1440; 
+                            if (endM <= startM) endM = 1440; 
                             for (let m = startM; m < endM; m++) {
                                 if (!minutePlayers[m].includes(p)) minutePlayers[m].push(p);
                             }
@@ -925,6 +957,7 @@
                 for (let m = 0; m <= 1440; m++) {
                     let group = m < 1440 ? minutePlayers[m].sort() : [];
                     let groupStr = group.length >= 2 ? group.join(', ') : "";
+
                     if (groupStr !== currentGroupStr) {
                         if (currentGroupStr !== "") {
                             matches.push({ playersStr: currentGroupStr, start: currentStart, end: m });
@@ -944,7 +977,7 @@
                         `;
                     });
                 } else if (hasAnyTimes) {
-                    dayHtml += `<div class="bg-slate-50 border border-slate-200 text-slate-500 rounded-lg p-2 text-center mb-2 text-xs font-bold">Нет общего времени</div>`;
+                     dayHtml += `<div class="bg-slate-50 border border-slate-200 text-slate-500 rounded-lg p-2 text-center mb-2 text-xs font-bold">Нет общего времени</div>`;
                 } else {
                     dayHtml += `<div class="bg-slate-50 border border-slate-200 text-slate-400 rounded-lg p-2 text-center mb-2 text-xs font-bold italic">Пусто</div>`;
                 }
@@ -954,6 +987,7 @@
                     let pData = schedules[p]?.[dateObj.iso] || [];
                     pData.forEach(slot => {
                         if (!slot.start) return; 
+                        
                         let colorClass = 'bg-slate-100 text-slate-600 border-slate-200';
                         let timeText = `${slot.start}-${slot.end}`; 
                         
@@ -961,7 +995,7 @@
                         if (slot.status === '?') colorClass = 'bg-yellow-50 text-yellow-700 border-yellow-300';
 
                         statusesHtml += `
-                            <div class="flex flex-col items-center justify-center p-1.5 px-2 border rounded-md ${colorClass} shadow-sm font-bold mt-1">
+                            <div class="flex flex-col items-center justify-center p-1.5 px-2 border rounded-md ${colorClass} shadow-sm font-bold">
                                 <span class="break-words text-center text-[13px] leading-tight mb-0.5">${p}</span>
                                 <span class="whitespace-nowrap text-[11px] opacity-80 leading-none">${timeText}</span>
                             </div>
@@ -969,7 +1003,7 @@
                     });
                 });
 
-                if (statusesHtml) dayHtml += `<div class="flex flex-col gap-1 mt-auto pt-2 border-t border-slate-100">${statusesHtml}</div>`;
+                if (statusesHtml) dayHtml += `<div class="flex flex-col gap-1.5 mt-auto pt-2 border-t border-slate-100">${statusesHtml}</div>`;
                 dayHtml += `</div></div>`;
                 
                 if (index < 7) week1Html += dayHtml;
@@ -979,92 +1013,92 @@
             week1Html += `</div></div>`;
             week2Html += `</div></div>`;
             
-            if (hasW1Days) finalHtml += week1Html;
-            if (hasW2Days) finalHtml += week2Html;
+            if (hasWeek1Days) finalHtml += week1Html;
+            if (hasWeek2Days) finalHtml += week2Html;
 
-            // --- 3. ТАЙМЛАЙН РЕЙДОВЫХ ДНЕЙ ---
-            let timelineHtml = `
-                <div class="mt-16 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 overflow-hidden">
-                    <h3 class="text-2xl font-black text-slate-800 mb-6 uppercase tracking-wide px-1 text-center">Рейдовое расписание</h3>
-                    <div class="overflow-x-auto pb-4 custom-scrollbar">
-                        <table class="w-full border-separate" style="border-spacing: 4px 8px; min-w: 800px;">
-                            <thead>
-                                <tr>
-                                    <th class="w-24"></th> <!-- Имя -->
+            // 3. Рендер ТАЙМЛАЙНА рейдовых дней (Среда-Вторник)
+            let raidTimelineHtml = `
+                <div class="mt-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 overflow-x-auto">
+                    <h3 class="text-xl font-black text-slate-800 mb-8 uppercase tracking-wide text-center">Рейдовое расписание</h3>
+                    <div class="min-w-[700px]">
+                        <!-- Шапка дней -->
+                        <div class="flex border-b-2 border-slate-200 pb-3 mb-4">
+                            <div class="w-24 shrink-0 font-bold text-slate-400 text-sm flex items-end justify-center uppercase tracking-wider">Игрок</div>
             `;
-            
             RAID_DAYS.forEach(day => {
-                timelineHtml += `<th class="text-center pb-4 text-sm font-black text-slate-500 uppercase tracking-widest w-[12%]">${day}</th>`;
+                raidTimelineHtml += `<div class="flex-1 text-center font-bold text-slate-500 uppercase tracking-widest text-xs">${day.substring(0,2)}</div>`;
             });
-            timelineHtml += `</tr></thead><tbody>`;
+            raidTimelineHtml += `</div>`;
 
-            const colors = ['bg-red-100 text-red-700 border-red-200', 'bg-emerald-100 text-emerald-700 border-emerald-200', 'bg-sky-100 text-sky-700 border-sky-200', 'bg-indigo-100 text-indigo-700 border-indigo-200', 'bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200'];
+            const colors = [
+                {bg: 'bg-blue-100', border: 'border-blue-200', text: 'text-blue-800'},
+                {bg: 'bg-green-100', border: 'border-green-200', text: 'text-green-800'},
+                {bg: 'bg-purple-100', border: 'border-purple-200', text: 'text-purple-800'},
+                {bg: 'bg-orange-100', border: 'border-orange-200', text: 'text-orange-800'}
+            ];
 
-            activePlayers.forEach((player, pIndex) => {
-                let pRaidData = schedules[player]?.raidDays || {};
+            activePlayers.forEach((p, pIndex) => {
+                const raidData = schedules[p]?.raidDays || {};
+                let hasAnyRaidData = false;
                 
-                let hasAnyRaidTime = RAID_DAYS.some(d => pRaidData[d] && pRaidData[d].some(slot => slot.start && slot.end));
-                if (!hasAnyRaidTime) return; 
+                for(let d of RAID_DAYS) {
+                    if (raidData[d] && raidData[d].length > 0) hasAnyRaidData = true;
+                }
+                
+                if (!hasAnyRaidData) return; 
 
-                let maxSlots = 1;
-                RAID_DAYS.forEach(d => {
-                    if (pRaidData[d] && pRaidData[d].length > maxSlots) maxSlots = pRaidData[d].length;
+                const pColor = colors[pIndex % colors.length];
+
+                raidTimelineHtml += `<div class="flex relative mb-4 items-center group">`;
+                raidTimelineHtml += `<div class="w-24 shrink-0 font-black text-slate-700 text-right pr-4 text-sm truncate">${p}</div>`;
+                
+                // Рисуем подложки
+                RAID_DAYS.forEach(() => {
+                    raidTimelineHtml += `<div class="flex-1 h-10 border-x border-dashed border-slate-100 bg-slate-50/50 mx-[1px] rounded-sm"></div>`;
                 });
 
-                let pColor = colors[pIndex % colors.length];
-
-                for (let slotIndex = 0; slotIndex < maxSlots; slotIndex++) {
-                    timelineHtml += `<tr>`;
-                    
-                    if (slotIndex === 0) {
-                        timelineHtml += `<td rowspan="${maxSlots}" class="font-black text-slate-800 pr-4 text-right text-sm uppercase tracking-wide">${player}</td>`;
-                    }
-
-                    let skipDays = 0;
-                    for (let dayIdx = 0; dayIdx < RAID_DAYS.length; dayIdx++) {
-                        if (skipDays > 0) {
-                            skipDays--;
-                            continue;
-                        }
-
-                        let dayName = RAID_DAYS[dayIdx];
-                        let slot = (pRaidData[dayName] && pRaidData[dayName][slotIndex]) ? pRaidData[dayName][slotIndex] : null;
-
-                        if (slot && slot.start && slot.end) {
-                            let colspan = 1;
-                            let timeStr = `${slot.start} - ${slot.end}`;
-                            
-                            for (let nextDayIdx = dayIdx + 1; nextDayIdx < RAID_DAYS.length; nextDayIdx++) {
-                                let nextDayName = RAID_DAYS[nextDayIdx];
-                                let nextSlot = (pRaidData[nextDayName] && pRaidData[nextDayName][slotIndex]) ? pRaidData[nextDayName][slotIndex] : null;
-                                
-                                if (nextSlot && `${nextSlot.start} - ${nextSlot.end}` === timeStr) {
-                                    colspan++;
-                                } else {
-                                    break;
-                                }
-                            }
-
-                            timelineHtml += `
-                                <td colspan="${colspan}" class="timeline-cell">
-                                    <div class="timeline-pill border ${pColor}">${timeStr}</div>
-                                </td>
-                            `;
-                            skipDays = colspan - 1; 
+                // Вычисляем объединенные блоки
+                let currentBlock = null;
+                const blocks = [];
+                
+                RAID_DAYS.forEach((day, dIndex) => {
+                    let entry = raidData[day]?.[0]; // Берем первую запись для таймлайна
+                    if (entry && entry.start && entry.end) {
+                        const timeStr = `${entry.start}-${entry.end}`;
+                        if (currentBlock && currentBlock.timeStr === timeStr) {
+                            currentBlock.span++;
                         } else {
-                            timelineHtml += `
-                                <td class="timeline-cell">
-                                    <div class="bg-slate-50 border border-slate-100 rounded-full h-[38px] w-full"></div>
-                                </td>
-                            `;
+                            if (currentBlock) blocks.push(currentBlock);
+                            currentBlock = { startIdx: dIndex, span: 1, timeStr: timeStr };
+                        }
+                    } else {
+                        if (currentBlock) {
+                            blocks.push(currentBlock);
+                            currentBlock = null;
                         }
                     }
-                    timelineHtml += `</tr>`;
-                }
+                });
+                if (currentBlock) blocks.push(currentBlock);
+
+                // Отрисовываем цветные плашки поверх подложек
+                const trackWidthPercent = 100 / RAID_DAYS.length;
+                blocks.forEach(b => {
+                    const leftPos = `calc(${b.startIdx * trackWidthPercent}% + 6rem)`; // 6rem это 24 (w-24)
+                    const widthVal = `calc(${b.span * trackWidthPercent}%)`;
+                    
+                    raidTimelineHtml += `
+                        <div class="absolute h-10 flex items-center justify-center rounded-full border ${pColor.bg} ${pColor.border} ${pColor.text} font-bold text-xs shadow-sm transition-transform transform group-hover:scale-[1.02] z-10 mx-[2px] cursor-default" 
+                             style="left: ${leftPos}; width: ${widthVal};">
+                            ${b.timeStr}
+                        </div>
+                    `;
+                });
+
+                raidTimelineHtml += `</div>`;
             });
 
-            timelineHtml += `</tbody></table></div></div>`;
-            finalHtml += timelineHtml;
+            raidTimelineHtml += `</div></div>`;
+            finalHtml += raidTimelineHtml;
 
             container.innerHTML = finalHtml;
         }
