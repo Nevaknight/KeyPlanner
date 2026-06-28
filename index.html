@@ -507,7 +507,6 @@
         }
 
         window.addTimeRow = function(isoDate, btnElem) {
-        window.addTimeRow = function(isoDate, btnElem) {
             const dateObj = generatedDates.find(d => d.iso === isoDate);
             const currentRow = btnElem.closest('tr');
             const newRowHtml = createRowHTML(dateObj, { status: '', start: '10:00', end: '21:00' }, false);
