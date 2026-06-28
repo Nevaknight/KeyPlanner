@@ -101,8 +101,8 @@
             <div id="wnl-builder-container" class="bg-gradient-to-br from-purple-50 to-white rounded-2xl shadow-sm border border-purple-200 p-6 sm:p-8 mb-6 hidden">
                 <h2 class="text-2xl font-black text-purple-900 tracking-tight mb-6 text-center uppercase">Создание опроса "Викли ноу ливерс"</h2>
                 <div class="space-y-4 max-w-2xl mx-auto">
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <div class="flex-1">
+                    <div class="flex flex-col sm:flex-row gap-4 items-end justify-center">
+                        <div class="flex-1 w-full">
                             <label class="block text-sm font-bold text-slate-700 mb-1">Дата</label>
                             <div class="relative">
                                 <select id="wnl-date" class="w-full border border-slate-300 rounded-lg p-3 outline-none focus:border-purple-500 bg-white font-medium shadow-sm appearance-none"></select>
@@ -111,10 +111,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex-1">
+                        <div class="w-full sm:w-40">
                             <label class="block text-sm font-bold text-slate-700 mb-1">Время старта</label>
-                            <div class="relative">
-                                <input type="time" id="wnl-time" class="w-full border border-slate-300 rounded-lg py-3 pl-3 pr-10 outline-none focus:border-purple-500 font-medium shadow-sm" onchange="document.getElementById('wnl-options').classList.remove('hidden')">
+                            <div class="relative w-full">
+                                <input type="time" id="wnl-time" class="w-full border border-slate-300 rounded-lg py-3 pl-3 pr-10 outline-none focus:border-purple-500 font-bold shadow-sm text-center cursor-text" onchange="document.getElementById('wnl-options').classList.remove('hidden')">
                                 <div class="absolute inset-y-0 right-0 flex items-center px-3 text-slate-500 cursor-pointer hover:text-purple-600 transition" onclick="this.previousElementSibling.showPicker()">
                                     <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </div>
@@ -210,7 +210,7 @@
 
         </div>
         
-        <!-- ФУТЕР -->
+        <!-- ФУТЕР с версией -->
         <footer class="text-center pt-10 pb-4 text-slate-400 font-medium text-sm mt-auto">
             Key Planner V1.0 - @Rainon
         </footer>
@@ -239,7 +239,7 @@
         // ==========================================
 
         const PLAYERS = ['Сейлоркринж', 'Рейнон', 'Рид', 'Рипыч'];
-        const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'DHtop', 'Сейлоркринж': 'R1234', 'Рейнон': 'R1234' };
+        const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'DHtop', 'Сейлоркринж': 'Яакулатутуру', 'Рейнон': 'R1234' };
         
         const dayNamesFull = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
         const dayNamesShort = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
@@ -422,6 +422,7 @@
                 dateSelect.innerHTML = '<option value="">Выберите дату опроса...</option>';
                 const todayIso = getMoscowISO().toISOString().split('T')[0];
                 generatedDates.forEach(d => {
+                    // Разрешаем создавать опрос на СЕГОДНЯ и будущие даты
                     if (d.iso >= todayIso) dateSelect.innerHTML += `<option value="${d.iso}">${d.display}</option>`;
                 });
             } else {
@@ -498,6 +499,7 @@
             if(!input.value) return;
 
             const [h, m] = input.value.split(':').map(Number);
+            // Блокируем время до 08:00
             if (h < 8) {
                 input.value = '';
                 showMessage('Игровое время начинается с 08:00!', 'error');
@@ -512,10 +514,10 @@
             const dataAttr = isRaidDay ? `data-raid-id="${dateObj.id}"` : `data-date="${dateObj.iso}"`;
             const uniqueId = `status-${Math.random().toString(36).substr(2, 9)}`;
             
-            // Левая кнопка сброса (Квадрат, увеличена до 8x8)
+            // Левая кнопка сброса (Квадрат 8x8)
             const resetBtnHtml = `
                 <button onclick="resetRow(this)" class="w-8 h-8 border-2 border-slate-200 text-slate-400 rounded-lg hover:bg-slate-100 hover:border-slate-400 transition flex items-center justify-center shadow-sm" title="Сбросить строку">
-                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    <svg class="w-4 h-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
                 </button>
             `;
 
@@ -563,14 +565,14 @@
                     <td class="py-3 px-2 text-center">
                         <div class="flex items-center justify-center gap-2">
                             <div class="relative w-20 sm:w-24">
-                                <input type="time" class="entry-start w-full border border-slate-300 rounded-md py-1.5 pl-2 pr-7 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-center" value="${entry.start || ''}" onchange="validateTime(this)">
+                                <input type="time" class="entry-start w-full border border-slate-300 rounded-md py-1.5 pl-2 pr-7 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-center cursor-text" value="${entry.start || ''}" onchange="validateTime(this)">
                                 <div class="absolute inset-y-0 right-0 flex items-center px-2 text-slate-400 cursor-pointer hover:text-blue-600 transition" onclick="this.previousElementSibling.showPicker()">
                                     <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </div>
                             </div>
                             <span class="text-slate-400 font-bold">-</span>
                             <div class="relative w-20 sm:w-24">
-                                <input type="time" class="entry-end w-full border border-slate-300 rounded-md py-1.5 pl-2 pr-7 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-center" value="${entry.end || ''}" onchange="validateTime(this)">
+                                <input type="time" class="entry-end w-full border border-slate-300 rounded-md py-1.5 pl-2 pr-7 outline-none text-sm font-bold shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-center cursor-text" value="${entry.end || ''}" onchange="validateTime(this)">
                                 <div class="absolute inset-y-0 right-0 flex items-center px-2 text-slate-400 cursor-pointer hover:text-blue-600 transition" onclick="this.previousElementSibling.showPicker()">
                                     <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </div>
@@ -607,9 +609,6 @@
             showFloatingSave();
         }
 
-        // ==========================================
-        // ЛОГИКА "ВИКЛИ НОУ ЛИВЕРС"
-        // ==========================================
         window.toggleWnl = function() {
             const isHours = document.querySelector('input[name="wnl-type"]:checked').value === 'hours';
             document.getElementById('wnl-hours-count').disabled = !isHours;
