@@ -201,6 +201,8 @@
         const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'R1234', 'Женя': 'R1234', 'Рейнон': 'R1234' };
         
         const dayNamesFull = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+        const dayNamesShort = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+        
         let currentUser = null;
         let generatedDates = []; 
 
@@ -231,6 +233,7 @@
                     iso: isoDate,
                     datePart: `${tempD.getDate().toString().padStart(2, '0')}.${(tempD.getMonth() + 1).toString().padStart(2, '0')}`,
                     dayPart: dayNamesFull[tempD.getDay()],
+                    dayPartShort: dayNamesShort[tempD.getDay()],
                     display: `${tempD.getDate().toString().padStart(2, '0')}.${(tempD.getMonth() + 1).toString().padStart(2, '0')} - ${dayNamesFull[tempD.getDay()]}`,
                     isPast: isoDate < todayIso 
                 });
@@ -372,7 +375,6 @@
                 if (dateObj.isPast) return; 
 
                 let dayEntries = userData[dateObj.iso];
-                // По умолчанию ничего не выбрано в статусе
                 if (!dayEntries || dayEntries.length === 0) {
                     dayEntries = [{ status: '', start: '10:00', end: '21:00' }];
                 }
@@ -394,7 +396,6 @@
         }
 
         function createRowHTML(dateObj, entry, isFirstRowOfDay) {
-            // Генерируем уникальное имя для группы радиокнопок
             const uniqueId = `status-${dateObj.iso}-${Math.random().toString(36).substr(2, 9)}`;
             
             return `
@@ -550,7 +551,6 @@
                 return null;
             }
 
-            // Добавляем timestamp, чтобы сбросить жесткое кеширование GitHub API
             const t = new Date().getTime();
             const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data/${path}?t=${t}`;
             
@@ -568,7 +568,6 @@
                 if (!response.ok) {
                     if (response.status === 404 && method === 'GET') return null; 
                     
-                    // Безопасное чтение ошибки от GitHub, чтобы избежать Unexpected token '<'
                     const text = await response.text();
                     let errMsg = response.statusText;
                     try {
@@ -618,12 +617,10 @@
                 const start = row.querySelector('.entry-start').value;
                 const end = row.querySelector('.entry-end').value;
                 
-                // Ищем выбранный радио-button в текущей строке
                 const checkedStatus = row.querySelector('.entry-status-radio:checked');
                 const status = checkedStatus ? checkedStatus.value : null;
 
                 if (!dataToSave[date]) dataToSave[date] = [];
-                // Сохраняем строку ТОЛЬКО если игрок нажал на плюс или вопрос
                 if (status === '+' || status === '?') {
                     dataToSave[date].push({ status, start, end });
                 }
@@ -782,7 +779,11 @@
                 if (dateObj.isPast) {
                     dayHtml = `
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col h-full opacity-60 grayscale hover:grayscale-0 transition-all duration-300">
-                            <div class="text-center font-bold text-slate-400 border-b border-slate-200 pb-2 mb-3 tracking-tight">${dateObj.display}</div>
+                            <div class="flex justify-center items-center gap-2 font-bold text-slate-400 border-b border-slate-200 pb-2 mb-3">
+                                <span class="w-12 text-right">${dateObj.datePart}</span>
+                                <span class="text-slate-300">-</span>
+                                <span class="w-12 text-left text-lg">${dateObj.dayPartShort}</span>
+                            </div>
                             <div class="flex-1 flex flex-col items-center justify-center pt-2 pb-4">
                                 <svg class="text-slate-300 w-8 h-8 mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
                                 <span class="text-slate-400 text-sm font-bold italic">День прошел</span>
@@ -792,62 +793,70 @@
                 } else {
                     dayHtml = `
                         <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col h-full hover:shadow-md transition-shadow">
-                            <div class="text-center font-bold text-slate-700 border-b border-slate-100 pb-2 mb-3 tracking-tight">${dateObj.display}</div>
+                            <div class="flex justify-center items-center gap-2 font-bold text-slate-700 border-b border-slate-100 pb-2 mb-3 tracking-tight">
+                                <span class="w-12 text-right">${dateObj.datePart}</span>
+                                <span class="text-slate-300">-</span>
+                                <span class="w-12 text-left text-lg">${dateObj.dayPartShort}</span>
+                            </div>
                             <div class="flex-1 flex flex-col gap-2">
                     `;
 
-                    let commonMinutes = new Array(1440).fill(1);
+                    // Массив поминутного заполнения для поиска любых групп совпадений
+                    let minutePlayers = Array.from({length: 1440}, () => []);
                     let hasAnyTimes = false;
 
-                    for (let p of activePlayers) {
-                        let playerMinutes = new Array(1440).fill(0);
-                        let dayData = schedules[p]?.[dateObj.iso] || [];
-                        
-                        let pHasData = false;
-                        dayData.forEach(slot => {
+                    // Собираем данные поминутно для тех, кто точно может ("+")
+                    activePlayers.forEach(p => {
+                        let pData = schedules[p]?.[dateObj.iso] || [];
+                        pData.forEach(slot => {
+                            if (slot.status === '+' || slot.status === '?') hasAnyTimes = true;
+
                             if (slot.status === '+' && slot.start && slot.end) {
-                                pHasData = true;
-                                hasAnyTimes = true;
                                 let startM = timeToMins(slot.start);
                                 let endM = timeToMins(slot.end);
                                 if (endM === 0) endM = 1440; 
+                                
                                 for (let m = startM; m < endM; m++) {
-                                    playerMinutes[m] = 1;
+                                    if (!minutePlayers[m].includes(p)) {
+                                        minutePlayers[m].push(p);
+                                    }
                                 }
                             }
                         });
-                        
-                        if (!pHasData) {
-                            commonMinutes.fill(0);
-                            break; 
-                        }
+                    });
 
-                        for (let i = 0; i < 1440; i++) {
-                            commonMinutes[i] = commonMinutes[i] * playerMinutes[i];
+                    // Ищем интервалы, где есть совпадение от 2х и более игроков
+                    let matches = [];
+                    let currentGroupStr = "";
+                    let currentStart = 0;
+
+                    for (let m = 0; m <= 1440; m++) {
+                        let group = m < 1440 ? minutePlayers[m].sort() : [];
+                        let groupStr = group.length >= 2 ? group.join(', ') : "";
+
+                        if (groupStr !== currentGroupStr) {
+                            if (currentGroupStr !== "") {
+                                matches.push({
+                                    playersStr: currentGroupStr,
+                                    start: currentStart,
+                                    end: m
+                                });
+                            }
+                            currentGroupStr = groupStr;
+                            currentStart = m;
                         }
                     }
 
-                    let commonIntervals = [];
-                    let inInterval = false;
-                    let startIdx = 0;
-
-                    for (let i = 0; i <= 1440; i++) {
-                        if (commonMinutes[i] === 1 && !inInterval) {
-                            inInterval = true;
-                            startIdx = i;
-                        } else if ((commonMinutes[i] === 0 || i === 1440) && inInterval) {
-                            inInterval = false;
-                            commonIntervals.push(`${minsToTime(startIdx)} - ${minsToTime(i)}`);
-                        }
-                    }
-
-                    if (commonIntervals.length > 0) {
-                        dayHtml += `
-                            <div class="bg-green-50 border border-green-200 text-green-800 rounded-lg p-2 text-center mb-2 shadow-inner">
-                                <span class="block text-[10px] font-black uppercase tracking-wider text-green-600 mb-0.5">Совпадение</span>
-                                <span class="font-black text-sm leading-tight tracking-wide">${commonIntervals.join('<br>')}</span>
-                            </div>
-                        `;
+                    // Вывод зеленых блоков совпадений
+                    if (matches.length > 0) {
+                        matches.forEach(m => {
+                            dayHtml += `
+                                <div class="bg-green-50 border border-green-200 text-green-800 rounded-lg p-2 text-center mb-2 shadow-inner">
+                                    <span class="block text-[11px] font-black tracking-wider text-green-700 mb-0.5">${m.playersStr}</span>
+                                    <span class="font-black text-sm leading-tight tracking-wide">${minsToTime(m.start)} - ${minsToTime(m.end)}</span>
+                                </div>
+                            `;
+                        });
                     } else if (hasAnyTimes) {
                          dayHtml += `
                             <div class="bg-slate-50 border border-slate-200 text-slate-500 rounded-lg p-2 text-center mb-2 text-xs font-bold">
@@ -862,22 +871,24 @@
                         `;
                     }
 
+                    // Вывод индивидуальных статусов игроков снизу
                     let statusesHtml = '';
                     activePlayers.forEach(p => {
                         let pData = schedules[p]?.[dateObj.iso] || [];
                         pData.forEach(slot => {
-                            if (!slot.start && slot.status !== '?') return;
+                            if (!slot.start) return; 
                             
                             let colorClass = 'bg-slate-100 text-slate-600 border-slate-200';
-                            let timeText = slot.status === '?' ? '?' : `${slot.start}-${slot.end}`;
+                            let timeText = `${slot.start}-${slot.end}`; // Время отображается всегда!
                             
                             if (slot.status === '+') colorClass = 'bg-blue-50 text-blue-700 border-blue-200';
                             if (slot.status === '?') colorClass = 'bg-yellow-50 text-yellow-700 border-yellow-300';
 
+                            // Имя теперь четко отцентрировано над временем
                             statusesHtml += `
-                                <div class="flex flex-wrap justify-between items-center text-xs p-1.5 px-2 border rounded-md ${colorClass} gap-1 font-bold">
-                                    <span class="break-words max-w-full">${p}</span>
-                                    <span class="whitespace-nowrap">${timeText}</span>
+                                <div class="flex flex-col items-center justify-center p-1.5 px-2 border rounded-md ${colorClass} shadow-sm font-bold">
+                                    <span class="break-words text-center text-[13px] leading-tight mb-0.5">${p}</span>
+                                    <span class="whitespace-nowrap text-[11px] opacity-80 leading-none">${timeText}</span>
                                 </div>
                             `;
                         });
