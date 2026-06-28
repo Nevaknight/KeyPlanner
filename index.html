@@ -420,8 +420,9 @@
                 wnlContainer.classList.remove('hidden');
                 const dateSelect = document.getElementById('wnl-date');
                 dateSelect.innerHTML = '<option value="">Выберите дату опроса...</option>';
+                const todayIso = getMoscowISO().toISOString().split('T')[0];
                 generatedDates.forEach(d => {
-                    if (!d.isPast) dateSelect.innerHTML += `<option value="${d.iso}">${d.display}</option>`;
+                    if (d.iso >= todayIso) dateSelect.innerHTML += `<option value="${d.iso}">${d.display}</option>`;
                 });
             } else {
                 wnlContainer.classList.add('hidden');
