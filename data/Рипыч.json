@@ -41,6 +41,11 @@
   "raid-fri": [],
   "raid-sat": [],
   "raid-sun": [],
-  "raid-mon": [],
+  "raid-mon": [
+    {
+      "start": "20:30",
+      "end": ""
+    }
+  ],
   "raid-tue": []
 }
