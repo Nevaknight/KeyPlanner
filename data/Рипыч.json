@@ -44,7 +44,7 @@
   "raid-mon": [
     {
       "start": "20:30",
-      "end": ""
+      "end": "23:59"
     }
   ],
   "raid-tue": [
