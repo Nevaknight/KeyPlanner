@@ -27,11 +27,21 @@
 <body class="text-slate-800 antialiased min-h-screen flex flex-col relative">
 
     <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-20">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <h1 class="text-xl font-bold text-slate-900 tracking-tight cursor-pointer flex items-center gap-2" onclick="showView('dashboard')">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between relative">
+            <!-- Логотип слева -->
+            <h1 class="text-xl font-bold text-slate-900 tracking-tight cursor-pointer flex items-center gap-2 z-10" onclick="showView('dashboard')">
                 <span>⌛</span> ХОЧУ ИГРАТЬ
             </h1>
-            <div id="nav-user" class="hidden flex items-center gap-4">
+            
+            <!-- Центральная часть (Кнопка стрима) -->
+            <div id="nav-center" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none">
+                <button id="nav-btn-stream" onclick="showView('stream')" class="pointer-events-auto w-11 h-11 bg-[#9146FF] hover:bg-[#772ce8] text-white rounded-2xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Смотреть стрим">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="3" ry="3"/></svg>
+                </button>
+            </div>
+
+            <!-- Пользовательское меню справа -->
+            <div id="nav-user" class="hidden flex items-center gap-4 z-10">
                 <span id="nav-player-name" class="font-bold text-blue-600 hidden sm:inline-block"></span>
                 <button id="nav-btn-dashboard" onclick="showView('dashboard')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Расписание</button>
                 <button id="nav-btn-form" onclick="showView('form')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Моя анкета</button>
@@ -210,10 +220,23 @@
             </div>
 
         </div>
+
+        <!-- ЭКРАН 4: СТРИМ TWITCH -->
+        <div id="view-stream" class="hidden-view w-full h-[calc(100vh-120px)] min-h-[500px]">
+            <div class="w-full h-full bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-200">
+                <iframe src="https://player.twitch.tv/?channel=rainon_&parent=nevaknight.github.io" 
+                        frameborder="0" 
+                        allowfullscreen="true" 
+                        scrolling="no" 
+                        height="100%" 
+                        width="100%">
+                </iframe>
+            </div>
+        </div>
         
         <!-- ФУТЕР с версией -->
         <footer class="text-center pt-10 pb-4 text-slate-400 font-medium text-sm mt-auto">
-            Key Planner V1.1 - @Rainon
+            Key Planner V1.4 - @Rainon
         </footer>
         
     </main>
@@ -299,6 +322,7 @@
             if (savedUser && PLAYERS.includes(savedUser)) {
                 currentUser = savedUser;
                 document.getElementById('nav-user').classList.remove('hidden');
+                document.getElementById('nav-center').classList.remove('hidden');
                 document.getElementById('nav-player-name').innerText = currentUser;
                 showView('dashboard');
             } else {
@@ -348,6 +372,7 @@
         function updateNavStyles(activeViewId) {
             const btnDash = document.getElementById('nav-btn-dashboard');
             const btnForm = document.getElementById('nav-btn-form');
+            const btnStream = document.getElementById('nav-btn-stream');
             
             const inactiveClasses = "text-slate-600 hover:bg-slate-100 bg-transparent".split(' ');
             const activeClasses = "text-blue-700 bg-blue-50 border border-blue-100 shadow-sm".split(' ');
@@ -356,6 +381,15 @@
             btnDash.classList.add(...inactiveClasses);
             btnForm.classList.remove(...activeClasses);
             btnForm.classList.add(...inactiveClasses);
+            
+            // Стиль для центральной кнопки Twitch
+            if (btnStream) {
+                if (activeViewId === 'stream') {
+                    btnStream.classList.add('ring-4', 'ring-[#d9c2ff]', 'bg-[#772ce8]');
+                } else {
+                    btnStream.classList.remove('ring-4', 'ring-[#d9c2ff]', 'bg-[#772ce8]');
+                }
+            }
 
             if(activeViewId === 'dashboard') {
                 btnDash.classList.remove(...inactiveClasses);
@@ -370,6 +404,8 @@
             document.getElementById('view-login').classList.add('hidden-view');
             document.getElementById('view-dashboard').classList.add('hidden-view');
             document.getElementById('view-form').classList.add('hidden-view');
+            document.getElementById('view-stream').classList.add('hidden-view');
+            
             document.getElementById(`view-${viewId}`).classList.remove('hidden-view');
             hideFloatingSave();
 
@@ -399,6 +435,7 @@
                 localStorage.setItem('wow_user', player);
                 errorElem.classList.add('hidden');
                 document.getElementById('nav-user').classList.remove('hidden');
+                document.getElementById('nav-center').classList.remove('hidden');
                 document.getElementById('nav-player-name').innerText = currentUser;
                 showView('dashboard');
             } else {
@@ -411,6 +448,7 @@
             currentUser = null;
             localStorage.removeItem('wow_user');
             document.getElementById('nav-user').classList.add('hidden');
+            document.getElementById('nav-center').classList.add('hidden');
             document.getElementById('login-password').value = '';
             showView('login');
         }
