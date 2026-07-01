@@ -66,6 +66,7 @@
                             <option value="Рид" class="text-slate-800">Рид</option>
                             <option value="Рипыч" class="text-slate-800">Рипыч</option>
                             <option value="Capunka" class="text-slate-800">Capunka</option>
+                            <option value="Azya" class="text-slate-800">Azya</option>
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -159,6 +160,20 @@
                 </div>
             </div>
 
+            <!-- НОВЫЙ БЛОК: НАСТРОЙКА ТРАНСЛЯЦИИ -->
+            <div id="stream-settings-container" class="bg-gradient-to-r from-[#fbf9ff] to-[#f4effc] rounded-2xl shadow-sm border border-[#eaddf7] p-6 mb-6">
+                <div class="flex flex-col sm:flex-row items-center gap-4">
+                    <div class="w-14 h-14 bg-[#9146FF] text-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="3" ry="3"/></svg>
+                    </div>
+                    <div class="flex-1 w-full">
+                        <label class="block text-sm font-black text-[#6035a0] mb-2 uppercase tracking-widest">ТРАНСЛЯЦИЯ</label>
+                        <input type="text" id="stream-url-input" oninput="showFloatingSave()" class="w-full border border-[#d9c2ff] rounded-xl p-3 outline-none focus:border-[#9146FF] focus:ring-2 focus:ring-[#eaddf7] bg-white font-medium shadow-sm transition-all text-slate-700 placeholder-slate-400" placeholder="Ссылка на Twitch, iframe или название канала...">
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-3 ml-[72px] hidden sm:block">Вставь ссылку на свой Twitch канал, чтобы он отображался в планировщике.</p>
+            </div>
+
             <!-- Блок 1: Текущая неделя -->
             <div id="week1-container" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
                 <h3 class="text-xl font-black text-slate-800 mb-6 text-center uppercase tracking-wide">Текущая неделя</h3>
@@ -223,8 +238,16 @@
 
         <!-- ЭКРАН 4: СТРИМ TWITCH -->
         <div id="view-stream" class="hidden-view w-full h-[calc(100vh-120px)] min-h-[500px]">
-            <div class="w-full h-full bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-200">
-                <iframe src="https://player.twitch.tv/?channel=rainon_&parent=nevaknight.github.io" 
+            <div class="w-full h-full bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-200 relative">
+                <!-- Заглушка, если стрим не настроен -->
+                <div id="stream-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 bg-slate-50 z-10 hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-4 opacity-50"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+                    <p class="text-lg font-medium text-slate-500">Трансляция не настроена</p>
+                    <p class="text-sm mt-2 max-w-sm text-center">Добавь ссылку на свой Twitch канал в разделе "Моя анкета", чтобы зрители могли тебя смотреть.</p>
+                </div>
+                
+                <iframe id="twitch-iframe" 
+                        src="" 
                         frameborder="0" 
                         allowfullscreen="true" 
                         scrolling="no" 
@@ -236,7 +259,7 @@
         
         <!-- ФУТЕР с версией -->
         <footer class="text-center pt-10 pb-4 text-slate-400 font-medium text-sm mt-auto">
-            Key Planner V1.4 - @Rainon
+            Key Planner V1.5 - @Rainon
         </footer>
         
     </main>
@@ -262,8 +285,8 @@
         const REPO_NAME = 'KeyPlanner';
         // ==========================================
 
-        const PLAYERS = ['Сейлоркринж', 'Рейнон', 'Рид', 'Рипыч', 'Capunka'];
-        const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'DHtop', 'Сейлоркринж': 'Яакулатутуру', 'Рейнон': 'R1234', 'Capunka': 'R1234' };
+        const PLAYERS = ['Сейлоркринж', 'Рейнон', 'Рид', 'Рипыч', 'Capunka', 'Azya'];
+        const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'DHtop', 'Сейлоркринж': 'Яакулатутуру', 'Рейнон': 'R1234', 'Capunka': 'R1234', 'Azya': 'R1234' };
         
         const dayNamesFull = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
         const dayNamesShort = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
@@ -281,6 +304,7 @@
 
         let currentUser = null;
         let generatedDates = []; 
+        let currentStreamChannel = 'rainon_'; // Канал по умолчанию
 
         function getMoscowISO() {
             const d = new Date();
@@ -416,8 +440,62 @@
                 loadUserFormFromGitHub();
             } else if (viewId === 'dashboard') {
                 loadAllData();
+            } else if (viewId === 'stream') {
+                loadStreamView();
             }
         }
+
+        // Функция для извлечения названия канала Twitch из любой строки
+        function extractTwitchChannel(inputStr) {
+            if (!inputStr) return null;
+            let str = inputStr.trim();
+            
+            // Если это iframe, пытаемся достать channel=...
+            if (str.includes('<iframe') && str.includes('channel=')) {
+                const match = str.match(/channel=([^&"'\s]+)/);
+                if (match && match[1]) return match[1];
+            }
+            
+            // Если это ссылка типа https://twitch.tv/azya
+            if (str.includes('twitch.tv/')) {
+                const parts = str.split('twitch.tv/');
+                if (parts.length > 1) {
+                    const channel = parts[1].split(/[/?#]/)[0]; // берем до первого слэша или параметров
+                    if (channel) return channel;
+                }
+            }
+            
+            // Если это просто никнейм (нет пробелов и тегов)
+            if (!str.includes(' ') && !str.includes('<') && str.length > 0) {
+                return str;
+            }
+            
+            return null; // Не удалось распознать
+        }
+
+        function loadStreamView() {
+            const iframe = document.getElementById('twitch-iframe');
+            const placeholder = document.getElementById('stream-placeholder');
+            
+            if (currentStreamChannel) {
+                placeholder.classList.add('hidden');
+                iframe.classList.remove('hidden');
+                // Устанавливаем домен для теста
+                const parentDomain = 'nevaknight.github.io'; 
+                // Собираем правильную ссылку для плеера
+                const streamUrl = `https://player.twitch.tv/?channel=${currentStreamChannel}&parent=${parentDomain}`;
+                
+                if (iframe.src !== streamUrl) {
+                    iframe.src = streamUrl;
+                }
+            } else {
+                // Если стрим не настроен
+                iframe.classList.add('hidden');
+                iframe.src = '';
+                placeholder.classList.remove('hidden');
+            }
+        }
+
 
         function login() {
             const player = document.getElementById('login-player').value;
@@ -466,6 +544,16 @@
                 });
             } else {
                 wnlContainer.classList.add('hidden');
+            }
+
+            // Рендер Настроек трансляции
+            const streamInput = document.getElementById('stream-url-input');
+            if (userData.streamChannel) {
+                // Если канал уже был сохранен, показываем его
+                streamInput.value = userData.streamChannel;
+                currentStreamChannel = userData.streamChannel;
+            } else {
+                streamInput.value = '';
             }
 
             // Рендер Недель
@@ -830,11 +918,23 @@
                 return;
             }
 
+            // Обрабатываем поле трансляции
+            const streamInputRaw = document.getElementById('stream-url-input').value;
+            const extractedChannel = extractTwitchChannel(streamInputRaw);
+
             // Начинаем сохранение
             btn.innerHTML = `<div class="w-6 h-6 border-4 border-white border-t-transparent rounded-full loader"></div>`;
             btn.disabled = true;
 
             const dataToSave = {};
+            
+            // Сохраняем канал трансляции, если он был распознан
+            if (extractedChannel) {
+                dataToSave.streamChannel = extractedChannel;
+                currentStreamChannel = extractedChannel;
+            } else {
+                currentStreamChannel = null; // сбрасываем, если поле пустое
+            }
             
             // Собираем дни из календаря
             document.querySelectorAll('.form-row[data-date]').forEach(row => {
@@ -881,6 +981,11 @@
                 btn.classList.replace('bg-green-600', 'bg-emerald-500');
                 btn.classList.replace('hover:bg-green-700', 'hover:bg-emerald-600');
                 
+                // Если мы изменили ссылку, и это была успешная экстракция, обновим инпут для красоты
+                if (extractedChannel) {
+                    document.getElementById('stream-url-input').value = extractedChannel;
+                }
+
                 setTimeout(() => {
                     btn.innerHTML = originalContent;
                     btn.classList.replace('bg-emerald-500', 'bg-green-600');
@@ -903,16 +1008,38 @@
             let playersWhoFilled = [];
             window.wnlGlobalData = {};
 
+            // Переменная для поиска первого попавшегося стрима
+            let firstFoundStream = null;
+
             // Грузим анкеты
             for (let player of PLAYERS) {
                 const fileData = await githubAPI('GET', `${player}.json`);
                 if (fileData && fileData.content) {
                     try {
                         const jsonString = decodeURIComponent(escape(atob(fileData.content)));
-                        allSchedules[player] = JSON.parse(jsonString);
+                        const data = JSON.parse(jsonString);
+                        allSchedules[player] = data;
                         playersWhoFilled.push(player);
+                        
+                        // Если это профиль вошедшего игрока, запоминаем его стрим
+                        if (player === currentUser && data.streamChannel) {
+                            currentStreamChannel = data.streamChannel;
+                        }
+
+                        // Ищем первый попавшийся стрим среди всех (на случай если у текущего юзера нет)
+                        if (!firstFoundStream && data.streamChannel) {
+                            firstFoundStream = data.streamChannel;
+                        }
                     } catch(e) {}
                 }
+            }
+
+            // Если у текущего юзера нет стрима, но у кого-то другого есть, будем показывать его по кнопке
+            if (!currentStreamChannel && firstFoundStream) {
+                currentStreamChannel = firstFoundStream;
+            } else if (!currentStreamChannel && !firstFoundStream) {
+                // Если ни у кого нет, пусть будет дефолт
+                currentStreamChannel = 'rainon_';
             }
 
             // Грузим WNL
@@ -1144,7 +1271,8 @@
                 'bg-purple-100 text-purple-800 border-purple-200',
                 'bg-emerald-100 text-emerald-800 border-emerald-200',
                 'bg-amber-100 text-amber-800 border-amber-200',
-                'bg-rose-100 text-rose-800 border-rose-200' // Добавлен еще один цвет для 5-го игрока
+                'bg-rose-100 text-rose-800 border-rose-200',
+                'bg-teal-100 text-teal-800 border-teal-200' // Добавлен еще один цвет для Azya
             ];
             
             activePlayers.forEach((player, pIndex) => {
