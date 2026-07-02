@@ -32,13 +32,6 @@
             <h1 class="text-xl font-bold text-slate-900 tracking-tight cursor-pointer flex items-center gap-2 z-10" onclick="showView('dashboard')">
                 <span>⌛</span> ХОЧУ ИГРАТЬ
             </h1>
-            
-            <!-- Центральная часть (Кнопка стрима) -->
-            <div id="nav-center" class="hidden absolute inset-0 flex items-center justify-center pointer-events-none">
-                <button id="nav-btn-stream" onclick="showView('stream')" class="pointer-events-auto w-11 h-11 bg-[#9146FF] hover:bg-[#772ce8] text-white rounded-2xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Смотреть трансляции">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="3" ry="3"/></svg>
-                </button>
-            </div>
 
             <!-- Пользовательское меню справа -->
             <div id="nav-user" class="hidden flex items-center gap-4 z-10">
@@ -52,6 +45,26 @@
 
     <main class="flex-1 max-w-7xl mx-auto px-4 py-8 w-full flex flex-col">
         
+        <!-- БЛОК БЫСТРЫХ ССЫЛОК (Скрыт на странице входа) -->
+        <div id="quick-links" class="hidden justify-center items-center gap-3 mb-6 w-full">
+            <!-- Warcraft Logs -->
+            <a href="https://www.warcraftlogs.com/" target="_blank" class="w-11 h-11 bg-slate-800 hover:bg-slate-700 text-white rounded-xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Warcraft Logs">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            </a>
+            <!-- Lorrgs.io -->
+            <a href="https://lorrgs.io/" target="_blank" class="w-11 h-11 bg-purple-800 hover:bg-purple-700 text-white rounded-xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Lorrgs.io">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </a>
+            <!-- Archon.gg -->
+            <a href="https://www.archon.gg/wow" target="_blank" class="w-11 h-11 bg-blue-800 hover:bg-blue-700 text-white rounded-xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Archon.gg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </a>
+            <!-- Twitch Stream -->
+            <button id="main-btn-stream" onclick="showView('stream')" class="w-11 h-11 bg-[#9146FF] hover:bg-[#772ce8] text-white rounded-xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Смотреть трансляции">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="3" ry="3"/></svg>
+            </button>
+        </div>
+
         <!-- ЭКРАН 1: ЛОГИН -->
         <div id="view-login" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-10 w-full">
             <h2 class="text-2xl font-bold text-center mb-6">Вход</h2>
@@ -67,6 +80,7 @@
                             <option value="Рипыч" class="text-slate-800">Рипыч</option>
                             <option value="Capunka" class="text-slate-800">Capunka</option>
                             <option value="Azya" class="text-slate-800">Azya</option>
+                            <option value="Azeka" class="text-slate-800">Azeka</option>
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -253,7 +267,7 @@
         
         <!-- ФУТЕР с версией -->
         <footer class="text-center pt-10 pb-4 text-slate-400 font-medium text-sm mt-auto">
-            Key Planner V1.6 - @Rainon
+            Key Planner V1.7 - @Rainon
         </footer>
         
     </main>
@@ -279,8 +293,8 @@
         const REPO_NAME = 'KeyPlanner';
         // ==========================================
 
-        const PLAYERS = ['Сейлоркринж', 'Рейнон', 'Рид', 'Рипыч', 'Capunka', 'Azya'];
-        const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'DHtop', 'Сейлоркринж': 'Яакулатутуру', 'Рейнон': 'R1234', 'Capunka': 'R1234', 'Azya': 'R1234' };
+        const PLAYERS = ['Сейлоркринж', 'Рейнон', 'Рид', 'Рипыч', 'Capunka', 'Azya', 'Azeka'];
+        const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'DHtop', 'Сейлоркринж': 'Яакулатутуру', 'Рейнон': 'R1234', 'Capunka': 'R1234', 'Azya': 'R1234', 'Azeka': 'R1234' };
         
         const dayNamesFull = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
         const dayNamesShort = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
@@ -339,7 +353,8 @@
             if (savedUser && PLAYERS.includes(savedUser)) {
                 currentUser = savedUser;
                 document.getElementById('nav-user').classList.remove('hidden');
-                document.getElementById('nav-center').classList.remove('hidden');
+                document.getElementById('quick-links').classList.remove('hidden');
+                document.getElementById('quick-links').classList.add('flex');
                 document.getElementById('nav-player-name').innerText = currentUser;
                 showView('dashboard');
             } else {
@@ -389,7 +404,7 @@
         function updateNavStyles(activeViewId) {
             const btnDash = document.getElementById('nav-btn-dashboard');
             const btnForm = document.getElementById('nav-btn-form');
-            const btnStream = document.getElementById('nav-btn-stream');
+            const btnStream = document.getElementById('main-btn-stream');
             
             const inactiveClasses = "text-slate-600 hover:bg-slate-100 bg-transparent".split(' ');
             const activeClasses = "text-blue-700 bg-blue-50 border border-blue-100 shadow-sm".split(' ');
@@ -425,6 +440,15 @@
             
             document.getElementById(`view-${viewId}`).classList.remove('hidden-view');
             hideFloatingSave();
+
+            const quickLinks = document.getElementById('quick-links');
+            if (viewId === 'login') {
+                quickLinks.classList.add('hidden');
+                quickLinks.classList.remove('flex');
+            } else {
+                quickLinks.classList.remove('hidden');
+                quickLinks.classList.add('flex');
+            }
 
             updateNavStyles(viewId);
 
@@ -503,7 +527,8 @@
                 localStorage.setItem('wow_user', player);
                 errorElem.classList.add('hidden');
                 document.getElementById('nav-user').classList.remove('hidden');
-                document.getElementById('nav-center').classList.remove('hidden');
+                document.getElementById('quick-links').classList.remove('hidden');
+                document.getElementById('quick-links').classList.add('flex');
                 document.getElementById('nav-player-name').innerText = currentUser;
                 showView('dashboard');
             } else {
@@ -516,7 +541,8 @@
             currentUser = null;
             localStorage.removeItem('wow_user');
             document.getElementById('nav-user').classList.add('hidden');
-            document.getElementById('nav-center').classList.add('hidden');
+            document.getElementById('quick-links').classList.add('hidden');
+            document.getElementById('quick-links').classList.remove('flex');
             document.getElementById('login-password').value = '';
             showView('login');
         }
