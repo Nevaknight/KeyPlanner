@@ -1,0 +1,157 @@
+{
+  "characters": {
+    "main": {
+      "class": "druid",
+      "name": "Сейлоркринж"
+    },
+    "alt1": {
+      "class": "none",
+      "name": ""
+    },
+    "alt2": {
+      "class": "none",
+      "name": ""
+    }
+  },
+  "dungeons": {
+    "dungeon_1": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_2": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_3": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_4": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_5": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_6": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_7": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_8": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    }
+  },
+  "2026-07-01": [],
+  "2026-07-02": [],
+  "2026-07-03": [],
+  "2026-07-04": [],
+  "2026-07-05": [],
+  "2026-07-06": [
+    {
+      "status": "+",
+      "start": "18:15",
+      "end": "23:00"
+    }
+  ],
+  "2026-07-07": [],
+  "2026-07-08": [],
+  "2026-07-09": [],
+  "2026-07-10": [],
+  "2026-07-11": [],
+  "2026-07-12": [],
+  "2026-07-13": [],
+  "2026-07-14": [],
+  "raid-wed": [],
+  "raid-thu": [],
+  "raid-fri": [],
+  "raid-sat": [],
+  "raid-sun": [],
+  "raid-mon": [],
+  "raid-tue": []
+}
