@@ -293,7 +293,7 @@
                 </div>
             </div>
 
-            <!-- БЛОК: НАСТРОЙКА ТРАНСЛЯЦИИ -->
+            <!-- БЛОК: НАСТРОЙКА ТРАНСЛЯЦИИ (перемещен вниз) -->
             <div id="stream-settings-container" class="bg-gradient-to-r from-[#fbf9ff] to-[#f4effc] rounded-2xl shadow-sm border border-[#eaddf7] p-6 mb-6">
                 <div class="flex flex-col sm:flex-row items-center gap-4">
                     <div class="w-14 h-14 bg-[#9146FF] text-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
@@ -326,7 +326,7 @@
         
         <!-- ФУТЕР с версией -->
         <footer class="text-center pt-10 pb-4 text-slate-400 font-medium text-sm mt-auto">
-            Key Planner V1.8 - @Rainon
+            Key Planner V1.9 - @Rainon
         </footer>
         
     </main>
@@ -424,14 +424,22 @@
         let allActiveStreams = []; 
         let globalDungeonLists = {};
 
-        function getMoscowISO() {
-            const d = new Date();
-            const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-            return new Date(utc + (3600000 * 3)); 
+        // Функция для строгого получения локального времени Москвы
+        function getMoscowDate() {
+            const date = new Date();
+            const moscowStr = date.toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
+            return new Date(moscowStr);
+        }
+
+        function pad(n) { return n.toString().padStart(2, '0'); }
+
+        function getTodayIso() {
+            const md = getMoscowDate();
+            return `${md.getFullYear()}-${pad(md.getMonth()+1)}-${pad(md.getDate())}`;
         }
 
         function generateTwoWeeks() {
-            let moscowDate = getMoscowISO();
+            let moscowDate = getMoscowDate();
             let day = moscowDate.getDay();
             let diffToWednesday = day >= 3 ? day - 3 : day + 4;
             
@@ -439,20 +447,21 @@
             startOfWeek.setDate(moscowDate.getDate() - diffToWednesday);
             startOfWeek.setHours(0,0,0,0);
 
-            let todayIso = getMoscowISO().toISOString().split('T')[0];
+            let todayIso = getTodayIso();
 
             generatedDates = [];
             for (let i = 0; i < 14; i++) {
                 let tempD = new Date(startOfWeek);
                 tempD.setDate(startOfWeek.getDate() + i);
-                let isoDate = tempD.toISOString().split('T')[0];
+                
+                let isoDate = `${tempD.getFullYear()}-${pad(tempD.getMonth()+1)}-${pad(tempD.getDate())}`;
                 
                 generatedDates.push({
                     iso: isoDate,
-                    datePart: `${tempD.getDate().toString().padStart(2, '0')}.${(tempD.getMonth() + 1).toString().padStart(2, '0')}`,
+                    datePart: `${pad(tempD.getDate())}.${pad(tempD.getMonth() + 1)}`,
                     dayPart: dayNamesFull[tempD.getDay()],
                     dayPartShort: dayNamesShort[tempD.getDay()],
-                    display: `${tempD.getDate().toString().padStart(2, '0')}.${(tempD.getMonth() + 1).toString().padStart(2, '0')} - ${dayNamesFull[tempD.getDay()]}`,
+                    display: `${pad(tempD.getDate())}.${pad(tempD.getMonth() + 1)} - ${dayNamesFull[tempD.getDay()]}`,
                     isPast: isoDate < todayIso,
                     isToday: isoDate === todayIso
                 });
@@ -822,7 +831,7 @@
                 wnlContainer.classList.remove('hidden');
                 const dateSelect = document.getElementById('wnl-date');
                 dateSelect.innerHTML = '<option value="">Выберите дату опроса...</option>';
-                const todayIso = getMoscowISO().toISOString().split('T')[0];
+                const todayIso = getTodayIso();
                 generatedDates.forEach(d => {
                     if (d.iso >= todayIso) dateSelect.innerHTML += `<option value="${d.iso}">${d.display}</option>`;
                 });
@@ -1505,15 +1514,7 @@
                     </div>
                 `;
             } else {
-                summaryContainer.innerHTML = `
-                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-                        <div class="bg-slate-50 p-4 border-b border-slate-200 flex items-center gap-4">
-                            <img src="./ICONS/DUNGEONS/ЭПОХАЛЬНЫЙ_КЛЮЧ.jpg" alt="Эпохальные подземелья" class="w-12 h-12 rounded-lg shadow-sm border border-slate-300 object-cover bg-slate-900">
-                            <h3 class="text-xl font-black text-slate-800 uppercase tracking-wide">Эпохальные подземелья</h3>
-                        </div>
-                        <div class="p-8 text-center text-slate-500 font-medium">Никто еще не выбрал подземелья.</div>
-                    </div>
-                `;
+                summaryContainer.innerHTML = '';
             }
 
             if (activePlayers.length === 0 && Object.keys(window.wnlGlobalData).length === 0) {
