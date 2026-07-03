@@ -167,20 +167,6 @@
                 </div>
             </div>
 
-            <!-- БЛОК: НАСТРОЙКА ТРАНСЛЯЦИИ -->
-            <div id="stream-settings-container" class="bg-gradient-to-r from-[#fbf9ff] to-[#f4effc] rounded-2xl shadow-sm border border-[#eaddf7] p-6 mb-6">
-                <div class="flex flex-col sm:flex-row items-center gap-4">
-                    <div class="w-14 h-14 bg-[#9146FF] text-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="3" ry="3"/></svg>
-                    </div>
-                    <div class="flex-1 w-full">
-                        <label class="block text-sm font-black text-[#6035a0] mb-2 uppercase tracking-widest">ТРАНСЛЯЦИЯ</label>
-                        <input type="text" id="stream-url-input" oninput="showFloatingSave(); this.classList.remove('border-red-500', 'bg-red-50');" class="w-full border border-[#d9c2ff] rounded-xl p-3 outline-none focus:border-[#9146FF] focus:ring-2 focus:ring-[#eaddf7] bg-white font-medium shadow-sm transition-all text-slate-700 placeholder-slate-400" placeholder="https://www.twitch.tv/никнейм">
-                    </div>
-                </div>
-                <p class="text-xs text-slate-500 mt-3 ml-[72px] hidden sm:block">Вставь прямую ссылку на канал. Строгий формат: <b class="text-[#9146FF]">https://www.twitch.tv/твое_имя</b></p>
-            </div>
-
             <!-- Блок Персонажей -->
             <div class="mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Мейн -->
@@ -305,6 +291,20 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+
+            <!-- БЛОК: НАСТРОЙКА ТРАНСЛЯЦИИ -->
+            <div id="stream-settings-container" class="bg-gradient-to-r from-[#fbf9ff] to-[#f4effc] rounded-2xl shadow-sm border border-[#eaddf7] p-6 mb-6">
+                <div class="flex flex-col sm:flex-row items-center gap-4">
+                    <div class="w-14 h-14 bg-[#9146FF] text-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="3" ry="3"/></svg>
+                    </div>
+                    <div class="flex-1 w-full">
+                        <label class="block text-sm font-black text-[#6035a0] mb-2 uppercase tracking-widest">ТРАНСЛЯЦИЯ</label>
+                        <input type="text" id="stream-url-input" oninput="showFloatingSave(); this.classList.remove('border-red-500', 'bg-red-50');" class="w-full border border-[#d9c2ff] rounded-xl p-3 outline-none focus:border-[#9146FF] focus:ring-2 focus:ring-[#eaddf7] bg-white font-medium shadow-sm transition-all text-slate-700 placeholder-slate-400" placeholder="https://www.twitch.tv/никнейм">
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-3 ml-[72px] hidden sm:block">Вставь прямую ссылку на канал. Строгий формат: <b class="text-[#9146FF]">https://www.twitch.tv/твое_имя</b></p>
             </div>
 
         </div>
@@ -453,7 +453,8 @@
                     dayPart: dayNamesFull[tempD.getDay()],
                     dayPartShort: dayNamesShort[tempD.getDay()],
                     display: `${tempD.getDate().toString().padStart(2, '0')}.${(tempD.getMonth() + 1).toString().padStart(2, '0')} - ${dayNamesFull[tempD.getDay()]}`,
-                    isPast: isoDate < todayIso 
+                    isPast: isoDate < todayIso,
+                    isToday: isoDate === todayIso
                 });
             }
         }
@@ -919,7 +920,7 @@
             let countW2 = 0;
 
             generatedDates.forEach((dateObj, index) => {
-                if (dateObj.isPast) return; 
+                const hideRow = dateObj.isPast || dateObj.isToday;
 
                 let dayEntries = userData[dateObj.iso];
                 if (!dayEntries || dayEntries.length === 0) {
@@ -927,13 +928,13 @@
                 }
                 
                 dayEntries.forEach((entry, i) => {
-                    const rowHtml = createRowHTML(dateObj, entry, i === 0, false);
+                    const rowHtml = createRowHTML(dateObj, entry, i === 0, false, hideRow);
                     if (index < 7) {
                         tbody1.insertAdjacentHTML('beforeend', rowHtml);
-                        countW1++;
+                        if (!hideRow) countW1++;
                     } else {
                         tbody2.insertAdjacentHTML('beforeend', rowHtml);
-                        countW2++;
+                        if (!hideRow) countW2++;
                     }
                 });
             });
@@ -986,7 +987,7 @@
             showFloatingSave();
         }
 
-        function createRowHTML(dateObj, entry, isFirstRowOfDay, isRaidDay) {
+        function createRowHTML(dateObj, entry, isFirstRowOfDay, isRaidDay, isHidden = false) {
             const dataAttr = isRaidDay ? `data-raid-id="${dateObj.id}"` : `data-date="${dateObj.iso}"`;
             const uniqueId = `status-${Math.random().toString(36).substr(2, 9)}`;
             
@@ -1014,7 +1015,7 @@
             }
 
             return `
-                <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors form-row ${isFirstRowOfDay ? 'border-t border-slate-200' : ''}" ${dataAttr}>
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors form-row ${isFirstRowOfDay ? 'border-t border-slate-200' : ''} ${isHidden ? 'hidden' : ''}" ${dataAttr}>
                     <td class="py-3 px-2 text-center">
                         <div class="flex justify-center">
                             ${resetBtnHtml}
@@ -1494,15 +1495,9 @@
             if (keysFound) {
                 summaryContainer.innerHTML = `
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-                        <div class="bg-slate-50 p-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <div class="flex items-center gap-4">
-                                <img src="./ICONS/DUNGEONS/ЭПОХАЛЬНЫЙ_КЛЮЧ.jpg" alt="Эпохальные подземелья" class="w-12 h-12 rounded-lg shadow-sm border border-slate-300 object-cover bg-slate-900">
-                                <h3 class="text-xl font-black text-slate-800 uppercase tracking-wide">Эпохальные подземелья</h3>
-                            </div>
-                            <button onclick="loadAllData()" class="text-sm bg-white border border-slate-300 hover:bg-slate-50 px-4 py-2.5 rounded-lg transition flex items-center justify-center gap-2 font-bold shadow-sm w-full sm:w-auto">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                                Обновить данные
-                            </button>
+                        <div class="bg-slate-50 p-4 border-b border-slate-200 flex items-center gap-4">
+                            <img src="./ICONS/DUNGEONS/ЭПОХАЛЬНЫЙ_КЛЮЧ.jpg" alt="Эпохальные подземелья" class="w-12 h-12 rounded-lg shadow-sm border border-slate-300 object-cover bg-slate-900">
+                            <h3 class="text-xl font-black text-slate-800 uppercase tracking-wide">Эпохальные подземелья</h3>
                         </div>
                         <div class="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 bg-slate-50/50">
                             ${dashDungeonsHtml}
@@ -1512,15 +1507,9 @@
             } else {
                 summaryContainer.innerHTML = `
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-                        <div class="bg-slate-50 p-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <div class="flex items-center gap-4">
-                                <img src="./ICONS/DUNGEONS/ЭПОХАЛЬНЫЙ_КЛЮЧ.jpg" alt="Эпохальные подземелья" class="w-12 h-12 rounded-lg shadow-sm border border-slate-300 object-cover bg-slate-900">
-                                <h3 class="text-xl font-black text-slate-800 uppercase tracking-wide">Эпохальные подземелья</h3>
-                            </div>
-                            <button onclick="loadAllData()" class="text-sm bg-white border border-slate-300 hover:bg-slate-50 px-4 py-2.5 rounded-lg transition flex items-center justify-center gap-2 font-bold shadow-sm w-full sm:w-auto">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                                Обновить данные
-                            </button>
+                        <div class="bg-slate-50 p-4 border-b border-slate-200 flex items-center gap-4">
+                            <img src="./ICONS/DUNGEONS/ЭПОХАЛЬНЫЙ_КЛЮЧ.jpg" alt="Эпохальные подземелья" class="w-12 h-12 rounded-lg shadow-sm border border-slate-300 object-cover bg-slate-900">
+                            <h3 class="text-xl font-black text-slate-800 uppercase tracking-wide">Эпохальные подземелья</h3>
                         </div>
                         <div class="p-8 text-center text-slate-500 font-medium">Никто еще не выбрал подземелья.</div>
                     </div>
