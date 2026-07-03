@@ -1,12 +1,133 @@
 {
   "streamChannel": "rainon_",
-  "2026-07-02": [
-    {
-      "status": "+",
-      "start": "19:00",
-      "end": "23:59"
+  "characters": {
+    "main": {
+      "class": "paladin",
+      "name": "Рейннон"
+    },
+    "alt1": {
+      "class": "none",
+      "name": ""
+    },
+    "alt2": {
+      "class": "none",
+      "name": ""
     }
-  ],
+  },
+  "dungeons": {
+    "dungeon_1": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_2": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_3": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_4": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_5": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_6": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_7": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_8": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    }
+  },
   "2026-07-03": [],
   "2026-07-04": [
     {
