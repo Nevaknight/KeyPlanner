@@ -1,4 +1,132 @@
 {
+  "characters": {
+    "main": {
+      "class": "none",
+      "name": ""
+    },
+    "alt1": {
+      "class": "none",
+      "name": ""
+    },
+    "alt2": {
+      "class": "none",
+      "name": ""
+    }
+  },
+  "dungeons": {
+    "dungeon_1": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_2": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_3": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_4": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_5": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_6": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_7": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_8": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    }
+  },
   "2026-07-01": [
     {
       "status": "+",
@@ -51,18 +179,25 @@
   "2026-07-09": [
     {
       "status": "+",
-      "start": "20:00",
+      "start": "17:00",
       "end": "23:59"
     }
   ],
   "2026-07-10": [
     {
       "status": "+",
-      "start": "11:00",
+      "start": "20:00",
       "end": "23:59"
     }
   ],
   "2026-07-11": [
+    {
+      "status": "+",
+      "start": "11:00",
+      "end": "23:59"
+    }
+  ],
+  "2026-07-12": [
     {
       "status": "+",
       "start": "11:00",
@@ -71,11 +206,11 @@
     {
       "status": "+",
       "start": "20:00",
-      "end": "23:59"
+      "end": "23:58"
     }
   ],
-  "2026-07-12": [],
   "2026-07-13": [],
+  "2026-07-14": [],
   "raid-wed": [],
   "raid-thu": [],
   "raid-fri": [],
