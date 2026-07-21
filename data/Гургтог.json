@@ -1,0 +1,234 @@
+{
+  "characters": {
+    "main": {
+      "class": "warlock",
+      "name": ""
+    },
+    "alt1": {
+      "class": "none",
+      "name": ""
+    },
+    "alt2": {
+      "class": "none",
+      "name": ""
+    }
+  },
+  "dungeons": {
+    "dungeon_1": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_2": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_3": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_4": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_5": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_6": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_7": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_8": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    }
+  },
+  "2026-07-22": [],
+  "2026-07-23": [
+    {
+      "status": "?",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "2026-07-24": [
+    {
+      "status": "?",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "2026-07-25": [
+    {
+      "status": "+",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "2026-07-26": [
+    {
+      "status": "+",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "2026-07-27": [
+    {
+      "status": "?",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "2026-07-28": [
+    {
+      "status": "?",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "2026-07-29": [
+    {
+      "status": "+",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "2026-07-30": [
+    {
+      "status": "+",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "2026-07-31": [
+    {
+      "status": "?",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "2026-08-01": [
+    {
+      "status": "?",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "2026-08-02": [
+    {
+      "status": "+",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "2026-08-03": [
+    {
+      "status": "+",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "2026-08-04": [
+    {
+      "status": "?",
+      "start": "",
+      "end": ""
+    }
+  ],
+  "raid-wed": [],
+  "raid-thu": [],
+  "raid-fri": [],
+  "raid-sat": [
+    {
+      "start": "20:00",
+      "end": "23:59"
+    }
+  ],
+  "raid-sun": [],
+  "raid-mon": [],
+  "raid-tue": []
+}
