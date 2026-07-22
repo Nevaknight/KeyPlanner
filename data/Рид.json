@@ -16,7 +16,7 @@
   "dungeons": {
     "dungeon_1": {
       "main": {
-        "rio": false,
+        "rio": true,
         "w": false
       },
       "alt1": {
@@ -30,7 +30,7 @@
     },
     "dungeon_2": {
       "main": {
-        "rio": false,
+        "rio": true,
         "w": false
       },
       "alt1": {
@@ -44,7 +44,7 @@
     },
     "dungeon_3": {
       "main": {
-        "rio": false,
+        "rio": true,
         "w": false
       },
       "alt1": {
@@ -58,7 +58,7 @@
     },
     "dungeon_4": {
       "main": {
-        "rio": false,
+        "rio": true,
         "w": false
       },
       "alt1": {
@@ -72,7 +72,7 @@
     },
     "dungeon_5": {
       "main": {
-        "rio": false,
+        "rio": true,
         "w": false
       },
       "alt1": {
@@ -86,7 +86,7 @@
     },
     "dungeon_6": {
       "main": {
-        "rio": false,
+        "rio": true,
         "w": false
       },
       "alt1": {
@@ -100,7 +100,7 @@
     },
     "dungeon_7": {
       "main": {
-        "rio": false,
+        "rio": true,
         "w": false
       },
       "alt1": {
@@ -114,7 +114,7 @@
     },
     "dungeon_8": {
       "main": {
-        "rio": false,
+        "rio": true,
         "w": false
       },
       "alt1": {
