@@ -159,8 +159,18 @@
     }
   ],
   "2026-09-08": [],
-  "raid-wed": [],
-  "raid-thu": [],
+  "raid-wed": [
+    {
+      "start": "20:00",
+      "end": ""
+    }
+  ],
+  "raid-thu": [
+    {
+      "start": "20:00",
+      "end": ""
+    }
+  ],
   "raid-fri": [],
   "raid-sat": [],
   "raid-sun": [],
