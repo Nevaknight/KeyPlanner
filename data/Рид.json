@@ -1,41 +1,207 @@
 {
-  "2026-06-28": [
+  "characters": {
+    "main": {
+      "class": "paladin",
+      "name": "Рид"
+    },
+    "alt1": {
+      "class": "none",
+      "name": ""
+    },
+    "alt2": {
+      "class": "none",
+      "name": ""
+    }
+  },
+  "dungeons": {
+    "dungeon_1": {
+      "main": {
+        "rio": true,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_2": {
+      "main": {
+        "rio": true,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_3": {
+      "main": {
+        "rio": true,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_4": {
+      "main": {
+        "rio": true,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_5": {
+      "main": {
+        "rio": true,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_6": {
+      "main": {
+        "rio": true,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_7": {
+      "main": {
+        "rio": true,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_8": {
+      "main": {
+        "rio": true,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    }
+  },
+  "2026-07-22": [],
+  "2026-07-23": [
     {
       "status": "+",
-      "start": "15:38",
-      "end": "18:38"
+      "start": "19:20",
+      "end": "23:30"
     }
   ],
-  "2026-06-29": [],
-  "2026-06-30": [
+  "2026-07-24": [
     {
       "status": "+",
-      "start": "10:00",
-      "end": "21:00"
+      "start": "19:00",
+      "end": "23:59"
     }
   ],
-  "2026-07-01": [],
-  "2026-07-02": [],
-  "2026-07-03": [],
-  "2026-07-04": [
+  "2026-07-25": [
     {
       "status": "?",
-      "start": "10:00",
-      "end": "21:00"
+      "start": "14:00",
+      "end": "19:00"
     }
   ],
-  "2026-07-05": [],
-  "2026-07-06": [],
+  "2026-07-26": [
+    {
+      "status": "?",
+      "start": "14:00",
+      "end": "19:00"
+    }
+  ],
+  "2026-07-27": [
+    {
+      "status": "+",
+      "start": "19:30",
+      "end": "23:30"
+    }
+  ],
+  "2026-07-28": [
+    {
+      "status": "+",
+      "start": "19:30",
+      "end": "23:08"
+    }
+  ],
+  "2026-07-29": [],
+  "2026-07-30": [],
+  "2026-07-31": [],
+  "2026-08-01": [],
+  "2026-08-02": [],
+  "2026-08-03": [],
+  "2026-08-04": [],
   "raid-wed": [
     {
-      "start": "09:06",
-      "end": "23:06"
+      "start": "20:45",
+      "end": "23:59"
     }
   ],
-  "raid-thu": [],
+  "raid-thu": [
+    {
+      "start": "20:45",
+      "end": "23:59"
+    }
+  ],
   "raid-fri": [],
   "raid-sat": [],
   "raid-sun": [],
-  "raid-mon": [],
-  "raid-tue": []
+  "raid-mon": [
+    {
+      "start": "20:45",
+      "end": "23:59"
+    }
+  ],
+  "raid-tue": [
+    {
+      "start": "20:45",
+      "end": "23:59"
+    }
+  ]
 }

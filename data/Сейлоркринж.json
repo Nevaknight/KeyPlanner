@@ -1,25 +1,152 @@
 {
-  "2026-06-28": [],
-  "2026-06-29": [],
-  "2026-06-30": [
-    {
-      "status": "+",
-      "start": "",
-      "end": ""
+  "characters": {
+    "main": {
+      "class": "druid",
+      "name": "Сейлоркринж"
+    },
+    "alt1": {
+      "class": "none",
+      "name": ""
+    },
+    "alt2": {
+      "class": "none",
+      "name": ""
     }
-  ],
-  "2026-07-01": [],
-  "2026-07-02": [],
-  "2026-07-03": [
+  },
+  "dungeons": {
+    "dungeon_1": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_2": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_3": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_4": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_5": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_6": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_7": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    },
+    "dungeon_8": {
+      "main": {
+        "rio": false,
+        "w": false
+      },
+      "alt1": {
+        "rio": false,
+        "w": false
+      },
+      "alt2": {
+        "rio": false,
+        "w": false
+      }
+    }
+  },
+  "2026-08-12": [],
+  "2026-08-13": [
     {
       "status": "?",
-      "start": "15:00",
-      "end": "23:56"
+      "start": "18:15",
+      "end": "21:15"
     }
   ],
-  "2026-07-04": [],
-  "2026-07-05": [],
-  "2026-07-06": [],
+  "2026-08-14": [],
+  "2026-08-15": [],
+  "2026-08-16": [],
+  "2026-08-17": [],
+  "2026-08-18": [],
+  "2026-08-19": [],
+  "2026-08-20": [],
+  "2026-08-21": [],
+  "2026-08-22": [],
+  "2026-08-23": [],
+  "2026-08-24": [],
+  "2026-08-25": [],
   "raid-wed": [],
   "raid-thu": [],
   "raid-fri": [],

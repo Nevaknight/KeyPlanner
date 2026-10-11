@@ -29,11 +29,14 @@
 <body class="text-slate-800 antialiased min-h-screen flex flex-col relative">
 
     <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-20">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <h1 class="text-xl font-bold text-slate-900 tracking-tight cursor-pointer flex items-center gap-2" onclick="showView('dashboard')">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between relative">
+            <!-- Логотип слева -->
+            <h1 class="text-xl font-bold text-slate-900 tracking-tight cursor-pointer flex items-center gap-2 z-10" onclick="showView('dashboard')">
                 <span>⌛</span> ХОЧУ ИГРАТЬ
             </h1>
-            <div id="nav-user" class="hidden flex items-center gap-4">
+
+            <!-- Пользовательское меню справа -->
+            <div id="nav-user" class="hidden flex items-center gap-4 z-10">
                 <span id="nav-player-name" class="font-bold text-blue-600 hidden sm:inline-block"></span>
                 <button id="nav-btn-dashboard" onclick="showView('dashboard')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Расписание</button>
                 <button id="nav-btn-form" onclick="showView('form')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Моя анкета</button>
@@ -44,6 +47,26 @@
 
     <main class="flex-1 max-w-7xl mx-auto px-4 py-8 w-full flex flex-col">
         
+        <!-- БЛОК БЫСТРЫХ ССЫЛОК (Скрыт на странице входа) -->
+        <div id="quick-links" class="hidden justify-center items-center gap-3 mb-6 w-full">
+            <!-- Warcraft Logs -->
+            <a href="https://www.warcraftlogs.com/" target="_blank" class="w-11 h-11 bg-slate-800 hover:bg-slate-700 text-white rounded-xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Warcraft Logs">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            </a>
+            <!-- Lorrgs.io -->
+            <a href="https://lorrgs.io/" target="_blank" class="w-11 h-11 bg-purple-800 hover:bg-purple-700 text-white rounded-xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Lorrgs.io">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </a>
+            <!-- Archon.gg -->
+            <a href="https://www.archon.gg/wow" target="_blank" class="w-11 h-11 bg-blue-800 hover:bg-blue-700 text-white rounded-xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Archon.gg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </a>
+            <!-- Twitch Stream -->
+            <button id="main-btn-stream" onclick="showView('stream')" class="w-11 h-11 bg-[#9146FF] hover:bg-[#772ce8] text-white rounded-xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Смотреть трансляции">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="3" ry="3"/></svg>
+            </button>
+        </div>
+
         <!-- ЭКРАН 1: ЛОГИН -->
         <div id="view-login" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-10 w-full">
             <h2 class="text-2xl font-bold text-center mb-6">Вход</h2>
@@ -57,6 +80,10 @@
                             <option value="Рейнон" class="text-slate-800">Рейнон</option>
                             <option value="Рид" class="text-slate-800">Рид</option>
                             <option value="Рипыч" class="text-slate-800">Рипыч</option>
+                            <option value="Capunka" class="text-slate-800">Capunka</option>
+                            <option value="Azya" class="text-slate-800">Azya</option>
+                            <option value="Azeka" class="text-slate-800">Azeka</option>
+                            <option value="Гургтог" class="text-slate-800">Гургтог</option>
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -76,15 +103,8 @@
 
         <!-- ЭКРАН 2: СВОДНАЯ ТАБЛИЦА (DASHBOARD) -->
         <div id="view-dashboard" class="hidden-view space-y-6 w-full">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                <div class="flex-1 text-center sm:text-left">
-                    <h2 id="dashboard-status-text" class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Ожидание данных...</h2>
-                </div>
-                <button onclick="loadAllData()" class="text-sm bg-white border border-slate-300 hover:bg-slate-50 px-4 py-2.5 rounded-lg transition flex items-center justify-center gap-2 font-bold shadow-sm w-full sm:w-auto">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                    Обновить данные
-                </button>
-            </div>
+            <!-- Здесь выводится блок подземелий, заменяющий старый хедер -->
+            <div id="dashboard-dungeons-summary" class="w-full"></div>
             
             <div id="dashboard-loading" class="text-center py-20 hidden bg-white rounded-2xl shadow-sm border border-slate-200">
                 <div class="inline-block w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full loader mb-4"></div>
@@ -92,7 +112,7 @@
             </div>
 
             <div id="dashboard-content" class="space-y-8">
-                <!-- Сюда будет рендериться контент -->
+                <!-- Сюда будет рендериться остальной контент -->
             </div>
         </div>
 
@@ -146,6 +166,72 @@
                         <button onclick="createWnl()" class="w-full mt-2 bg-purple-600 hover:bg-purple-700 text-white font-black py-4 rounded-xl transition shadow-md text-lg tracking-wide uppercase">
                             Создать и опубликовать опрос
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок Персонажей -->
+            <div class="mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Мейн -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <h4 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Мейн</h4>
+                    <div class="flex items-center gap-4">
+                        <img id="main-icon" src="https://wow.zamimg.com/images/wow/icons/large/inv_misc_questionmark.jpg" class="w-14 h-14 rounded-xl shadow-sm border border-slate-200 object-cover bg-slate-50">
+                        <div class="flex-1 flex flex-col gap-2">
+                            <select id="main-class" onchange="updateClassIcon('main')" class="w-full border border-slate-300 rounded-lg p-2 outline-none focus:border-blue-500 text-sm font-semibold text-slate-700 bg-white shadow-sm">
+                            </select>
+                            <input type="text" id="main-name" placeholder="Ник персонажа" maxlength="12" class="w-full border border-slate-300 rounded-lg p-2 outline-none focus:border-blue-500 text-sm font-semibold shadow-sm" oninput="updateCharName('main')">
+                        </div>
+                    </div>
+                </div>
+                <!-- Альт 1 -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <h4 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Альт 1</h4>
+                    <div class="flex items-center gap-4">
+                        <img id="alt1-icon" src="https://wow.zamimg.com/images/wow/icons/large/inv_misc_questionmark.jpg" class="w-14 h-14 rounded-xl shadow-sm border border-slate-200 object-cover bg-slate-50">
+                        <div class="flex-1 flex flex-col gap-2">
+                            <select id="alt1-class" onchange="updateClassIcon('alt1')" class="w-full border border-slate-300 rounded-lg p-2 outline-none focus:border-blue-500 text-sm font-semibold text-slate-700 bg-white shadow-sm">
+                            </select>
+                            <input type="text" id="alt1-name" placeholder="Ник персонажа" maxlength="12" class="w-full border border-slate-300 rounded-lg p-2 outline-none focus:border-blue-500 text-sm font-semibold shadow-sm" oninput="updateCharName('alt1')">
+                        </div>
+                    </div>
+                </div>
+                <!-- Альт 2 -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <h4 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Альт 2</h4>
+                    <div class="flex items-center gap-4">
+                        <img id="alt2-icon" src="https://wow.zamimg.com/images/wow/icons/large/inv_misc_questionmark.jpg" class="w-14 h-14 rounded-xl shadow-sm border border-slate-200 object-cover bg-slate-50">
+                        <div class="flex-1 flex flex-col gap-2">
+                            <select id="alt2-class" onchange="updateClassIcon('alt2')" class="w-full border border-slate-300 rounded-lg p-2 outline-none focus:border-blue-500 text-sm font-semibold text-slate-700 bg-white shadow-sm">
+                            </select>
+                            <input type="text" id="alt2-name" placeholder="Ник персонажа" maxlength="12" class="w-full border border-slate-300 rounded-lg p-2 outline-none focus:border-blue-500 text-sm font-semibold shadow-sm" oninput="updateCharName('alt2')">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок Ключей (Подземелий) -->
+            <div class="bg-transparent mb-10 text-center">
+                <h3 class="text-xl font-black text-slate-800 mb-2 uppercase tracking-wide px-2 flex items-center justify-center gap-2">
+                    Эпохальные подземелья
+                </h3>
+                <p class="text-slate-500 text-sm mb-4 px-2 max-w-3xl mx-auto text-center">Выберите подземелья, в которых вам нужен RIO или W (недельный ключ) для каждого персонажа.</p>
+                
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden tree-container-block text-left relative">
+                    <div class="bg-slate-50 p-4 border-b border-slate-200 flex items-center justify-between gap-4">
+                        <img src="./ICONS/DUNGEONS/ЭПОХАЛЬНЫЙ_КЛЮЧ.jpg" alt="Ключи" class="w-12 h-12 rounded-lg shadow-sm border border-slate-300 object-cover bg-slate-900 shrink-0">
+                        <div class="shrink-0 flex items-center justify-end">
+                            <button onclick="resetDungeonsSelection()" class="text-slate-400 hover:text-red-500 bg-white border border-slate-200 hover:border-red-200 hover:bg-red-50 w-11 h-11 rounded-lg transition-all shadow-sm flex items-center justify-center" title="Сбросить выбор всех ключей">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto custom-scrollbar pb-2">
+                        <table class="w-max min-w-full table-fixed border-collapse">
+                            <tbody id="form-body-dungeons" class="text-sm border-b border-slate-200">
+                                <!-- Сюда рендерятся подземелья -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -210,11 +296,40 @@
                 </div>
             </div>
 
+            <!-- БЛОК: НАСТРОЙКА ТРАНСЛЯЦИИ (перемещен вниз) -->
+            <div id="stream-settings-container" class="bg-gradient-to-r from-[#fbf9ff] to-[#f4effc] rounded-2xl shadow-sm border border-[#eaddf7] p-6 mb-6">
+                <div class="flex flex-col sm:flex-row items-center gap-4">
+                    <div class="w-14 h-14 bg-[#9146FF] text-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="3" ry="3"/></svg>
+                    </div>
+                    <div class="flex-1 w-full">
+                        <label class="block text-sm font-black text-[#6035a0] mb-2 uppercase tracking-widest">ТРАНСЛЯЦИЯ</label>
+                        <input type="text" id="stream-url-input" oninput="showFloatingSave(); this.classList.remove('border-red-500', 'bg-red-50');" class="w-full border border-[#d9c2ff] rounded-xl p-3 outline-none focus:border-[#9146FF] focus:ring-2 focus:ring-[#eaddf7] bg-white font-medium shadow-sm transition-all text-slate-700 placeholder-slate-400" placeholder="https://www.twitch.tv/никнейм">
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-3 ml-[72px] hidden sm:block">Вставь прямую ссылку на канал. Строгий формат: <b class="text-[#9146FF]">https://www.twitch.tv/твое_имя</b></p>
+            </div>
+
+        </div>
+
+        <!-- ЭКРАН 4: СТРИМЫ TWITCH (СЕТКА) -->
+        <div id="view-stream" class="hidden-view w-full h-full">
+            <!-- Заглушка, если стримы не настроены -->
+            <div id="stream-placeholder" class="flex flex-col items-center justify-center text-slate-400 bg-white border border-slate-200 shadow-sm rounded-2xl p-16 hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-4 opacity-50"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+                <p class="text-xl font-bold text-slate-600 mb-2">Трансляции пока никто не добавил</p>
+                <p class="text-sm mt-2 max-w-sm text-center">Добавь ссылку на свой Twitch канал в разделе "Моя анкета" в правильном формате, чтобы зрители могли тебя смотреть.</p>
+            </div>
+            
+            <!-- Сетка для всех плееров (Матрица) -->
+            <div id="streams-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full hidden">
+                <!-- Плееры будут вставляться сюда -->
+            </div>
         </div>
         
         <!-- ФУТЕР с версией -->
         <footer class="text-center pt-10 pb-4 text-slate-400 font-medium text-sm mt-auto">
-            Key Planner V1.0 - @Rainon
+            Key Planner V1.9 - @Rainon
         </footer>
         
     </main>
@@ -231,6 +346,29 @@
         <span id="message-text"></span>
     </div>
 
+    <!-- Модальное окно для списка игроков подземелья -->
+    <div id="dungeon-list-modal" onclick="if(event.target === this) closeDungeonListModal()" class="fixed inset-0 bg-slate-900 bg-opacity-60 z-[100] hidden flex items-center justify-center backdrop-blur-sm cursor-pointer">
+        <div class="bg-white rounded-2xl shadow-2xl p-0 w-[90%] max-w-md transform transition-all scale-95 opacity-0 cursor-auto flex flex-col overflow-hidden" id="dungeon-list-modal-content">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div class="flex items-center gap-4">
+                     <img id="dl-modal-icon" src="" class="w-12 h-12 rounded-lg border border-slate-300 shadow-sm object-cover bg-slate-900">
+                     <div class="flex flex-col">
+                         <h3 id="dl-modal-title" class="font-black text-slate-800 text-lg leading-tight"></h3>
+                         <div class="mt-1">
+                             <span id="dl-modal-type" class="text-[10px] font-black tracking-wider text-white px-2 py-1 rounded bg-slate-500 uppercase"></span>
+                         </div>
+                     </div>
+                </div>
+                <button onclick="closeDungeonListModal()" class="text-slate-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-xl transition-colors shrink-0" title="Закрыть (ESC)">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="dl-modal-list" class="p-2 max-h-[60vh] overflow-y-auto custom-scrollbar bg-white flex flex-col">
+                <!-- Сюда вставляется список -->
+            </div>
+        </div>
+    </div>
+
     <script>
         // ==========================================
         const TOKEN_PART_1 = 'github_pat_11AVPVAWY0ePzqamRGnq9g_'; 
@@ -240,13 +378,40 @@
         const REPO_NAME = 'KeyPlanner';
         // ==========================================
 
-        const PLAYERS = ['Сейлоркринж', 'Рейнон', 'Рид', 'Рипыч'];
-        const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'DHtop', 'Сейлоркринж': 'Яакулатутуру', 'Рейнон': 'R1234' };
+        const PLAYERS = ['Сейлоркринж', 'Рейнон', 'Рид', 'Рипыч', 'Capunka', 'Azya', 'Azeka', 'Гургтог'];
+        const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'DHtop', 'Сейлоркринж': 'Яакулатутуру', 'Рейнон': 'R1234', 'Capunka': 'R1234', 'Azya': 'R1234', 'Azeka': 'R1234', 'Гургтог': 'R1234' };
         
         const dayNamesFull = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
         const dayNamesShort = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+
+        const WOW_CLASSES = {
+            'none': { name: 'Не выбран', icon: 'https://wow.zamimg.com/images/wow/icons/large/inv_misc_questionmark.jpg' },
+            'paladin': { name: 'Паладин', icon: 'https://wow.zamimg.com/images/wow/icons/large/classicon_paladin.jpg' },
+            'druid': { name: 'Друид', icon: 'https://wow.zamimg.com/images/wow/icons/large/classicon_druid.jpg' },
+            'monk': { name: 'Монах', icon: 'https://wow.zamimg.com/images/wow/icons/large/classicon_monk.jpg' },
+            'mage': { name: 'Маг', icon: 'https://wow.zamimg.com/images/wow/icons/large/classicon_mage.jpg' },
+            'evoker': { name: 'Пробудитель', icon: 'https://wow.zamimg.com/images/wow/icons/large/classicon_evoker.jpg' },
+            'warrior': { name: 'Воин', icon: 'https://wow.zamimg.com/images/wow/icons/large/classicon_warrior.jpg' },
+            'demonhunter': { name: 'Охотник на демонов', icon: 'https://wow.zamimg.com/images/wow/icons/large/classicon_demonhunter.jpg' },
+            'shaman': { name: 'Шаман', icon: 'https://wow.zamimg.com/images/wow/icons/large/classicon_shaman.jpg' },
+            'priest': { name: 'Жрец', icon: 'https://wow.zamimg.com/images/wow/icons/large/classicon_priest.jpg' },
+            'hunter': { name: 'Охотник', icon: 'https://wow.zamimg.com/images/wow/icons/large/classicon_hunter.jpg' },
+            'warlock': { name: 'Чернокнижник', icon: 'https://wow.zamimg.com/images/wow/icons/large/classicon_warlock.jpg' },
+            'rogue': { name: 'Разбойник', icon: 'https://wow.zamimg.com/images/wow/icons/large/classicon_rogue.jpg' },
+            'deathknight': { name: 'Рыцарь смерти', icon: 'https://wow.zamimg.com/images/wow/icons/large/spell_deathknight_classicon.jpg' }
+        };
+
+        const DUNGEONS = [
+            { id: 'dungeon_1', name: 'Алтарь Клыков', icon: './ICONS/DUNGEONS/АЛТАРЬ_КЛЫКОВ.jpg' },
+            { id: 'dungeon_2', name: 'Арена Шрама Бездны', icon: './ICONS/DUNGEONS/АРЕНА_ШРАМА_БЕЗДНЫ.jpg' },
+            { id: 'dungeon_3', name: 'Берлога Налоракка', icon: './ICONS/DUNGEONS/БЕРЛОГА_НАЛОРАККА.jpg' },
+            { id: 'dungeon_4', name: 'Гробница Королей', icon: './ICONS/DUNGEONS/ГРОБНИЦА_КОРОЛЕЙ.jpg' },
+            { id: 'dungeon_5', name: 'Закоулок Душегубов', icon: './ICONS/DUNGEONS/ЗАКОУЛОК_ДУШЕГУБОВ.jpg' },
+            { id: 'dungeon_6', name: 'Рубиновые Омуты Жизни', icon: './ICONS/DUNGEONS/РУБИНОВЫЕ_ОМУТЫ_ЖИЗНИ.jpg' },
+            { id: 'dungeon_7', name: 'Слепящая Долина', icon: './ICONS/DUNGEONS/СЛЕПЯЩАЯ_ДОЛИНА.jpg' },
+            { id: 'dungeon_8', name: 'Храм Сетралисс', icon: './ICONS/DUNGEONS/ХРАМ_СЕТРАЛИСС.jpg' }
+        ];
         
-        // Массив для рейдовых дней (Среда -> Вторник)
         const raidDaysList = [
             { id: 'raid-wed', name: 'Среда', short: 'СР' },
             { id: 'raid-thu', name: 'Четверг', short: 'ЧТ' },
@@ -259,15 +424,25 @@
 
         let currentUser = null;
         let generatedDates = []; 
+        let allActiveStreams = []; 
+        let globalDungeonLists = {};
 
-        function getMoscowISO() {
-            const d = new Date();
-            const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-            return new Date(utc + (3600000 * 3)); 
+        // Функция для строгого получения локального времени Москвы
+        function getMoscowDate() {
+            const date = new Date();
+            const moscowStr = date.toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
+            return new Date(moscowStr);
+        }
+
+        function pad(n) { return n.toString().padStart(2, '0'); }
+
+        function getTodayIso() {
+            const md = getMoscowDate();
+            return `${md.getFullYear()}-${pad(md.getMonth()+1)}-${pad(md.getDate())}`;
         }
 
         function generateTwoWeeks() {
-            let moscowDate = getMoscowISO();
+            let moscowDate = getMoscowDate();
             let day = moscowDate.getDay();
             let diffToWednesday = day >= 3 ? day - 3 : day + 4;
             
@@ -275,35 +450,57 @@
             startOfWeek.setDate(moscowDate.getDate() - diffToWednesday);
             startOfWeek.setHours(0,0,0,0);
 
-            let todayIso = getMoscowISO().toISOString().split('T')[0];
+            let todayIso = getTodayIso();
 
             generatedDates = [];
             for (let i = 0; i < 14; i++) {
                 let tempD = new Date(startOfWeek);
                 tempD.setDate(startOfWeek.getDate() + i);
-                let isoDate = tempD.toISOString().split('T')[0];
+                
+                let isoDate = `${tempD.getFullYear()}-${pad(tempD.getMonth()+1)}-${pad(tempD.getDate())}`;
                 
                 generatedDates.push({
                     iso: isoDate,
-                    datePart: `${tempD.getDate().toString().padStart(2, '0')}.${(tempD.getMonth() + 1).toString().padStart(2, '0')}`,
+                    datePart: `${pad(tempD.getDate())}.${pad(tempD.getMonth() + 1)}`,
                     dayPart: dayNamesFull[tempD.getDay()],
                     dayPartShort: dayNamesShort[tempD.getDay()],
-                    display: `${tempD.getDate().toString().padStart(2, '0')}.${(tempD.getMonth() + 1).toString().padStart(2, '0')} - ${dayNamesFull[tempD.getDay()]}`,
-                    isPast: isoDate < todayIso 
+                    display: `${pad(tempD.getDate())}.${pad(tempD.getMonth() + 1)} - ${dayNamesFull[tempD.getDay()]}`,
+                    isPast: isoDate < todayIso,
+                    isToday: isoDate === todayIso
                 });
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             generateTwoWeeks();
+            
+            ['main', 'alt1', 'alt2'].forEach(type => {
+                const select = document.getElementById(`${type}-class`);
+                if (select) {
+                    for (const [key, val] of Object.entries(WOW_CLASSES)) {
+                        select.insertAdjacentHTML('beforeend', `<option value="${key}">${val.name}</option>`);
+                    }
+                }
+            });
+
             const savedUser = localStorage.getItem('wow_user');
             if (savedUser && PLAYERS.includes(savedUser)) {
                 currentUser = savedUser;
                 document.getElementById('nav-user').classList.remove('hidden');
+                document.getElementById('quick-links').classList.remove('hidden');
+                document.getElementById('quick-links').classList.add('flex');
                 document.getElementById('nav-player-name').innerText = currentUser;
                 showView('dashboard');
             } else {
                 showView('login');
+            }
+        });
+
+        // Клавиатурные сокращения
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const dlModal = document.getElementById('dungeon-list-modal');
+                if (dlModal && !dlModal.classList.contains('hidden')) closeDungeonListModal();
             }
         });
 
@@ -336,7 +533,7 @@
             }, 5000);
         }
 
-        window.showFloatingSave = function() {
+        window.showFloatingSave = function(element = null) {
             const btn = document.getElementById('floating-save-btn');
             btn.classList.remove('translate-y-24', 'opacity-0');
         }
@@ -349,6 +546,7 @@
         function updateNavStyles(activeViewId) {
             const btnDash = document.getElementById('nav-btn-dashboard');
             const btnForm = document.getElementById('nav-btn-form');
+            const btnStream = document.getElementById('main-btn-stream');
             
             const inactiveClasses = "text-slate-600 hover:bg-slate-100 bg-transparent".split(' ');
             const activeClasses = "text-blue-700 bg-blue-50 border border-blue-100 shadow-sm".split(' ');
@@ -357,6 +555,14 @@
             btnDash.classList.add(...inactiveClasses);
             btnForm.classList.remove(...activeClasses);
             btnForm.classList.add(...inactiveClasses);
+            
+            if (btnStream) {
+                if (activeViewId === 'stream') {
+                    btnStream.classList.add('ring-4', 'ring-[#d9c2ff]', 'bg-[#772ce8]');
+                } else {
+                    btnStream.classList.remove('ring-4', 'ring-[#d9c2ff]', 'bg-[#772ce8]');
+                }
+            }
 
             if(activeViewId === 'dashboard') {
                 btnDash.classList.remove(...inactiveClasses);
@@ -371,16 +577,66 @@
             document.getElementById('view-login').classList.add('hidden-view');
             document.getElementById('view-dashboard').classList.add('hidden-view');
             document.getElementById('view-form').classList.add('hidden-view');
+            document.getElementById('view-stream').classList.add('hidden-view');
+            
             document.getElementById(`view-${viewId}`).classList.remove('hidden-view');
             hideFloatingSave();
+
+            const quickLinks = document.getElementById('quick-links');
+            if (viewId === 'login') {
+                quickLinks.classList.add('hidden');
+                quickLinks.classList.remove('flex');
+            } else {
+                quickLinks.classList.remove('hidden');
+                quickLinks.classList.add('flex');
+            }
 
             updateNavStyles(viewId);
 
             if (viewId === 'form') {
-                renderForm();
                 loadUserFormFromGitHub();
             } else if (viewId === 'dashboard') {
                 loadAllData();
+            } else if (viewId === 'stream') {
+                loadStreamView();
+            }
+        }
+
+        function extractTwitchChannel(inputStr) {
+            if (!inputStr) return null;
+            let str = inputStr.trim();
+            const regex = /^https:\/\/(www\.)?twitch\.tv\/([a-zA-Z0-9_]+)\/?$/;
+            const match = str.match(regex);
+            if (match && match[2]) return match[2];
+            return null; 
+        }
+
+        function loadStreamView() {
+            const grid = document.getElementById('streams-grid');
+            const placeholder = document.getElementById('stream-placeholder');
+            grid.innerHTML = ''; 
+            
+            if (allActiveStreams && allActiveStreams.length > 0) {
+                placeholder.classList.add('hidden');
+                grid.classList.remove('hidden');
+                const parentDomain = 'nevaknight.github.io';
+                
+                allActiveStreams.forEach(stream => {
+                    const streamUrl = `https://player.twitch.tv/?channel=${stream.channel}&parent=${parentDomain}`;
+                    const streamHtml = `
+                        <div class="w-full aspect-video bg-slate-900 rounded-2xl overflow-hidden shadow-md border border-slate-200 relative group">
+                            <div class="absolute top-3 left-3 bg-black/70 backdrop-blur-sm text-white text-sm font-bold px-3 py-1.5 rounded-lg z-10 pointer-events-none flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                                ${stream.player}
+                            </div>
+                            <iframe src="${streamUrl}" frameborder="0" allowfullscreen="true" scrolling="no" class="w-full h-full"></iframe>
+                        </div>
+                    `;
+                    grid.insertAdjacentHTML('beforeend', streamHtml);
+                });
+            } else {
+                grid.classList.add('hidden');
+                placeholder.classList.remove('hidden');
             }
         }
 
@@ -400,6 +656,8 @@
                 localStorage.setItem('wow_user', player);
                 errorElem.classList.add('hidden');
                 document.getElementById('nav-user').classList.remove('hidden');
+                document.getElementById('quick-links').classList.remove('hidden');
+                document.getElementById('quick-links').classList.add('flex');
                 document.getElementById('nav-player-name').innerText = currentUser;
                 showView('dashboard');
             } else {
@@ -412,8 +670,162 @@
             currentUser = null;
             localStorage.removeItem('wow_user');
             document.getElementById('nav-user').classList.add('hidden');
+            document.getElementById('quick-links').classList.add('hidden');
+            document.getElementById('quick-links').classList.remove('flex');
             document.getElementById('login-password').value = '';
             showView('login');
+        }
+
+        // Логика персонажей в анкете
+        function updateFormTreeLines() {
+            document.querySelectorAll('.tree-container-block').forEach(block => {
+                const mainRow = block.querySelector('.row-char-main');
+                const alt1Row = block.querySelector('.row-char-alt1');
+                const alt2Row = block.querySelector('.row-char-alt2');
+                
+                if(!mainRow) return;
+
+                const hasAlt1 = alt1Row && !alt1Row.classList.contains('hidden');
+                const hasAlt2 = alt2Row && !alt2Row.classList.contains('hidden');
+                const hasAnyAlts = hasAlt1 || hasAlt2;
+
+                const mainLine = mainRow.querySelector('.tree-line-container');
+                if (mainLine) {
+                    mainLine.innerHTML = hasAnyAlts ? `<div class="absolute left-[14px] top-1/2 bottom-[-1px] border-emerald-400 z-0" style="border-left-width: 2px;"></div>` : '';
+                }
+
+                const alt1Line = alt1Row ? alt1Row.querySelector('.tree-line-container') : null;
+                if (alt1Line) {
+                    if (hasAlt2) {
+                        alt1Line.innerHTML = `
+                            <div class="absolute left-[14px] top-[-1px] bottom-1/2 w-4 border-emerald-400 z-0" style="border-left-width: 2px; border-bottom-width: 2px; border-bottom-left-radius: 8px;"></div>
+                            <div class="absolute left-[14px] top-1/2 bottom-[-1px] border-emerald-400 z-0" style="border-left-width: 2px;"></div>
+                        `;
+                    } else {
+                        alt1Line.innerHTML = `<div class="absolute left-[14px] top-[-1px] bottom-1/2 w-4 border-emerald-400 z-0" style="border-left-width: 2px; border-bottom-width: 2px; border-bottom-left-radius: 8px;"></div>`;
+                    }
+                }
+
+                const alt2Line = alt2Row ? alt2Row.querySelector('.tree-line-container') : null;
+                if (alt2Line) {
+                    alt2Line.innerHTML = `<div class="absolute left-[14px] top-[-1px] bottom-1/2 w-4 border-emerald-400 z-0" style="border-left-width: 2px; border-bottom-width: 2px; border-bottom-left-radius: 8px;"></div>`;
+                }
+            });
+        }
+
+        window.updateClassIcon = function(type) {
+            const select = document.getElementById(`${type}-class`);
+            const iconImg = document.getElementById(`${type}-icon`);
+            const className = select.value;
+            const classData = WOW_CLASSES[className];
+            
+            if (iconImg) {
+                iconImg.src = classData ? classData.icon : WOW_CLASSES['none'].icon;
+            }
+
+            document.querySelectorAll(`.row-char-${type}`).forEach(row => {
+                if (className === 'none') {
+                    row.classList.add('hidden');
+                } else {
+                    row.classList.remove('hidden');
+                    const rowIcon = row.querySelector('.display-icon');
+                    if (rowIcon) rowIcon.src = classData.icon;
+                }
+            });
+
+            updateFormTreeLines();
+            showFloatingSave();
+        }
+
+        window.updateCharName = function(type) {
+            const input = document.getElementById(`${type}-name`);
+            const newName = input.value.trim() || currentUser;
+
+            document.querySelectorAll(`.row-char-${type}`).forEach(row => {
+                const nameEl = row.querySelector('.display-name');
+                if (nameEl) nameEl.innerText = newName;
+            });
+            showFloatingSave();
+        }
+
+        window.toggleDungeonBtn = function(btn, type) {
+            const isActive = btn.getAttribute('data-active') === 'true';
+            if (!isActive) {
+                btn.setAttribute('data-active', 'true');
+                btn.classList.remove('bg-slate-100', 'text-slate-400', 'border-slate-200');
+                if (type === 'rio') btn.classList.add('bg-blue-500', 'text-white', 'border-blue-600');
+                if (type === 'w') btn.classList.add('bg-purple-500', 'text-white', 'border-purple-600');
+            } else {
+                btn.setAttribute('data-active', 'false');
+                btn.classList.add('bg-slate-100', 'text-slate-400', 'border-slate-200');
+                if (type === 'rio') btn.classList.remove('bg-blue-500', 'text-white', 'border-blue-600');
+                if (type === 'w') btn.classList.remove('bg-purple-500', 'text-white', 'border-purple-600');
+            }
+            showFloatingSave();
+        }
+
+        window.resetDungeonsSelection = function() {
+            const container = document.getElementById('form-body-dungeons');
+            if (container) {
+                container.querySelectorAll('.dungeon-btn-rio, .dungeon-btn-w').forEach(btn => {
+                    btn.setAttribute('data-active', 'false');
+                    btn.classList.remove('bg-blue-500', 'bg-purple-500', 'text-white', 'border-blue-600', 'border-purple-600');
+                    btn.classList.add('bg-slate-100', 'text-slate-400', 'border-slate-200');
+                });
+                showFloatingSave();
+            }
+        }
+
+        // Модальное окно списка ключей
+        window.openDungeonListModal = function(listKey) {
+            const data = globalDungeonLists[listKey];
+            if (!data) return;
+
+            document.getElementById('dl-modal-icon').src = data.dungeon.icon;
+            document.getElementById('dl-modal-title').innerText = data.dungeon.name;
+            
+            const typeBadge = document.getElementById('dl-modal-type');
+            typeBadge.innerText = data.type;
+            if (data.type === 'RIO') {
+                typeBadge.className = 'text-[10px] font-black tracking-wider text-white px-2 py-1 rounded uppercase bg-blue-500';
+            } else {
+                typeBadge.className = 'text-[10px] font-black tracking-wider text-white px-2 py-1 rounded uppercase bg-purple-500';
+            }
+
+            let listHtml = '';
+            if (data.list.length === 0) {
+                listHtml = `<div class="p-4 text-center text-slate-500 font-medium">Нет желающих</div>`;
+            } else {
+                data.list.forEach(p => {
+                    const classIcon = WOW_CLASSES[p.charConfig.class]?.icon || WOW_CLASSES['none'].icon;
+                    const displayName = p.charConfig.name || p.accountName;
+                    const charTag = p.charType === 'main' ? p.accountName : 'Альт';
+                    
+                    listHtml += `
+                        <div class="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors border-b border-slate-100 last:border-0">
+                            <img src="${classIcon}" class="w-8 h-8 rounded border border-slate-300 object-cover shadow-sm bg-slate-900 shrink-0">
+                            <div class="flex flex-col leading-tight overflow-hidden">
+                                <span class="truncate font-bold text-slate-800 text-[15px]">${displayName}</span>
+                                <span class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">${charTag}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('dl-modal-list').innerHTML = listHtml;
+
+            const modal = document.getElementById('dungeon-list-modal');
+            const content = document.getElementById('dungeon-list-modal-content');
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => content.classList.remove('scale-95', 'opacity-0'));
+        }
+
+        window.closeDungeonListModal = function() {
+            const modal = document.getElementById('dungeon-list-modal');
+            const content = document.getElementById('dungeon-list-modal-content');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 200); 
         }
 
         function renderForm(userData = {}) {
@@ -422,13 +834,89 @@
                 wnlContainer.classList.remove('hidden');
                 const dateSelect = document.getElementById('wnl-date');
                 dateSelect.innerHTML = '<option value="">Выберите дату опроса...</option>';
-                const todayIso = getMoscowISO().toISOString().split('T')[0];
+                const todayIso = getTodayIso();
                 generatedDates.forEach(d => {
-                    // Разрешаем создавать опрос на СЕГОДНЯ и будущие даты
                     if (d.iso >= todayIso) dateSelect.innerHTML += `<option value="${d.iso}">${d.display}</option>`;
                 });
             } else {
                 wnlContainer.classList.add('hidden');
+            }
+
+            // Рендер Настроек трансляции
+            const streamInput = document.getElementById('stream-url-input');
+            if (userData.streamChannel) {
+                streamInput.value = `https://www.twitch.tv/${userData.streamChannel}`;
+            } else {
+                streamInput.value = '';
+            }
+
+            // Рендер персонажей и подземелий
+            const chars = userData.characters || { main: { class: 'none', name: '' }, alt1: { class: 'none', name: '' }, alt2: { class: 'none', name: '' } };
+            ['main', 'alt1', 'alt2'].forEach(type => {
+                const charData = chars[type] || { class: 'none', name: '' };
+                const classSelect = document.getElementById(`${type}-class`);
+                const nameInput = document.getElementById(`${type}-name`);
+                if(classSelect) classSelect.value = charData.class || 'none';
+                if(nameInput) nameInput.value = charData.name || '';
+                updateClassIcon(type);
+            });
+
+            const dContainer = document.getElementById('form-body-dungeons');
+            if (dContainer) {
+                dContainer.innerHTML = '';
+                let dRowsHtml = '';
+                ['main', 'alt1', 'alt2'].forEach(charType => {
+                    const charData = chars[charType] || { class: 'none', name: '' };
+                    const charDungeons = userData.dungeons || {};
+                    
+                    let dungeonsHtml = `<div class="flex gap-4 w-max">`;
+                    DUNGEONS.forEach(d => {
+                        const dState = charDungeons[d.id]?.[charType] || { rio: false, w: false };
+                        
+                        const rioCls = dState.rio ? 'bg-blue-500 text-white border-blue-600' : 'bg-slate-100 text-slate-400 border-slate-200';
+                        const wCls = dState.w ? 'bg-purple-500 text-white border-purple-600' : 'bg-slate-100 text-slate-400 border-slate-200';
+                        
+                        dungeonsHtml += `
+                            <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-xl border border-slate-200 shadow-sm shrink-0" data-dungeon-id="${d.id}">
+                                <img src="${d.icon}" alt="${d.name}" class="w-[48px] h-[48px] rounded-lg object-cover bg-slate-900 border border-slate-300" title="${d.name}">
+                                <div class="flex flex-col gap-1 justify-center">
+                                    <button onclick="toggleDungeonBtn(this, 'rio')" data-active="${dState.rio}" class="dungeon-btn-rio w-10 h-[22px] rounded border text-[10px] font-black transition-colors flex items-center justify-center ${rioCls}">RIO</button>
+                                    <button onclick="toggleDungeonBtn(this, 'w')" data-active="${dState.w}" class="dungeon-btn-w w-10 h-[22px] rounded border text-[10px] font-black transition-colors flex items-center justify-center ${wCls}">W</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    dungeonsHtml += `</div>`;
+
+                    const isHiddenClass = charData.class === 'none' ? 'hidden' : '';
+                    const displayName = charData.name || currentUser;
+                    const displayIcon = WOW_CLASSES[charData.class]?.icon || WOW_CLASSES['none'].icon;
+                    const isAlt = charType !== 'main';
+                    const rowBgClass = isAlt ? 'bg-slate-50/50' : '';
+
+                    dRowsHtml += `
+                        <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors row-char-${charType} ${rowBgClass} ${isHiddenClass}" data-char-type="${charType}">
+                            <td class="w-[200px] p-0 border-r border-slate-100/50 align-middle">
+                                <div class="relative flex items-center h-[64px] w-full">
+                                    <div class="tree-line-container w-[30px] shrink-0 relative h-full"></div>
+                                    <div class="flex items-center gap-2 w-[160px] shrink-0">
+                                        <img src="${displayIcon}" class="display-icon w-8 h-8 rounded-md border border-slate-300 object-cover shadow-sm bg-slate-900 shrink-0">
+                                        <div class="flex flex-col leading-tight overflow-hidden w-full pr-1">
+                                            <span class="display-name truncate font-bold text-slate-800 text-[14px]">${displayName}</span>
+                                            <span class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">${charType === 'main' ? currentUser : 'Альт'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="w-[10px] shrink-0 flex justify-center"></div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-2 align-middle">
+                                ${dungeonsHtml}
+                            </td>
+                        </tr>
+                    `;
+                });
+                dContainer.innerHTML = dRowsHtml;
+                updateFormTreeLines();
             }
 
             // Рендер Недель
@@ -444,7 +932,7 @@
             let countW2 = 0;
 
             generatedDates.forEach((dateObj, index) => {
-                if (dateObj.isPast) return; 
+                const hideRow = dateObj.isPast || dateObj.isToday;
 
                 let dayEntries = userData[dateObj.iso];
                 if (!dayEntries || dayEntries.length === 0) {
@@ -452,13 +940,13 @@
                 }
                 
                 dayEntries.forEach((entry, i) => {
-                    const rowHtml = createRowHTML(dateObj, entry, i === 0, false);
+                    const rowHtml = createRowHTML(dateObj, entry, i === 0, false, hideRow);
                     if (index < 7) {
                         tbody1.insertAdjacentHTML('beforeend', rowHtml);
-                        countW1++;
+                        if (!hideRow) countW1++;
                     } else {
                         tbody2.insertAdjacentHTML('beforeend', rowHtml);
-                        countW2++;
+                        if (!hideRow) countW2++;
                     }
                 });
             });
@@ -501,7 +989,6 @@
             if(!input.value) return;
 
             const [h, m] = input.value.split(':').map(Number);
-            // Блокируем время до 08:00
             if (h < 8) {
                 input.value = '';
                 showMessage('Игровое время начинается с 08:00!', 'error');
@@ -512,11 +999,10 @@
             showFloatingSave();
         }
 
-        function createRowHTML(dateObj, entry, isFirstRowOfDay, isRaidDay) {
+        function createRowHTML(dateObj, entry, isFirstRowOfDay, isRaidDay, isHidden = false) {
             const dataAttr = isRaidDay ? `data-raid-id="${dateObj.id}"` : `data-date="${dateObj.iso}"`;
             const uniqueId = `status-${Math.random().toString(36).substr(2, 9)}`;
             
-            // Левая кнопка сброса (Квадрат 8x8)
             const resetBtnHtml = `
                 <button onclick="resetRow(this)" class="w-8 h-8 border-2 border-slate-200 text-slate-400 rounded-lg hover:bg-slate-100 hover:border-slate-400 transition flex items-center justify-center shadow-sm" title="Сбросить строку">
                     <svg class="w-4 h-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
@@ -541,7 +1027,7 @@
             }
 
             return `
-                <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors form-row ${isFirstRowOfDay ? 'border-t border-slate-200' : ''}" ${dataAttr}>
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors form-row ${isFirstRowOfDay ? 'border-t border-slate-200' : ''} ${isHidden ? 'hidden' : ''}" ${dataAttr}>
                     <td class="py-3 px-2 text-center">
                         <div class="flex justify-center">
                             ${resetBtnHtml}
@@ -764,7 +1250,6 @@
             const btn = document.getElementById('floating-save-btn');
             const originalContent = btn.innerHTML;
             
-            // ПРОВЕРКА НА ОШИБКИ (Время введено, а статус не выбран)
             let hasError = false;
             let errorRow = null;
 
@@ -772,7 +1257,6 @@
                 const start = row.querySelector('.entry-start');
                 const end = row.querySelector('.entry-end');
                 
-                // Проверяем статус только у строк с датами (не рейдовые дни)
                 if (row.hasAttribute('data-date')) {
                     const checkedStatus = row.querySelector('.entry-status-radio:checked');
                     if ((start && start.value) || (end && end.value)) {
@@ -788,17 +1272,63 @@
 
             if (hasError) {
                 showMessage('Укажи статус (+ или ?) для выбранного времени!', 'error');
-                // Плавный скролл до ошибки
                 errorRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
 
-            // Начинаем сохранение
+            const streamInputRaw = document.getElementById('stream-url-input').value;
+            let extractedChannel = null;
+            
+            if (streamInputRaw) {
+                extractedChannel = extractTwitchChannel(streamInputRaw);
+                if (!extractedChannel) {
+                    showMessage('Неверный формат! Нужно: https://www.twitch.tv/имя', 'error');
+                    const streamInput = document.getElementById('stream-url-input');
+                    streamInput.classList.add('border-red-500', 'bg-red-50');
+                    streamInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return; 
+                }
+            }
+
             btn.innerHTML = `<div class="w-6 h-6 border-4 border-white border-t-transparent rounded-full loader"></div>`;
             btn.disabled = true;
 
             const dataToSave = {};
             
+            if (extractedChannel) {
+                dataToSave.streamChannel = extractedChannel;
+            }
+            
+            // Собираем персонажей и подземелья
+            dataToSave.characters = {
+                main: { class: document.getElementById('main-class').value, name: document.getElementById('main-name').value.trim() },
+                alt1: { class: document.getElementById('alt1-class').value, name: document.getElementById('alt1-name').value.trim() },
+                alt2: { class: document.getElementById('alt2-class').value, name: document.getElementById('alt2-name').value.trim() }
+            };
+            
+            dataToSave.dungeons = {};
+            DUNGEONS.forEach(d => { dataToSave.dungeons[d.id] = { main: {rio:false, w:false}, alt1: {rio:false, w:false}, alt2: {rio:false, w:false} }; });
+            
+            const dContainer = document.getElementById('form-body-dungeons');
+            if (dContainer) {
+                ['main', 'alt1', 'alt2'].forEach(charType => {
+                    const row = dContainer.querySelector(`.row-char-${charType}`);
+                    if (row) {
+                        DUNGEONS.forEach(d => {
+                            const block = row.querySelector(`div[data-dungeon-id="${d.id}"]`);
+                            if (block) {
+                                const rioBtn = block.querySelector('.dungeon-btn-rio');
+                                const wBtn = block.querySelector('.dungeon-btn-w');
+                                dataToSave.dungeons[d.id][charType] = {
+                                    rio: rioBtn ? rioBtn.getAttribute('data-active') === 'true' : false,
+                                    w: wBtn ? wBtn.getAttribute('data-active') === 'true' : false
+                                };
+                            }
+                        });
+                    }
+                });
+            }
+
             // Собираем дни из календаря
             document.querySelectorAll('.form-row[data-date]').forEach(row => {
                 const date = row.getAttribute('data-date');
@@ -832,7 +1362,7 @@
             const sha = fileData ? fileData.sha : null;
 
             const body = {
-                message: `Update schedule for ${currentUser}`,
+                message: `Update schedule and config for ${currentUser}`,
                 content: base64Content
             };
             if (sha) body.sha = sha;
@@ -844,12 +1374,16 @@
                 btn.classList.replace('bg-green-600', 'bg-emerald-500');
                 btn.classList.replace('hover:bg-green-700', 'hover:bg-emerald-600');
                 
+                if (extractedChannel) {
+                    document.getElementById('stream-url-input').value = `https://www.twitch.tv/${extractedChannel}`;
+                }
+
                 setTimeout(() => {
                     btn.innerHTML = originalContent;
                     btn.classList.replace('bg-emerald-500', 'bg-green-600');
                     btn.classList.replace('hover:bg-emerald-600', 'hover:bg-green-700');
                     btn.disabled = false;
-                    hideFloatingSave(); // Прячем после успешного сохранения
+                    hideFloatingSave(); 
                 }, 2000);
             } else {
                 btn.innerHTML = originalContent;
@@ -859,12 +1393,16 @@
 
         async function loadAllData() {
             document.getElementById('dashboard-content').innerHTML = '';
+            const summaryContainer = document.getElementById('dashboard-dungeons-summary');
+            if(summaryContainer) summaryContainer.innerHTML = '';
+
             document.getElementById('dashboard-loading').classList.remove('hidden');
-            document.getElementById('dashboard-status-text').innerText = 'Загрузка данных...';
 
             let allSchedules = {};
             let playersWhoFilled = [];
             window.wnlGlobalData = {};
+            allActiveStreams = []; 
+            globalDungeonLists = {};
 
             // Грузим анкеты
             for (let player of PLAYERS) {
@@ -872,8 +1410,13 @@
                 if (fileData && fileData.content) {
                     try {
                         const jsonString = decodeURIComponent(escape(atob(fileData.content)));
-                        allSchedules[player] = JSON.parse(jsonString);
+                        const data = JSON.parse(jsonString);
+                        allSchedules[player] = data;
                         playersWhoFilled.push(player);
+                        
+                        if (data.streamChannel) {
+                            allActiveStreams.push({ player: player, channel: data.streamChannel });
+                        }
                     } catch(e) {}
                 }
             }
@@ -905,16 +1448,82 @@
 
         function renderDashboard(schedules, activePlayers) {
             const container = document.getElementById('dashboard-content');
-            const statusText = document.getElementById('dashboard-status-text');
+            const summaryContainer = document.getElementById('dashboard-dungeons-summary');
             
-            if (activePlayers.length === 0 && Object.keys(window.wnlGlobalData).length === 0) {
-                statusText.innerHTML = `<span class="text-slate-500 font-medium">Никто еще не заполнил анкету.</span>`;
-                container.innerHTML = `<div class="p-12 text-center bg-white rounded-2xl border border-slate-200 border-dashed text-slate-500">Данных для отображения пока нет.</div>`;
-                return;
+            // --- РЕНДЕР ПОДЗЕМЕЛИЙ (Эпохальные подземелья) ---
+            let dashDungeonsHtml = '';
+            let keysFound = false;
+            
+            DUNGEONS.forEach(d => {
+                let rioList = [];
+                let wList = [];
+
+                activePlayers.forEach(player => {
+                    const pData = schedules[player];
+                    if (!pData || !pData.dungeons) return;
+
+                    const chars = pData.characters || {};
+                    const dLoot = pData.dungeons[d.id] || {};
+
+                    ['main', 'alt1', 'alt2'].forEach(charType => {
+                        const charConfig = chars[charType];
+                        if (!charConfig || charConfig.class === 'none') return;
+
+                        const cData = dLoot[charType];
+                        if (cData) {
+                            const entry = { accountName: player, charType: charType, charConfig: charConfig };
+                            if (cData.rio) rioList.push(entry);
+                            if (cData.w) wList.push(entry);
+                        }
+                    });
+                });
+
+                if (rioList.length === 0 && wList.length === 0) return;
+                keysFound = true;
+
+                globalDungeonLists[`${d.id}_rio`] = { dungeon: d, type: 'RIO', list: rioList };
+                globalDungeonLists[`${d.id}_w`] = { dungeon: d, type: 'W', list: wList };
+
+                const rioNames = rioList.map(x => x.charConfig.name || x.accountName).join(', ') || 'Нет желающих';
+                const wNames = wList.map(x => x.charConfig.name || x.accountName).join(', ') || 'Нет желающих';
+
+                const rioActive = rioList.length > 0 ? 'bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200 shadow-sm cursor-pointer' : 'bg-slate-50 text-slate-400 border-slate-200 cursor-auto';
+                const wActive = wList.length > 0 ? 'bg-purple-100 text-purple-700 border-purple-300 hover:bg-purple-200 shadow-sm cursor-pointer' : 'bg-slate-50 text-slate-400 border-slate-200 cursor-auto';
+
+                dashDungeonsHtml += `
+                    <div class="flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-sm shrink-0 w-full">
+                        <img src="${d.icon}" alt="${d.name}" class="w-[60px] h-[60px] rounded-lg object-cover bg-slate-900 shadow-sm shrink-0 border border-slate-200">
+                        <div class="flex flex-col gap-2 w-full overflow-hidden items-center text-center">
+                            <span class="text-sm font-bold text-slate-800 truncate w-full" title="${d.name}">${d.name}</span>
+                            <div class="flex gap-1.5 w-full mt-auto">
+                                <button ${rioList.length > 0 ? `onclick="openDungeonListModal('${d.id}_rio')"` : ''} class="flex-1 h-7 rounded border text-[11px] font-black transition-colors ${rioActive}" title="${rioNames}">RIO - ${rioList.length}</button>
+                                <button ${wList.length > 0 ? `onclick="openDungeonListModal('${d.id}_w')"` : ''} class="flex-1 h-7 rounded border text-[11px] font-black transition-colors ${wActive}" title="${wNames}">W - ${wList.length}</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (keysFound) {
+                summaryContainer.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+                        <div class="bg-slate-50 p-4 border-b border-slate-200 flex items-center gap-4">
+                            <img src="./ICONS/DUNGEONS/ЭПОХАЛЬНЫЙ_КЛЮЧ.jpg" alt="Эпохальные подземелья" class="w-12 h-12 rounded-lg shadow-sm border border-slate-300 object-cover bg-slate-900">
+                            <h3 class="text-xl font-black text-slate-800 uppercase tracking-wide">Эпохальные подземелья</h3>
+                        </div>
+                        <div class="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 bg-slate-50/50">
+                            ${dashDungeonsHtml}
+                        </div>
+                    </div>
+                `;
+            } else {
+                summaryContainer.innerHTML = '';
             }
 
-            // Статус бар
-            statusText.innerHTML = `Заполнили: <span class="font-black text-blue-600">${activePlayers.join(', ') || '—'}</span>`;
+            if (activePlayers.length === 0 && Object.keys(window.wnlGlobalData).length === 0) {
+                container.innerHTML = `<div class="p-12 text-center bg-white rounded-2xl border border-slate-200 border-dashed text-slate-500">Данных расписания для отображения пока нет.</div>`;
+                return;
+            }
 
             let finalHtml = '';
 
@@ -961,7 +1570,7 @@
             });
             finalHtml += wnlHtml;
 
-            // 2. Рендер МАТРИЦЫ Дат (Центрируем сетку)
+            // 2. Рендер МАТРИЦЫ Дат
             let week1Html = `
                 <div class="mt-8">
                     <h3 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-wide px-1 text-center">Текущая неделя</h3>
@@ -974,11 +1583,11 @@
             `;
 
             generatedDates.forEach((dateObj, index) => {
-                if (dateObj.isPast) return; // Скрываем прошедшие дни
+                if (dateObj.isPast) return; 
 
                 let dayHtml = `
-                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col hover:shadow-md transition-shadow w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(14.28%-0.8rem)] min-w-[140px]">
-                        <div class="text-center font-bold text-slate-700 border-b border-slate-100 pb-2 mb-3 tracking-tight text-lg">
+                    <div class="bg-white border border-slate-200 rounded-xl p-3 sm:p-4 shadow-sm flex flex-col hover:shadow-md transition-shadow w-full sm:w-[calc(50%-1rem)] md:w-[calc(33.33%-1rem)] lg:w-[calc((100%-6rem)/7)] min-w-[110px] lg:min-w-[120px]">
+                        <div class="text-center font-bold text-slate-700 border-b border-slate-100 pb-2 mb-3 tracking-tight text-base lg:text-lg">
                             ${dateObj.datePart} - ${dateObj.dayPartShort}
                         </div>
                         <div class="flex-1 flex flex-col gap-2">
@@ -1092,7 +1701,6 @@
                     <h3 class="text-xl font-black text-slate-800 mb-8 text-center uppercase tracking-wide">Рейдовое расписание</h3>
                     <div class="overflow-x-auto custom-scrollbar w-full">
                         <div class="min-w-[700px] px-2">
-                            <!-- Заголовок дней -->
                             <div class="flex border-b border-slate-200 pb-3 mb-4">
                                 <div class="w-24 text-xs font-bold text-slate-400 uppercase tracking-widest text-center self-end">Игрок</div>
                                 <div class="flex-1 grid grid-cols-7 gap-2 text-center text-sm font-black text-slate-700">
@@ -1101,12 +1709,13 @@
                             </div>
             `;
 
-            // Генерируем таймлайн для каждого игрока
             const colors = [
                 'bg-blue-100 text-blue-800 border-blue-200',
                 'bg-purple-100 text-purple-800 border-purple-200',
                 'bg-emerald-100 text-emerald-800 border-emerald-200',
-                'bg-amber-100 text-amber-800 border-amber-200'
+                'bg-amber-100 text-amber-800 border-amber-200',
+                'bg-rose-100 text-rose-800 border-rose-200',
+                'bg-teal-100 text-teal-800 border-teal-200'
             ];
             
             activePlayers.forEach((player, pIndex) => {
@@ -1123,16 +1732,12 @@
                     <div class="flex items-center mb-4 group relative">
                         <div class="w-24 font-bold text-slate-800 text-sm truncate pr-2 text-center">${player}</div>
                         <div class="flex-1 relative h-10 flex">
-                            <!-- Подложка (серые пунктирные квадраты) -->
                             <div class="absolute inset-0 grid grid-cols-7 gap-2 opacity-30">
                                 ${raidDaysList.map(() => `<div class="border-2 border-dashed border-slate-300 rounded-lg h-full"></div>`).join('')}
                             </div>
-                            
-                            <!-- Актуальные блоки -->
                             <div class="relative w-full h-full flex gap-2">
                 `;
 
-                // Алгоритм слияния соседних дней с одинаковым временем
                 let currentBlock = null;
                 for (let i = 0; i < 7; i++) {
                     let time = playerRaidData[i];
@@ -1143,7 +1748,6 @@
                         } else if (currentBlock.time === time) {
                             currentBlock.count++;
                         } else {
-                            // Время изменилось, рендерим старый блок
                             raidTimelineHtml += renderTimelineBlock(currentBlock, colorClass);
                             raidTimelineHtml += renderEmptyTimelineSlots(currentBlock.startIdx + currentBlock.count, i);
                             currentBlock = { startIdx: i, count: 1, time: time };
