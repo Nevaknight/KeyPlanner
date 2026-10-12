@@ -321,6 +321,29 @@
                     <div class="text-center py-10 text-slate-400 font-medium loader-container">Загружаем список...</div>
                 </div>
             </div>
+            
+            <!-- НАСТРОЙКИ TELEGRAM -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <h2 class="text-2xl font-black text-slate-800 tracking-tight mb-4 flex items-center gap-3">
+                    <svg class="w-7 h-7 text-[#229ED9]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.98 1.25-5.58 3.68-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.81-.27-1.46-.42-1.4-.88.03-.24.38-.48 1.03-.74 4.04-1.76 6.74-2.92 8.09-3.48 3.85-1.6 4.64-1.88 5.17-1.89.11 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.13-.03.19z"/></svg>
+                    Оповещения в Telegram
+                </h2>
+                <p class="text-slate-500 text-sm mb-6">Введите данные бота, чтобы при создании опросов в чат автоматически уходило уведомление.</p>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1">Токен бота (BotFather)</label>
+                        <input type="password" id="tg-token" class="w-full border border-slate-300 rounded-lg p-3 outline-none focus:border-blue-500 font-medium shadow-sm" placeholder="123456789:ABCDefgh...">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1">ID чата гильдии/статика</label>
+                        <input type="text" id="tg-chat-id" class="w-full border border-slate-300 rounded-lg p-3 outline-none focus:border-blue-500 font-medium shadow-sm" placeholder="-100123456789">
+                    </div>
+                    <button onclick="saveTelegramSettings()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-sm w-full sm:w-auto mt-2">
+                        Сохранить настройки
+                    </button>
+                </div>
+            </div>
         </div>
         
         <footer class="text-center pt-10 pb-4 text-slate-400 font-medium text-sm mt-auto">
@@ -693,6 +716,8 @@
         async function loadAdminView() {
             const listContainer = document.getElementById('admin-users-list');
             listContainer.innerHTML = '<div class="text-center py-10 text-slate-400 font-medium"><div class="inline-block w-8 h-8 border-4 border-slate-200 border-t-blue-600 rounded-full loader"></div></div>';
+            
+            loadTelegramSettings();
 
             try {
                 // 1. Получаем список всех существующих игроков из базы анкет
@@ -1361,6 +1386,8 @@
                 document.getElementById('wnl-time').value = '';
                 document.getElementById('wnl-options').classList.add('hidden');
                 showView('dashboard');
+                
+                sendTelegramNotification(date, time);
             } catch (error) {
                 console.error(error);
                 showMessage('Ошибка при создании опроса', 'error');
@@ -1937,6 +1964,73 @@
                 html += `<div class="w-full flex-[1_1_0%]"></div>`;
             }
             return html;
+        }
+
+        // --- ФУНКЦИИ TELEGRAM ---
+        window.loadTelegramSettings = async function() {
+            if (!window.isMasterAdmin) return;
+            try {
+                const docRef = window.fbDoc(window.fbDb, "settings", "telegram");
+                const docSnap = await window.fbGetDoc(docRef);
+                if (docSnap.exists()) {
+                    document.getElementById('tg-token').value = docSnap.data().token || '';
+                    document.getElementById('tg-chat-id').value = docSnap.data().chatId || '';
+                }
+            } catch (e) {
+                console.error("Ошибка загрузки ТГ", e);
+            }
+        }
+
+        window.saveTelegramSettings = async function() {
+            const token = document.getElementById('tg-token').value.trim();
+            const chatId = document.getElementById('tg-chat-id').value.trim();
+            
+            if (!token || !chatId) {
+                return showMessage('Заполните оба поля!', 'error');
+            }
+            
+            try {
+                const docRef = window.fbDoc(window.fbDb, "settings", "telegram");
+                await window.fbSetDoc(docRef, { token, chatId });
+                showMessage('Настройки Telegram сохранены!', 'success');
+            } catch (e) {
+                console.error(e);
+                showMessage('Ошибка при сохранении', 'error');
+            }
+        }
+
+        async function sendTelegramNotification(isoDate, startTime) {
+            try {
+                const docRef = window.fbDoc(window.fbDb, "settings", "telegram");
+                const docSnap = await window.fbGetDoc(docRef);
+                
+                if (!docSnap.exists()) return;
+                
+                const tgData = docSnap.data();
+                if (!tgData.token || !tgData.chatId) return;
+
+                const dateObj = generatedDates.find(d => d.iso === isoDate);
+                const displayDate = dateObj ? dateObj.display : isoDate;
+                const siteUrl = window.location.href.split('#')[0];
+                
+                const message = `🚨 <b>Новый опрос "Викли ноу ливерс"!</b>\n\n📅 Дата: <b>${displayDate}</b>\n⏳ Время старта: <b>${startTime} (МСК)</b>\n\nЗаходите на сайт и голосуйте: <a href="${siteUrl}">ХОЧУ ИГРАТЬ</a>`;
+
+                const tgUrl = `https://api.telegram.org/bot${tgData.token}/sendMessage`;
+                
+                await fetch(tgUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: tgData.chatId,
+                        text: message,
+                        parse_mode: 'HTML',
+                        disable_web_page_preview: true
+                    })
+                });
+                
+            } catch (e) {
+                console.error('Ошибка отправки в Telegram:', e);
+            }
         }
     </script>
 </body>
