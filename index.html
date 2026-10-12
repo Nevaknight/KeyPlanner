@@ -1385,9 +1385,16 @@
                 showMessage('Опрос успешно опубликован!', 'success');
                 document.getElementById('wnl-time').value = '';
                 document.getElementById('wnl-options').classList.add('hidden');
-                showView('dashboard');
                 
-                sendTelegramNotification(date, time);
+                // Отправляем в Телеграм и сохраняем ID сообщения
+                const messageId = await sendTelegramNotification(date, times);
+                if (messageId) {
+                    if(!wnlData[date]._meta) wnlData[date]._meta = {};
+                    wnlData[date]._meta.message_id = messageId;
+                    await window.fbSetDoc(docRef, wnlData);
+                }
+
+                showView('dashboard');
             } catch (error) {
                 console.error(error);
                 showMessage('Ошибка при создании опроса', 'error');
@@ -1412,6 +1419,40 @@
             } catch (error) {
                 console.error(error);
                 showMessage('Не удалось проголосовать', 'error');
+            }
+        }
+
+        window.deleteWnl = async function(date) {
+            if (!window.isMasterAdmin && !window.currentModerators.includes(currentUser)) return;
+            
+            if (!confirm('Вы точно уверены, что хотите удалить этот опрос "Викли ноу ливерс"?')) return;
+            
+            showMessage('Удаляем опрос...', 'info');
+            try {
+                const docRef = window.fbDoc(window.fbDb, "schedules", "weekly_no_leavers");
+                const docSnap = await window.fbGetDoc(docRef);
+                if (!docSnap.exists()) return;
+                
+                let wnlData = docSnap.data();
+                if (!wnlData[date]) return;
+                
+                // Извлекаем сохраненный ID сообщения
+                const messageId = wnlData[date]._meta?.message_id;
+                
+                // Удаляем сообщение из Telegram если ID найден
+                if (messageId) {
+                    await deleteTelegramMessage(messageId);
+                }
+                
+                // Удаляем опрос из базы
+                delete wnlData[date];
+                await window.fbSetDoc(docRef, wnlData);
+                
+                showMessage('Опрос успешно удален!', 'success');
+                loadAllData(); // Обновляем интерфейс
+            } catch (e) {
+                console.error(e);
+                showMessage('Ошибка при удалении опроса', 'error');
             }
         }
 
@@ -1703,12 +1744,22 @@
                 const dateObj = generatedDates.find(d => d.iso === date);
                 if(!dateObj || dateObj.isPast) return; 
 
-                wnlHtml += `<div class="bg-gradient-to-br from-purple-50 to-white rounded-2xl shadow-sm border border-purple-200 p-6 sm:p-8">
+                // Кнопка удаления опроса
+                const canDelete = window.isMasterAdmin || window.currentModerators.includes(currentUser);
+                const deleteBtnHtml = canDelete ? `
+                    <button onclick="deleteWnl('${date}')" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-red-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-xl transition-all" title="Удалить опрос">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                ` : '';
+
+                wnlHtml += `<div class="relative bg-gradient-to-br from-purple-50 to-white rounded-2xl shadow-sm border border-purple-200 p-6 sm:p-8">
+                    ${deleteBtnHtml}
                     <h2 class="text-3xl sm:text-4xl font-black text-purple-900 tracking-tight uppercase mb-1 drop-shadow-sm text-center">Викли ноу ливерс</h2>
                     <h3 class="text-xl font-bold text-purple-600 mb-6 text-center">${dateObj.display}</h3>
                     <div class="space-y-4">`;
 
-                const sortedTimes = Object.keys(window.wnlGlobalData[date]).sort();
+                // Отфильтровываем ключ _meta перед отрисовкой времени
+                const sortedTimes = Object.keys(window.wnlGlobalData[date]).filter(k => k !== '_meta').sort();
                 sortedTimes.forEach(time => {
                     const votes = window.wnlGlobalData[date][time] || {};
                     const playersWantToPlay = Object.keys(votes).filter(p => votes[p] === '+').join(', ');
@@ -1999,25 +2050,53 @@
             }
         }
 
-        async function sendTelegramNotification(isoDate, startTime) {
+        // Вспомогательная функция удаления сообщения через Telegram API
+        async function deleteTelegramMessage(messageId) {
             try {
                 const docRef = window.fbDoc(window.fbDb, "settings", "telegram");
                 const docSnap = await window.fbGetDoc(docRef);
                 
                 if (!docSnap.exists()) return;
-                
                 const tgData = docSnap.data();
                 if (!tgData.token || !tgData.chatId) return;
+
+                const tgUrl = `https://api.telegram.org/bot${tgData.token}/deleteMessage`;
+                
+                await fetch(tgUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: tgData.chatId,
+                        message_id: messageId
+                    })
+                });
+            } catch (e) {
+                console.error('Ошибка удаления сообщения в Telegram:', e);
+            }
+        }
+
+        async function sendTelegramNotification(isoDate, timesArray) {
+            try {
+                const docRef = window.fbDoc(window.fbDb, "settings", "telegram");
+                const docSnap = await window.fbGetDoc(docRef);
+                
+                if (!docSnap.exists()) return null;
+                
+                const tgData = docSnap.data();
+                if (!tgData.token || !tgData.chatId) return null;
 
                 const dateObj = generatedDates.find(d => d.iso === isoDate);
                 const displayDate = dateObj ? dateObj.display : isoDate;
                 const siteUrl = window.location.href.split('#')[0];
                 
-                const message = `🚨 <b>Новый опрос "Викли ноу ливерс"!</b>\n\n📅 Дата: <b>${displayDate}</b>\n⏳ Время старта: <b>${startTime} (МСК)</b>\n\nЗаходите на сайт и голосуйте: <a href="${siteUrl}">ХОЧУ ИГРАТЬ</a>`;
+                // Склеиваем массив времени для сообщения
+                const timesStr = timesArray.join(', ');
+                
+                const message = `🚨 <b>Новый опрос "Викли ноу ливерс"!</b>\n\n📅 Дата: <b>${displayDate}</b>\n⏳ Время старта: <b>${timesStr} (МСК)</b>\n\nЗаходите на сайт и голосуйте: <a href="${siteUrl}">ХОЧУ ИГРАТЬ</a>`;
 
                 const tgUrl = `https://api.telegram.org/bot${tgData.token}/sendMessage`;
                 
-                await fetch(tgUrl, {
+                const response = await fetch(tgUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -2028,8 +2107,17 @@
                     })
                 });
                 
+                const resData = await response.json();
+                if (resData.ok) {
+                    return resData.result.message_id;
+                } else {
+                    console.error("TG API Error:", resData);
+                    return null;
+                }
+                
             } catch (e) {
                 console.error('Ошибка отправки в Telegram:', e);
+                return null;
             }
         }
     </script>
