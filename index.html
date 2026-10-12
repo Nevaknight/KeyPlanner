@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ХОЧУ ИГРАТЬ</title>
-    <!-- Иконка песочные часы -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⌛%3C/text%3E%3C/svg%3E">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#3b82f6">
@@ -33,10 +32,16 @@
                 <span>⌛</span> ХОЧУ ИГРАТЬ
             </h1>
 
-            <div id="nav-user" class="hidden flex items-center gap-4 z-10">
+            <div id="nav-user" class="hidden flex items-center gap-2 sm:gap-4 z-10">
                 <span id="nav-player-name" class="font-bold text-blue-600 hidden sm:inline-block"></span>
                 <button id="nav-btn-dashboard" onclick="showView('dashboard')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Расписание</button>
                 <button id="nav-btn-form" onclick="showView('form')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Моя анкета</button>
+                
+                <!-- Кнопка админки (Шестеренка) -->
+                <button id="nav-btn-admin" onclick="showView('admin')" class="hidden text-slate-500 hover:text-blue-600 hover:bg-slate-100 transition p-2 rounded-md" title="Управление доступом">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+
                 <button onclick="logout()" class="text-sm text-red-500 hover:text-red-700 transition font-bold px-2">Выйти</button>
             </div>
         </div>
@@ -99,8 +104,12 @@
         <!-- ЭКРАН 3: АНКЕТА ИГРОКА -->
         <div id="view-form" class="hidden-view w-full">
             
+            <!-- Блок Опросов (Доступен только админу и модераторам) -->
             <div id="wnl-builder-container" class="bg-gradient-to-br from-purple-50 to-white rounded-2xl shadow-sm border border-purple-200 p-6 sm:p-8 mb-6 hidden">
-                <h2 class="text-2xl font-black text-purple-900 tracking-tight mb-6 text-center uppercase">Создание опроса "Викли ноу ливерс"</h2>
+                <h2 class="text-2xl font-black text-purple-900 tracking-tight mb-6 text-center uppercase flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-purple-600"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Создание опроса "Викли ноу ливерс"
+                </h2>
                 <div class="space-y-4 max-w-2xl mx-auto">
                     <div class="flex flex-col sm:flex-row gap-4 items-end justify-center">
                         <div class="flex-1 w-full">
@@ -298,9 +307,24 @@
             <div id="streams-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full hidden">
             </div>
         </div>
+
+        <!-- ЭКРАН 5: ПАНЕЛЬ УПРАВЛЕНИЯ (АДМИНКА) -->
+        <div id="view-admin" class="hidden-view w-full max-w-3xl mx-auto space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <h2 class="text-2xl font-black text-slate-800 tracking-tight mb-4 flex items-center gap-3">
+                    <svg class="w-7 h-7 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    Управление доступом
+                </h2>
+                <p class="text-slate-500 text-sm mb-6">Назначайте модераторов одним кликом. Модераторы получают право создавать опросы "Викли ноу ливерс".</p>
+                
+                <div id="admin-users-list" class="space-y-3">
+                    <div class="text-center py-10 text-slate-400 font-medium loader-container">Загружаем список...</div>
+                </div>
+            </div>
+        </div>
         
         <footer class="text-center pt-10 pb-4 text-slate-400 font-medium text-sm mt-auto">
-            Key Planner V2.0 (Firebase) - @Rainon
+            Key Planner V2.0 (Firebase RBAC) - @Rainon
         </footer>
         
     </main>
@@ -355,7 +379,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Передаем методы в глобальную область видимости для старого UI кода
         window.fbAuth = auth;
         window.fbDb = db;
         window.fbSignIn = signInWithEmailAndPassword;
@@ -369,16 +392,20 @@
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                console.log("Пользователь авторизован в Firebase:", user.email);
-            } else {
-                console.log("Пользователь не авторизован");
+                console.log("Пользователь авторизован:", user.email);
             }
         });
     </script>
 
     <script>
-        // Надежная автоматическая генерация email из любого ника для Firebase
+        // Интеллектуальный генератор Email с учетом прав Владельца
         const getPlayerEmail = (playerName) => {
+            const lowerName = playerName.trim().toLowerCase();
+            // Ключ Мастер-админа (Связывает ник с той почтой, что вы создали вручную)
+            if (lowerName === 'рейнон' || lowerName === 'reynon') {
+                return 'reynon@rainonplanner.local';
+            }
+            // Для остальных игроков генерируем уникальную почту автоматически
             const safeString = btoa(encodeURIComponent(playerName)).replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
             return `${safeString}@rainonplanner.local`;
         };
@@ -428,6 +455,10 @@
         let generatedDates = []; 
         let allActiveStreams = []; 
         let globalDungeonLists = {};
+        
+        // Системные роли
+        window.isMasterAdmin = false;
+        window.currentModerators = [];
 
         function getMoscowDate() {
             const date = new Date();
@@ -490,7 +521,11 @@
                 document.getElementById('quick-links').classList.remove('hidden');
                 document.getElementById('quick-links').classList.add('flex');
                 document.getElementById('nav-player-name').innerText = currentUser;
-                showView('dashboard');
+                
+                // Загружаем права и открываем дашборд
+                loadUserRoles().then(() => {
+                    showView('dashboard');
+                });
             } else {
                 showView('login');
             }
@@ -542,9 +577,53 @@
             btn.classList.add('translate-y-24', 'opacity-0');
         }
 
+        // Загрузка прав доступа (Владелец / Модераторы)
+        async function loadUserRoles() {
+            if (!currentUser) return;
+            
+            const lowerName = currentUser.toLowerCase();
+            if (lowerName === 'рейнон' || lowerName === 'reynon') {
+                window.isMasterAdmin = true;
+            } else {
+                window.isMasterAdmin = false;
+            }
+
+            try {
+                const rolesRef = window.fbDoc(window.fbDb, "settings", "roles");
+                const rolesSnap = await window.fbGetDoc(rolesRef);
+                if (rolesSnap.exists()) {
+                    window.currentModerators = rolesSnap.data().moderators || [];
+                } else {
+                    window.currentModerators = [];
+                }
+            } catch(e) {
+                console.error("Ошибка загрузки ролей", e);
+                window.currentModerators = [];
+            }
+
+            // Настройка видимости кнопки Админки
+            const btnAdmin = document.getElementById('nav-btn-admin');
+            if (window.isMasterAdmin) {
+                btnAdmin.classList.remove('hidden');
+            } else {
+                btnAdmin.classList.add('hidden');
+            }
+
+            // Настройка видимости блока создания ВНЛ в анкете
+            const wnlContainer = document.getElementById('wnl-builder-container');
+            if (wnlContainer) {
+                if (window.isMasterAdmin || window.currentModerators.includes(currentUser)) {
+                    wnlContainer.classList.remove('hidden');
+                } else {
+                    wnlContainer.classList.add('hidden');
+                }
+            }
+        }
+
         function updateNavStyles(activeViewId) {
             const btnDash = document.getElementById('nav-btn-dashboard');
             const btnForm = document.getElementById('nav-btn-form');
+            const btnAdmin = document.getElementById('nav-btn-admin');
             const btnStream = document.getElementById('main-btn-stream');
             
             const inactiveClasses = "text-slate-600 hover:bg-slate-100 bg-transparent".split(' ');
@@ -554,6 +633,9 @@
             btnDash.classList.add(...inactiveClasses);
             btnForm.classList.remove(...activeClasses);
             btnForm.classList.add(...inactiveClasses);
+            
+            btnAdmin.classList.remove('bg-blue-50', 'text-blue-600');
+            btnAdmin.classList.add('text-slate-500', 'hover:bg-slate-100');
             
             if (btnStream) {
                 if (activeViewId === 'stream') {
@@ -569,14 +651,18 @@
             } else if(activeViewId === 'form') {
                 btnForm.classList.remove(...inactiveClasses);
                 btnForm.classList.add(...activeClasses);
+            } else if(activeViewId === 'admin') {
+                btnAdmin.classList.remove('text-slate-500', 'hover:bg-slate-100');
+                btnAdmin.classList.add('bg-blue-50', 'text-blue-600');
             }
         }
 
-        function showView(viewId) {
+        window.showView = function(viewId) {
             document.getElementById('view-login').classList.add('hidden-view');
             document.getElementById('view-dashboard').classList.add('hidden-view');
             document.getElementById('view-form').classList.add('hidden-view');
             document.getElementById('view-stream').classList.add('hidden-view');
+            document.getElementById('view-admin').classList.add('hidden-view');
             
             document.getElementById(`view-${viewId}`).classList.remove('hidden-view');
             hideFloatingSave();
@@ -598,6 +684,78 @@
                 loadAllData();
             } else if (viewId === 'stream') {
                 loadStreamView();
+            } else if (viewId === 'admin') {
+                loadAdminView();
+            }
+        }
+
+        // Загрузка Админ-панели (список всех игроков)
+        async function loadAdminView() {
+            const listContainer = document.getElementById('admin-users-list');
+            listContainer.innerHTML = '<div class="text-center py-10 text-slate-400 font-medium"><div class="inline-block w-8 h-8 border-4 border-slate-200 border-t-blue-600 rounded-full loader"></div></div>';
+
+            try {
+                // 1. Получаем список всех существующих игроков из базы анкет
+                const querySnapshot = await window.fbGetDocs(window.fbCollection(window.fbDb, "schedules"));
+                let players = [];
+                querySnapshot.forEach((docSnap) => {
+                    const id = docSnap.id;
+                    if (id !== "weekly_no_leavers" && id !== "roles") players.push(id);
+                });
+
+                if (players.length === 0) {
+                    listContainer.innerHTML = '<div class="text-center py-10 text-slate-500 bg-slate-50 rounded-xl border border-slate-200">Пока никто не зарегистрировался.</div>';
+                    return;
+                }
+
+                let html = '';
+                players.sort().forEach(player => {
+                    const isMod = window.currentModerators.includes(player);
+                    const isMaster = player.toLowerCase() === 'рейнон' || player.toLowerCase() === 'reynon';
+                    
+                    html += `
+                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200 hover:shadow-sm transition-shadow">
+                            <span class="font-bold text-slate-800 flex items-center gap-2 text-lg">
+                                ${player} 
+                                ${isMaster ? '<span class="text-[10px] font-black bg-blue-600 text-white px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">Владелец</span>' : ''}
+                            </span>
+                            ${!isMaster ? `
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                  <input type="checkbox" class="sr-only peer" ${isMod ? 'checked' : ''} onchange="toggleModerator('${player}', this.checked)">
+                                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                  <span class="ml-3 text-sm font-bold text-slate-600 select-none">Модератор</span>
+                                </label>
+                            ` : `<span class="text-sm font-bold text-slate-400 uppercase tracking-widest">Полный доступ</span>`}
+                        </div>
+                    `;
+                });
+                
+                listContainer.innerHTML = html;
+
+            } catch (error) {
+                console.error("Ошибка загрузки админки", error);
+                listContainer.innerHTML = '<div class="text-center py-10 text-red-500 font-bold bg-red-50 rounded-xl border border-red-200">Ошибка загрузки списка игроков.</div>';
+            }
+        }
+
+        // Переключение роли модератора (Вызывается из UI админки)
+        window.toggleModerator = async function(playerName, isGranted) {
+            try {
+                const rolesRef = window.fbDoc(window.fbDb, "settings", "roles");
+                
+                if (isGranted) {
+                    if (!window.currentModerators.includes(playerName)) window.currentModerators.push(playerName);
+                } else {
+                    window.currentModerators = window.currentModerators.filter(m => m !== playerName);
+                }
+
+                await window.fbSetDoc(rolesRef, { moderators: window.currentModerators }, { merge: true });
+                showMessage(`Права для ${playerName} успешно обновлены!`, 'success');
+                
+            } catch (error) {
+                console.error(error);
+                showMessage('Ошибка при сохранении прав', 'error');
+                loadAdminView(); // Откатываем визуальный тумблер обратно
             }
         }
 
@@ -639,8 +797,7 @@
             }
         }
 
-        // Авторизация через Firebase Auth
-        async function login() {
+        window.login = async function() {
             const player = document.getElementById('login-player').value.trim();
             const password = document.getElementById('login-password').value;
             const errorElem = document.getElementById('login-error');
@@ -662,11 +819,13 @@
                 document.getElementById('quick-links').classList.remove('hidden');
                 document.getElementById('quick-links').classList.add('flex');
                 document.getElementById('nav-player-name').innerText = currentUser;
+                
+                await loadUserRoles();
                 showView('dashboard');
             } catch (err) {
                 console.error(err);
                 if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-                    errorElem.innerText = 'Неверный пароль или аккаунт не найден. Если ты новенький - нажми "Регистрация".';
+                    errorElem.innerText = 'Неверный логин или пароль. Если ты новенький - нажми "Регистрация".';
                 } else {
                     errorElem.innerText = 'Ошибка входа: ' + err.message;
                 }
@@ -674,7 +833,7 @@
             }
         }
 
-        async function registerUser() {
+        window.registerUser = async function() {
             const player = document.getElementById('login-player').value.trim();
             const password = document.getElementById('login-password').value;
             const errorElem = document.getElementById('login-error');
@@ -702,11 +861,13 @@
                 document.getElementById('quick-links').classList.remove('hidden');
                 document.getElementById('quick-links').classList.add('flex');
                 document.getElementById('nav-player-name').innerText = currentUser;
-                showView('form'); // Перекидываем новенького сразу на заполнение анкеты
+                
+                await loadUserRoles();
+                showView('form'); 
             } catch (err) {
                 console.error(err);
                 if (err.code === 'auth/email-already-in-use') {
-                    errorElem.innerText = 'Это имя уже занято! Если это ты, нажми "Войти".';
+                    errorElem.innerText = 'Это имя уже занято! Попробуй нажать "Войти" или выбери другой ник.';
                 } else {
                     errorElem.innerText = 'Ошибка регистрации: ' + err.message;
                 }
@@ -714,11 +875,14 @@
             }
         }
 
-        function logout() {
+        window.logout = function() {
             if (window.fbSignOut && window.fbAuth) {
                 window.fbSignOut(window.fbAuth);
             }
             currentUser = null;
+            window.isMasterAdmin = false;
+            window.currentModerators = [];
+            
             localStorage.removeItem('wow_user');
             document.getElementById('nav-user').classList.add('hidden');
             document.getElementById('quick-links').classList.add('hidden');
@@ -878,8 +1042,9 @@
         }
 
         function renderForm(userData = {}) {
+            // Инициализация ВНЛ-блока если есть права
             const wnlContainer = document.getElementById('wnl-builder-container');
-            if (currentUser === 'Рейнон') {
+            if (window.isMasterAdmin || window.currentModerators.includes(currentUser)) {
                 wnlContainer.classList.remove('hidden');
                 const dateSelect = document.getElementById('wnl-date');
                 dateSelect.innerHTML = '<option value="">Выберите дату опроса...</option>';
@@ -1223,7 +1388,6 @@
             }
         }
 
-        // Загрузка анкеты пользователя из Cloud Firestore
         async function loadUserFormFromFirebase() {
             if (!currentUser) return;
             try {
@@ -1242,7 +1406,6 @@
             }
         }
 
-        // Сохранение анкеты в Cloud Firestore вместо GitHub
         window.saveForm = async function() {
             const btn = document.getElementById('floating-save-btn');
             const originalContent = btn.innerHTML;
@@ -1376,7 +1539,6 @@
             }
         }
 
-        // Загрузка всех данных для сводной таблицы из Firebase
         async function loadAllData() {
             document.getElementById('dashboard-content').innerHTML = '';
             const summaryContainer = document.getElementById('dashboard-dungeons-summary');
@@ -1391,7 +1553,6 @@
             globalDungeonLists = {};
 
             try {
-                // Динамически загружаем ВСЕ анкеты из базы данных (без жесткого списка)
                 const querySnapshot = await window.fbGetDocs(window.fbCollection(window.fbDb, "schedules"));
                 querySnapshot.forEach((docSnap) => {
                     const playerId = docSnap.id;
@@ -1399,7 +1560,7 @@
                     
                     if (playerId === "weekly_no_leavers") {
                         window.wnlGlobalData = data;
-                    } else {
+                    } else if (playerId !== "roles") { // Пропускаем системный документ с ролями
                         allSchedules[playerId] = data;
                         playersWhoFilled.push(playerId);
                         
