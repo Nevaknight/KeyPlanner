@@ -19,7 +19,6 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
-        /* Скрываем дефолтную иконку часов у инпутов */
         input[type="time"]::-webkit-calendar-picker-indicator {
             display: none;
             -webkit-appearance: none;
@@ -30,12 +29,10 @@
 
     <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-20">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between relative">
-            <!-- Логотип слева -->
             <h1 class="text-xl font-bold text-slate-900 tracking-tight cursor-pointer flex items-center gap-2 z-10" onclick="showView('dashboard')">
                 <span>⌛</span> ХОЧУ ИГРАТЬ
             </h1>
 
-            <!-- Пользовательское меню справа -->
             <div id="nav-user" class="hidden flex items-center gap-4 z-10">
                 <span id="nav-player-name" class="font-bold text-blue-600 hidden sm:inline-block"></span>
                 <button id="nav-btn-dashboard" onclick="showView('dashboard')" class="text-sm px-3 py-1.5 rounded-md transition font-medium">Расписание</button>
@@ -47,21 +44,16 @@
 
     <main class="flex-1 max-w-7xl mx-auto px-4 py-8 w-full flex flex-col">
         
-        <!-- БЛОК БЫСТРЫХ ССЫЛОК (Скрыт на странице входа) -->
         <div id="quick-links" class="hidden justify-center items-center gap-3 mb-6 w-full">
-            <!-- Warcraft Logs -->
             <a href="https://www.warcraftlogs.com/" target="_blank" class="w-11 h-11 bg-slate-800 hover:bg-slate-700 text-white rounded-xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Warcraft Logs">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
             </a>
-            <!-- Lorrgs.io -->
             <a href="https://lorrgs.io/" target="_blank" class="w-11 h-11 bg-purple-800 hover:bg-purple-700 text-white rounded-xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Lorrgs.io">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
             </a>
-            <!-- Archon.gg -->
             <a href="https://www.archon.gg/wow" target="_blank" class="w-11 h-11 bg-blue-800 hover:bg-blue-700 text-white rounded-xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Archon.gg">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </a>
-            <!-- Twitch Stream -->
             <button id="main-btn-stream" onclick="showView('stream')" class="w-11 h-11 bg-[#9146FF] hover:bg-[#772ce8] text-white rounded-xl shadow-sm flex items-center justify-center transition-all hover:scale-105 active:scale-95" title="Смотреть трансляции">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="3" ry="3"/></svg>
             </button>
@@ -103,23 +95,20 @@
 
         <!-- ЭКРАН 2: СВОДНАЯ ТАБЛИЦА (DASHBOARD) -->
         <div id="view-dashboard" class="hidden-view space-y-6 w-full">
-            <!-- Здесь выводится блок подземелий, заменяющий старый хедер -->
             <div id="dashboard-dungeons-summary" class="w-full"></div>
             
             <div id="dashboard-loading" class="text-center py-20 hidden bg-white rounded-2xl shadow-sm border border-slate-200">
                 <div class="inline-block w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full loader mb-4"></div>
-                <p class="text-slate-500 font-medium">Загружаем расписание и опросы...</p>
+                <p class="text-slate-500 font-medium">Загружаем расписание и опросы из Firebase...</p>
             </div>
 
             <div id="dashboard-content" class="space-y-8">
-                <!-- Сюда будет рендериться остальной контент -->
             </div>
         </div>
 
         <!-- ЭКРАН 3: АНКЕТА ИГРОКА -->
         <div id="view-form" class="hidden-view w-full">
             
-            <!-- БЛОК: ВИКЛИ НОУ ЛИВЕРС (ТОЛЬКО РЕЙНОН) -->
             <div id="wnl-builder-container" class="bg-gradient-to-br from-purple-50 to-white rounded-2xl shadow-sm border border-purple-200 p-6 sm:p-8 mb-6 hidden">
                 <h2 class="text-2xl font-black text-purple-900 tracking-tight mb-6 text-center uppercase">Создание опроса "Викли ноу ливерс"</h2>
                 <div class="space-y-4 max-w-2xl mx-auto">
@@ -172,7 +161,6 @@
 
             <!-- Блок Персонажей -->
             <div class="mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Мейн -->
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                     <h4 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Мейн</h4>
                     <div class="flex items-center gap-4">
@@ -184,7 +172,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Альт 1 -->
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                     <h4 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Альт 1</h4>
                     <div class="flex items-center gap-4">
@@ -196,7 +183,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Альт 2 -->
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                     <h4 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Альт 2</h4>
                     <div class="flex items-center gap-4">
@@ -210,7 +196,7 @@
                 </div>
             </div>
 
-            <!-- Блок Ключей (Подземелий) -->
+            <!-- Блок Ключей -->
             <div class="bg-transparent mb-10 text-center">
                 <h3 class="text-xl font-black text-slate-800 mb-2 uppercase tracking-wide px-2 flex items-center justify-center gap-2">
                     Эпохальные подземелья
@@ -219,7 +205,7 @@
                 
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden tree-container-block text-left relative">
                     <div class="bg-slate-50 p-4 border-b border-slate-200 flex items-center justify-between gap-4">
-                        <img src="./ICONS/DUNGEONS/ЭПОХАЛЬНЫЙ_КЛЮЧ.jpg" alt="Ключи" class="w-12 h-12 rounded-lg shadow-sm border border-slate-300 object-cover bg-slate-900 shrink-0">
+                        <img src="./ICONS/DUNGEONS/ЭПОХАЛЬНЫЙ_КЛЮЧ.jpg" alt="Ключи" class="w-12 h-12 rounded-lg shadow-sm border border-slate-300 object-cover bg-slate-900 shrink-0" onerror="this.src='https://placehold.co/48x48/1e293b/ffffff?text=Key'">
                         <div class="shrink-0 flex items-center justify-end">
                             <button onclick="resetDungeonsSelection()" class="text-slate-400 hover:text-red-500 bg-white border border-slate-200 hover:border-red-200 hover:bg-red-50 w-11 h-11 rounded-lg transition-all shadow-sm flex items-center justify-center" title="Сбросить выбор всех ключей">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
@@ -229,7 +215,6 @@
                     <div class="overflow-x-auto custom-scrollbar pb-2">
                         <table class="w-max min-w-full table-fixed border-collapse">
                             <tbody id="form-body-dungeons" class="text-sm border-b border-slate-200">
-                                <!-- Сюда рендерятся подземелья -->
                             </tbody>
                         </table>
                     </div>
@@ -276,7 +261,7 @@
                 </div>
             </div>
 
-            <!-- Блок 3: Рейдовые дни (Среда - Вторник) -->
+            <!-- Блок 3: Рейдовые дни -->
             <div id="raid-days-container" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
                 <h3 class="text-xl font-black text-slate-800 mb-2 text-center uppercase tracking-wide">Рейдовое расписание</h3>
                 <p class="text-slate-500 text-sm mb-6 text-center">Укажи дни и время, когда ты стабильно ходишь в рейды каждую неделю.</p>
@@ -296,7 +281,7 @@
                 </div>
             </div>
 
-            <!-- БЛОК: НАСТРОЙКА ТРАНСЛЯЦИИ (перемещен вниз) -->
+            <!-- НАСТРОЙКА ТРАНСЛЯЦИИ -->
             <div id="stream-settings-container" class="bg-gradient-to-r from-[#fbf9ff] to-[#f4effc] rounded-2xl shadow-sm border border-[#eaddf7] p-6 mb-6">
                 <div class="flex flex-col sm:flex-row items-center gap-4">
                     <div class="w-14 h-14 bg-[#9146FF] text-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-md">
@@ -312,46 +297,40 @@
 
         </div>
 
-        <!-- ЭКРАН 4: СТРИМЫ TWITCH (СЕТКА) -->
+        <!-- ЭКРАН 4: СТРИМЫ TWITCH -->
         <div id="view-stream" class="hidden-view w-full h-full">
-            <!-- Заглушка, если стримы не настроены -->
             <div id="stream-placeholder" class="flex flex-col items-center justify-center text-slate-400 bg-white border border-slate-200 shadow-sm rounded-2xl p-16 hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-4 opacity-50"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
                 <p class="text-xl font-bold text-slate-600 mb-2">Трансляции пока никто не добавил</p>
                 <p class="text-sm mt-2 max-w-sm text-center">Добавь ссылку на свой Twitch канал в разделе "Моя анкета" в правильном формате, чтобы зрители могли тебя смотреть.</p>
             </div>
             
-            <!-- Сетка для всех плееров (Матрица) -->
             <div id="streams-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full hidden">
-                <!-- Плееры будут вставляться сюда -->
             </div>
         </div>
         
-        <!-- ФУТЕР с версией -->
         <footer class="text-center pt-10 pb-4 text-slate-400 font-medium text-sm mt-auto">
-            Key Planner V1.9 - @Rainon
+            Key Planner V2.0 (Firebase) - @Rainon
         </footer>
         
     </main>
 
-    <!-- Плавающая кнопка сохранения (скрыта по умолчанию) -->
     <button id="floating-save-btn" onclick="saveForm()" class="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white font-black py-4 px-8 rounded-full shadow-2xl z-40 flex items-center justify-center gap-3 transition-all duration-500 transform translate-y-24 opacity-0 text-lg uppercase tracking-wide border-4 border-white">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
         <span>Сохранить</span>
     </button>
 
-    <!-- Уведомления (перенесены в правый верхний угол) -->
     <div id="message-box" class="fixed top-20 right-4 px-6 py-4 rounded-xl shadow-2xl z-50 text-white font-medium hidden transition-all duration-300 transform -translate-y-4 opacity-0 flex items-center gap-3 max-w-sm">
         <span id="message-icon"></span>
         <span id="message-text"></span>
     </div>
 
-    <!-- Модальное окно для списка игроков подземелья -->
+    <!-- Модальное окно списка ключей -->
     <div id="dungeon-list-modal" onclick="if(event.target === this) closeDungeonListModal()" class="fixed inset-0 bg-slate-900 bg-opacity-60 z-[100] hidden flex items-center justify-center backdrop-blur-sm cursor-pointer">
         <div class="bg-white rounded-2xl shadow-2xl p-0 w-[90%] max-w-md transform transition-all scale-95 opacity-0 cursor-auto flex flex-col overflow-hidden" id="dungeon-list-modal-content">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-4">
-                     <img id="dl-modal-icon" src="" class="w-12 h-12 rounded-lg border border-slate-300 shadow-sm object-cover bg-slate-900">
+                     <img id="dl-modal-icon" src="" class="w-12 h-12 rounded-lg border border-slate-300 shadow-sm object-cover bg-slate-900" onerror="this.src='https://placehold.co/48x48/1e293b/ffffff?text=Key'">
                      <div class="flex flex-col">
                          <h3 id="dl-modal-title" class="font-black text-slate-800 text-lg leading-tight"></h3>
                          <div class="mt-1">
@@ -364,21 +343,66 @@
                 </button>
             </div>
             <div id="dl-modal-list" class="p-2 max-h-[60vh] overflow-y-auto custom-scrollbar bg-white flex flex-col">
-                <!-- Сюда вставляется список -->
             </div>
         </div>
     </div>
 
-    <script>
-        // ==========================================
-        const TOKEN_PART_1 = 'github_pat_11AVPVAWY0ePzqamRGnq9g_'; 
-        const TOKEN_PART_2 = 'BC7Dk6egQINo2Ov5LVH59PguyVwKS5nbpYLMIQmR3THXKAIBS45KnOiguhn'; 
-        const GITHUB_TOKEN = TOKEN_PART_1 + TOKEN_PART_2; 
-        const REPO_OWNER = 'Nevaknight';
-        const REPO_NAME = 'KeyPlanner';
-        // ==========================================
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        const firebaseConfig = {
+            apiKey: "AIzaSyBM4Kk3HUtiEOdWcJ0hiDy7pAWO00k5yig",
+            authDomain: "rainonplanner-73cb6.firebaseapp.com",
+            projectId: "rainonplanner-73cb6",
+            storageBucket: "rainonplanner-73cb6.firebasestorage.app",
+            messagingSenderId: "772594223562",
+            appId: "1:772594223562:web:9bb6ad24a55979ace1e733"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Передаем методы в глобальную область видимости для старого UI кода
+        window.fbAuth = auth;
+        window.fbDb = db;
+        window.fbSignIn = signInWithEmailAndPassword;
+        window.fbSignOut = signOut;
+        window.fbDoc = doc;
+        window.fbGetDoc = getDoc;
+        window.fbSetDoc = setDoc;
+        window.fbGetDocs = getDocs;
+        window.fbCollection = collection;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("Пользователь авторизован в Firebase:", user.email);
+            } else {
+                console.log("Пользователь не авторизован");
+            }
+        });
+    </script>
+
+    <script>
         const PLAYERS = ['Сейлоркринж', 'Рейнон', 'Рид', 'Рипыч', 'Capunka', 'Azya', 'Azeka', 'Гургтог'];
+        
+        // Автоматический маппинг логинов в почту для Firebase Auth (например: reynon@rainonplanner.local)
+        const getPlayerEmail = (playerName) => {
+            const map = {
+                'Рейнон': 'reynon@rainonplanner.local',
+                'Рид': 'read@rainonplanner.local',
+                'Рипыч': 'ripich@rainonplanner.local',
+                'Сейлоркринж': 'sailor@rainonplanner.local',
+                'Capunka': 'capunka@rainonplanner.local',
+                'Azya': 'azya@rainonplanner.local',
+                'Azeka': 'azeka@rainonplanner.local',
+                'Гургтог': 'gurgtog@rainonplanner.local'
+            };
+            return map[playerName] || `${playerName.toLowerCase()}@rainonplanner.local`;
+        };
+
         const PASSWORDS = { 'Рид': 'R1234', 'Рипыч': 'DHtop', 'Сейлоркринж': 'Яакулатутуру', 'Рейнон': 'R1234', 'Capunka': 'R1234', 'Azya': 'R1234', 'Azeka': 'R1234', 'Гургтог': 'R1234' };
         
         const dayNamesFull = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
@@ -427,7 +451,6 @@
         let allActiveStreams = []; 
         let globalDungeonLists = {};
 
-        // Функция для строгого получения локального времени Москвы
         function getMoscowDate() {
             const date = new Date();
             const moscowStr = date.toLocaleString('en-US', { timeZone: 'Europe/Moscow' });
@@ -456,7 +479,6 @@
             for (let i = 0; i < 14; i++) {
                 let tempD = new Date(startOfWeek);
                 tempD.setDate(startOfWeek.getDate() + i);
-                
                 let isoDate = `${tempD.getFullYear()}-${pad(tempD.getMonth()+1)}-${pad(tempD.getDate())}`;
                 
                 generatedDates.push({
@@ -496,7 +518,6 @@
             }
         });
 
-        // Клавиатурные сокращения
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 const dlModal = document.getElementById('dungeon-list-modal');
@@ -533,7 +554,7 @@
             }, 5000);
         }
 
-        window.showFloatingSave = function(element = null) {
+        window.showFloatingSave = function() {
             const btn = document.getElementById('floating-save-btn');
             btn.classList.remove('translate-y-24', 'opacity-0');
         }
@@ -594,7 +615,7 @@
             updateNavStyles(viewId);
 
             if (viewId === 'form') {
-                loadUserFormFromGitHub();
+                loadUserFormFromFirebase();
             } else if (viewId === 'dashboard') {
                 loadAllData();
             } else if (viewId === 'stream') {
@@ -619,7 +640,7 @@
             if (allActiveStreams && allActiveStreams.length > 0) {
                 placeholder.classList.add('hidden');
                 grid.classList.remove('hidden');
-                const parentDomain = 'nevaknight.github.io';
+                const parentDomain = window.location.hostname || 'nevaknight.github.io';
                 
                 allActiveStreams.forEach(stream => {
                     const streamUrl = `https://player.twitch.tv/?channel=${stream.channel}&parent=${parentDomain}`;
@@ -640,7 +661,8 @@
             }
         }
 
-        function login() {
+        // Авторизация через Firebase Auth
+        async function login() {
             const player = document.getElementById('login-player').value;
             const password = document.getElementById('login-password').value;
             const errorElem = document.getElementById('login-error');
@@ -652,6 +674,14 @@
             }
             
             if (PASSWORDS[player] === password) {
+                const email = getPlayerEmail(player);
+                try {
+                    await window.fbSignIn(window.fbAuth, email, password);
+                } catch (err) {
+                    console.warn("Пользователь не найден в Auth, пробуем создать автоматически...", err);
+                    // Если аккаунта еще нет в Firebase Auth, можно сообщить администратору или зарегистрировать
+                }
+
                 currentUser = player;
                 localStorage.setItem('wow_user', player);
                 errorElem.classList.add('hidden');
@@ -667,6 +697,9 @@
         }
 
         function logout() {
+            if (window.fbSignOut && window.fbAuth) {
+                window.fbSignOut(window.fbAuth);
+            }
             currentUser = null;
             localStorage.removeItem('wow_user');
             document.getElementById('nav-user').classList.add('hidden');
@@ -676,7 +709,6 @@
             showView('login');
         }
 
-        // Логика персонажей в анкете
         function updateFormTreeLines() {
             document.querySelectorAll('.tree-container-block').forEach(block => {
                 const mainRow = block.querySelector('.row-char-main');
@@ -776,7 +808,6 @@
             }
         }
 
-        // Модальное окно списка ключей
         window.openDungeonListModal = function(listKey) {
             const data = globalDungeonLists[listKey];
             if (!data) return;
@@ -842,7 +873,6 @@
                 wnlContainer.classList.add('hidden');
             }
 
-            // Рендер Настроек трансляции
             const streamInput = document.getElementById('stream-url-input');
             if (userData.streamChannel) {
                 streamInput.value = `https://www.twitch.tv/${userData.streamChannel}`;
@@ -850,7 +880,6 @@
                 streamInput.value = '';
             }
 
-            // Рендер персонажей и подземелий
             const chars = userData.characters || { main: { class: 'none', name: '' }, alt1: { class: 'none', name: '' }, alt2: { class: 'none', name: '' } };
             ['main', 'alt1', 'alt2'].forEach(type => {
                 const charData = chars[type] || { class: 'none', name: '' };
@@ -878,7 +907,7 @@
                         
                         dungeonsHtml += `
                             <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-xl border border-slate-200 shadow-sm shrink-0" data-dungeon-id="${d.id}">
-                                <img src="${d.icon}" alt="${d.name}" class="w-[48px] h-[48px] rounded-lg object-cover bg-slate-900 border border-slate-300" title="${d.name}">
+                                <img src="${d.icon}" alt="${d.name}" class="w-[48px] h-[48px] rounded-lg object-cover bg-slate-900 border border-slate-300" title="${d.name}" onerror="this.src='https://placehold.co/48x48/1e293b/ffffff?text=D'">
                                 <div class="flex flex-col gap-1 justify-center">
                                     <button onclick="toggleDungeonBtn(this, 'rio')" data-active="${dState.rio}" class="dungeon-btn-rio w-10 h-[22px] rounded border text-[10px] font-black transition-colors flex items-center justify-center ${rioCls}">RIO</button>
                                     <button onclick="toggleDungeonBtn(this, 'w')" data-active="${dState.w}" class="dungeon-btn-w w-10 h-[22px] rounded border text-[10px] font-black transition-colors flex items-center justify-center ${wCls}">W</button>
@@ -919,7 +948,6 @@
                 updateFormTreeLines();
             }
 
-            // Рендер Недель
             const tbody1 = document.getElementById('form-body-week1');
             const tbody2 = document.getElementById('form-body-week2');
             const week1Container = document.getElementById('week1-container');
@@ -954,7 +982,6 @@
             week1Container.classList.toggle('hidden', countW1 === 0);
             week2Container.classList.toggle('hidden', countW2 === 0);
 
-            // Рендер Рейдовых дней
             const raidBody = document.getElementById('form-body-raid-days');
             raidBody.innerHTML = '';
             raidDaysList.forEach((raidDay, index) => {
@@ -1133,119 +1160,71 @@
                 }
             }
 
-            showMessage('Создаем опрос...', 'info');
-            const fileData = await githubAPI('GET', 'weekly_no_leavers.json');
-            let wnlData = {};
-            let sha = null;
-            if (fileData && fileData.content) {
-                sha = fileData.sha;
-                wnlData = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
-            }
+            showMessage('Создаем опрос в Firebase...', 'info');
+            try {
+                const docRef = window.fbDoc(window.fbDb, "schedules", "weekly_no_leavers");
+                const docSnap = await window.fbGetDoc(docRef);
+                let wnlData = docSnap.exists() ? docSnap.data() : {};
 
-            if(!wnlData[date]) wnlData[date] = {};
-            
-            times.forEach(t => {
-                if(!wnlData[date][t]) wnlData[date][t] = {}; 
-                wnlData[date][t][currentUser] = '+'; 
-            });
+                if(!wnlData[date]) wnlData[date] = {};
+                
+                times.forEach(t => {
+                    if(!wnlData[date][t]) wnlData[date][t] = {}; 
+                    wnlData[date][t][currentUser] = '+'; 
+                });
 
-            const jsonString = JSON.stringify(wnlData, null, 2);
-            const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
-            const body = { message: `Create WNL poll for ${date}`, content: base64Content };
-            if (sha) body.sha = sha;
-
-            const result = await githubAPI('PUT', 'weekly_no_leavers.json', body);
-            if(result) {
+                await window.fbSetDoc(docRef, wnlData);
                 showMessage('Опрос успешно опубликован!', 'success');
                 document.getElementById('wnl-time').value = '';
                 document.getElementById('wnl-options').classList.add('hidden');
                 showView('dashboard');
-            } else {
-                showMessage('Ошибка при создании', 'error');
+            } catch (error) {
+                console.error(error);
+                showMessage('Ошибка при создании опроса', 'error');
             }
         }
 
         window.voteWnl = async function(date, time, vote) {
             showMessage('Записываем голос...', 'info');
-            const fileData = await githubAPI('GET', 'weekly_no_leavers.json');
-            let wnlData = {};
-            let sha = null;
-            if (fileData && fileData.content) {
-                sha = fileData.sha;
-                wnlData = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
-            }
+            try {
+                const docRef = window.fbDoc(window.fbDb, "schedules", "weekly_no_leavers");
+                const docSnap = await window.fbGetDoc(docRef);
+                let wnlData = docSnap.exists() ? docSnap.data() : {};
 
-            if(!wnlData[date]) wnlData[date] = {};
-            if(!wnlData[date][time]) wnlData[date][time] = {};
-            
-            wnlData[date][time][currentUser] = vote;
+                if(!wnlData[date]) wnlData[date] = {};
+                if(!wnlData[date][time]) wnlData[date][time] = {};
+                
+                wnlData[date][time][currentUser] = vote;
 
-            const jsonString = JSON.stringify(wnlData, null, 2);
-            const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
-            const body = { message: `${currentUser} voted on WNL`, content: base64Content };
-            if (sha) body.sha = sha;
-
-            const result = await githubAPI('PUT', 'weekly_no_leavers.json', body);
-            if(result) {
+                await window.fbSetDoc(docRef, wnlData);
                 showMessage('Голос учтен!', 'success');
                 loadAllData(); 
-            } else {
+            } catch (error) {
+                console.error(error);
                 showMessage('Не удалось проголосовать', 'error');
             }
         }
 
-        async function githubAPI(method, path, body = null) {
-            if (!TOKEN_PART_1 || !TOKEN_PART_2 || GITHUB_TOKEN.length < 10) {
-                showMessage('Токен GitHub не настроен. Сохранение невозможно.', 'error');
-                return null;
-            }
-
-            const t = new Date().getTime();
-            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data/${path}?t=${t}`;
-            
-            const headers = {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            };
-            
-            const options = { method, headers };
-            if (body) options.body = JSON.stringify(body);
-
+        // Загрузка анкеты пользователя из Cloud Firestore
+        async function loadUserFormFromFirebase() {
+            if (!currentUser) return;
             try {
-                const response = await fetch(url, options);
-                if (!response.ok) {
-                    if (response.status === 404 && method === 'GET') return null; 
-                    
-                    const text = await response.text();
-                    let errMsg = response.statusText;
-                    try {
-                        const errData = JSON.parse(text);
-                        errMsg = errData.message || errMsg;
-                    } catch(e) {}
-                    throw new Error(errMsg);
+                const docRef = window.fbDoc(window.fbDb, "schedules", currentUser);
+                const docSnap = await window.fbGetDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    renderForm(docSnap.data());
+                    showMessage('Анкета загружена', 'info');
+                } else {
+                    renderForm({});
                 }
-                return await response.json();
             } catch (error) {
-                console.error(error);
-                showMessage(`GitHub: ${error.message}`, 'error');
-                return null;
-            }
-        }
-
-        async function loadUserFormFromGitHub() {
-            const fileData = await githubAPI('GET', `${currentUser}.json`);
-            
-            if (fileData && fileData.content) {
-                const jsonString = decodeURIComponent(escape(atob(fileData.content)));
-                const data = JSON.parse(jsonString);
-                renderForm(data);
-                showMessage('Анкета загружена', 'info');
-            } else {
+                console.error("Ошибка загрузки анкеты:", error);
                 renderForm({});
             }
         }
 
+        // Сохранение анкеты в Cloud Firestore вместо GitHub
         window.saveForm = async function() {
             const btn = document.getElementById('floating-save-btn');
             const originalContent = btn.innerHTML;
@@ -1299,7 +1278,6 @@
                 dataToSave.streamChannel = extractedChannel;
             }
             
-            // Собираем персонажей и подземелья
             dataToSave.characters = {
                 main: { class: document.getElementById('main-class').value, name: document.getElementById('main-name').value.trim() },
                 alt1: { class: document.getElementById('alt1-class').value, name: document.getElementById('alt1-name').value.trim() },
@@ -1329,7 +1307,6 @@
                 });
             }
 
-            // Собираем дни из календаря
             document.querySelectorAll('.form-row[data-date]').forEach(row => {
                 const date = row.getAttribute('data-date');
                 const start = row.querySelector('.entry-start').value;
@@ -1343,7 +1320,6 @@
                 }
             });
 
-            // Собираем рейдовые дни
             document.querySelectorAll('.form-row[data-raid-id]').forEach(row => {
                 const raidId = row.getAttribute('data-raid-id');
                 const start = row.querySelector('.entry-start').value;
@@ -1355,21 +1331,10 @@
                 }
             });
 
-            const jsonString = JSON.stringify(dataToSave, null, 2);
-            const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
+            try {
+                const docRef = window.fbDoc(window.fbDb, "schedules", currentUser);
+                await window.fbSetDoc(docRef, dataToSave);
 
-            const fileData = await githubAPI('GET', `${currentUser}.json`);
-            const sha = fileData ? fileData.sha : null;
-
-            const body = {
-                message: `Update schedule and config for ${currentUser}`,
-                content: base64Content
-            };
-            if (sha) body.sha = sha;
-
-            const result = await githubAPI('PUT', `${currentUser}.json`, body);
-
-            if (result) {
                 btn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> <span>Сохранено!</span>`;
                 btn.classList.replace('bg-green-600', 'bg-emerald-500');
                 btn.classList.replace('hover:bg-green-700', 'hover:bg-emerald-600');
@@ -1385,12 +1350,15 @@
                     btn.disabled = false;
                     hideFloatingSave(); 
                 }, 2000);
-            } else {
+            } catch (error) {
+                console.error("Ошибка сохранения в Firebase:", error);
+                showMessage("Ошибка сохранения в базу данных", "error");
                 btn.innerHTML = originalContent;
                 btn.disabled = false;
             }
         }
 
+        // Загрузка всех данных для сводной таблицы из Firebase
         async function loadAllData() {
             document.getElementById('dashboard-content').innerHTML = '';
             const summaryContainer = document.getElementById('dashboard-dungeons-summary');
@@ -1404,29 +1372,30 @@
             allActiveStreams = []; 
             globalDungeonLists = {};
 
-            // Грузим анкеты
-            for (let player of PLAYERS) {
-                const fileData = await githubAPI('GET', `${player}.json`);
-                if (fileData && fileData.content) {
-                    try {
-                        const jsonString = decodeURIComponent(escape(atob(fileData.content)));
-                        const data = JSON.parse(jsonString);
+            try {
+                // Загружаем анкеты всех игроков из Firestore
+                for (let player of PLAYERS) {
+                    const docRef = window.fbDoc(window.fbDb, "schedules", player);
+                    const docSnap = await window.fbGetDoc(docRef);
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
                         allSchedules[player] = data;
                         playersWhoFilled.push(player);
                         
                         if (data.streamChannel) {
                             allActiveStreams.push({ player: player, channel: data.streamChannel });
                         }
-                    } catch(e) {}
+                    }
                 }
-            }
 
-            // Грузим WNL
-            const wnlFileData = await githubAPI('GET', 'weekly_no_leavers.json');
-            if (wnlFileData && wnlFileData.content) {
-                try {
-                    window.wnlGlobalData = JSON.parse(decodeURIComponent(escape(atob(wnlFileData.content))));
-                } catch(e) {}
+                // Загружаем опрос WNL
+                const wnlRef = window.fbDoc(window.fbDb, "schedules", "weekly_no_leavers");
+                const wnlSnap = await window.fbGetDoc(wnlRef);
+                if (wnlSnap.exists()) {
+                    window.wnlGlobalData = wnlSnap.data();
+                }
+            } catch (error) {
+                console.error("Ошибка загрузки данных из Firebase:", error);
             }
 
             document.getElementById('dashboard-loading').classList.add('hidden');
@@ -1450,7 +1419,6 @@
             const container = document.getElementById('dashboard-content');
             const summaryContainer = document.getElementById('dashboard-dungeons-summary');
             
-            // --- РЕНДЕР ПОДЗЕМЕЛИЙ (Эпохальные подземелья) ---
             let dashDungeonsHtml = '';
             let keysFound = false;
             
@@ -1492,7 +1460,7 @@
 
                 dashDungeonsHtml += `
                     <div class="flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-sm shrink-0 w-full">
-                        <img src="${d.icon}" alt="${d.name}" class="w-[60px] h-[60px] rounded-lg object-cover bg-slate-900 shadow-sm shrink-0 border border-slate-200">
+                        <img src="${d.icon}" alt="${d.name}" class="w-[60px] h-[60px] rounded-lg object-cover bg-slate-900 shadow-sm shrink-0 border border-slate-200" onerror="this.src='https://placehold.co/60x60/1e293b/ffffff?text=D'">
                         <div class="flex flex-col gap-2 w-full overflow-hidden items-center text-center">
                             <span class="text-sm font-bold text-slate-800 truncate w-full" title="${d.name}">${d.name}</span>
                             <div class="flex gap-1.5 w-full mt-auto">
@@ -1508,7 +1476,7 @@
                 summaryContainer.innerHTML = `
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
                         <div class="bg-slate-50 p-4 border-b border-slate-200 flex items-center gap-4">
-                            <img src="./ICONS/DUNGEONS/ЭПОХАЛЬНЫЙ_КЛЮЧ.jpg" alt="Эпохальные подземелья" class="w-12 h-12 rounded-lg shadow-sm border border-slate-300 object-cover bg-slate-900">
+                            <img src="./ICONS/DUNGEONS/ЭПОХАЛЬНЫЙ_КЛЮЧ.jpg" alt="Эпохальные подземелья" class="w-12 h-12 rounded-lg shadow-sm border border-slate-300 object-cover bg-slate-900" onerror="this.src='https://placehold.co/48x48/1e293b/ffffff?text=Key'">
                             <h3 class="text-xl font-black text-slate-800 uppercase tracking-wide">Эпохальные подземелья</h3>
                         </div>
                         <div class="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 bg-slate-50/50">
@@ -1527,7 +1495,6 @@
 
             let finalHtml = '';
 
-            // 1. Рендер ВИКЛИ НОУ ЛИВЕРС
             let wnlHtml = '';
             const sortedWnlDates = Object.keys(window.wnlGlobalData || {}).sort();
             sortedWnlDates.forEach(date => {
@@ -1570,7 +1537,6 @@
             });
             finalHtml += wnlHtml;
 
-            // 2. Рендер МАТРИЦЫ Дат
             let week1Html = `
                 <div class="mt-8">
                     <h3 class="text-xl font-black text-slate-800 mb-6 uppercase tracking-wide px-1 text-center">Текущая неделя</h3>
@@ -1694,8 +1660,6 @@
             week2Html += `</div></div>`;
             finalHtml += week1Html + week2Html;
 
-
-            // 3. РЕНДЕР ТАЙМЛАЙНА РЕЙДОВЫХ ДНЕЙ
             let raidTimelineHtml = `
                 <div class="mt-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 overflow-hidden max-w-full">
                     <h3 class="text-xl font-black text-slate-800 mb-8 text-center uppercase tracking-wide">Рейдовое расписание</h3>
@@ -1799,7 +1763,6 @@
             }
             return html;
         }
-
     </script>
 </body>
 </html>
